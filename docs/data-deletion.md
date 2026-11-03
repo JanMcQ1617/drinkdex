@@ -1,6 +1,6 @@
 # Deleting your data
 
-**Last updated: 28 October 2026**
+**Last updated: 3 November 2026**
 
 How to delete everything Sipply holds about you, what that removes, and how
 to remove Sipply from Facebook, Google or Apple if you signed in with one of
@@ -10,7 +10,7 @@ them.
 
 ## Delete your Sipply account
 
-In the app, open **Profile → "..."** (top right) **→ Settings → Delete
+In the app, open **Profile → “...”** (top right) **→ Settings → Delete
 account**, and confirm.
 
 It happens straight away, it cannot be undone, and you do not need to email
@@ -32,14 +32,16 @@ From our servers:
 - your collections, and the links to any you shared
 - the tournaments you host (with everyone's place in them), your place in
   tournaments others host, and the song you added to any post
-- the count of song searches kept for the search limit
+- the counts kept for the song-search limit and for the limit on wrong
+  tournament join codes
 - your phones' device tokens (the addresses Apple uses to bring Sipply's
   notifications to each phone), your notification switches, the notes of
   notifications sent to you or about you, and the records that limit how
   often one person's tags and tournament invites can notify another (once
   an hour each)
 - your invite links, the hashes that let people find you by phone number
-  or Instagram username, and the record kept for the matching limits
+  (or by an Instagram username added in an earlier version), and the record
+  kept for the matching limits
 - your sign-in details: the phone number you signed in with, if you did,
   and everything Google or Facebook sent when you connected it: your name,
   your email address, the link to your profile picture, and the number

@@ -1,0 +1,20 @@
+# Netlify: Sipply's public site (support, privacy, terms, data deletion,
+# the shared-collection page c/ and the wine lists), served from the
+# domain root. The same pages GitHub Pages serves from main / docs at
+# /drinkdex/; scripts/build-site.mjs renders docs/ into site-dist/ the way
+# Pages' Jekyll does, with links that work at "/".
+#
+# Deploy from the repo root:
+#
+#   node scripts/build-site.mjs && node scripts/build-site.mjs --check
+#   netlify deploy --prod --no-build --dir site-dist
+#
+# The command below is what `netlify deploy` runs when it builds (it does
+# unless told --no-build). It is set so Netlify never guesses one: this
+# repo is an Expo app, and a detected framework's build is not this site.
+# Headers and the pretty-URL rewrites are written by the script into
+# site-dist/_headers and site-dist/_redirects.
+
+[build]
+  command = "node scripts/build-site.mjs"
+  publish = "site-dist"

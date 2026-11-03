@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Last updated: 28 October 2026**
+**Last updated: 3 November 2026**
 
 Sipply is a drinks field guide. You collect entries, and you can share what
 you've had with people you follow. This policy describes exactly what the
@@ -46,9 +46,10 @@ temporary access key is discarded on your phone and never stored. If your
 Google email address already has a Sipply account, Continue with Google
 signs you in to that account.
 
-**Continue with Facebook (only if you use it).** Facebook's own page asks
-you to let Sipply have your name, profile picture and email address. You
-can use it to sign up or sign in. Each part is used for one thing:
+**Continue with Facebook (only if you sign in with Facebook).** Facebook's
+own page asks you to let Sipply have your name, profile picture and email
+address. You can use it to sign up or sign in. Each part is used for one
+thing:
 
 - **Your name** becomes your display name if Facebook is how you sign up.
   Other users can see it, and you can change it before you finish signing
@@ -93,17 +94,25 @@ keeps nothing about you, and remembers only that answer on your phone for
 with a caption and your photo. Posts are visible to anyone signed in to
 Sipply.
 
-**Tournaments (only if you host one or are invited to one).** Its name,
-dates and goal, who hosts it, who was invited and whether they joined, and
-the standings, with the time zone of the host's phone, which decides when
-each day starts for the limit of three entries a day. Standings are
-worked out on our server from the posts members share during the
-tournament: each different drink posted adds one entry, and entries are
-counted, never amounts. The host, its members and the people invited to it can see its
-name, who is in it or still invited, and the standings; nobody else can,
-and nobody you have blocked or who has blocked you is shown to you.
-Results are kept when it ends. Deleting your account deletes the
-tournaments you host and your place in others.
+**Tournaments (only if you host one, are invited to one or join one).** Its
+name, dates and goal, who hosts it, who was invited and who joined, its
+six-character join code, and the standings, with the time zone of the
+host's phone, which decides when each day starts for the limit of three
+entries a day. Standings are worked out on our server from the posts
+members share during the tournament: each different drink posted adds one
+entry, and entries are counted, never amounts. The host, its members and
+the people invited to it can see its name, who is in it or still invited,
+and the standings; the host and its members also see its code until it
+ends. Anyone signed in who types the code sees, before joining, its name,
+dates and goal, how many people are in it and who hosts it, never the
+standings or who else is in it. Nobody else can see it, and nobody you
+have blocked or who has blocked you is shown to you. To make codes hard to
+guess, the server counts how many wrong codes each account types in each
+hour, never which codes they were; after twenty wrong codes within about
+two hours, it asks you to try again later. A count stops mattering after
+that, and the next code you type a day or more later deletes it.
+Results are kept when a tournament ends. Deleting your account deletes the
+tournaments you host, your place in others and your count of wrong codes.
 
 **Music on a post (only if you add it).** The song you choose is stored
 with that photo: its title, artist and Apple Music catalogue number, which
@@ -177,8 +186,9 @@ drink you can add the place you had it: a bar, restaurant, brewery,
 winery, distillery, café, hotel or music venue; the search only offers
 venues, never a home or a street address. Places are found with Apple
 Maps on your phone. What you type goes to Apple to find them, and if you
-allow it, so does your location, to suggest places near you; your
-location is never sent to Sipply or saved. When you tag a place, Sipply
+allow it, so does your location, to show the place you are in and places
+near you. The app asks for your location only when you tap **Current
+place**, and your location is never sent to Sipply or saved. When you tag a place, Sipply
 stores two things with that photo: Apple's identifier for the place, and
 the name you give it, which starts as the name Apple Maps shows and which
 you can change, like a caption. Sipply does not store the place's
@@ -256,34 +266,27 @@ are used only to check for matches and are not stored. Hashing hides a
 number from casual view, but it is not encryption, so we treat these values
 as personal data.
 
-**Instagram matching (only if you use it).** Sipply has no connection to
-Instagram and cannot read anything from your account — no Meta API gives an
-app your follower or following list. Instead, you ask Instagram for a copy
-of your own followers and following, on its Download your information page,
-and choose the .zip Instagram sends; there is no need to unzip it. The
-download is read **on your device**, and only two parts of it are opened:
-the followers and following files, and your personal information file if
-the download has one. Photos, messages and everything else in a larger
-download are never unpacked. From the personal information file, or
-failing that from the download's own file name, which Instagram builds
-from your username, the app takes only your own username, to offer to make
-you findable by it, and does nothing with it unless you accept; the email
-address, phone number and date of birth in that file are never kept or
-sent. You can paste a list of usernames instead of choosing a file.
-
-Either way, the usernames are converted on the phone to salted hashes, and
-only those hashes are sent for comparison, the same way contacts are.
-**Your Instagram list is never uploaded**, and the hashes are not stored.
-Your own handle, if you choose to add one so friends can find you, is
-stored only as a hash, never in readable form, and is never shown to other
-users. **Stop being findable** in Profile → "..." → Settings → Find
-friends clears it.
+**Instagram (earlier versions only).** Earlier versions of Sipply can
+match a list of followers you downloaded from Instagram yourself, and let
+you add your own Instagram username so that friends can find you by it. In
+those versions the download is read on your phone, its usernames are
+turned into salted hashes there, and only the hashes are sent to be
+compared; they are not stored. A list you imported is only ever kept on
+your phone. A username you added is stored on our servers only as a salted
+hash, never in readable form, and never shown to anyone; **Stop being
+findable** under that username clears it. Newer versions no longer read
+Instagram files or ask for a username. They delete an imported list from
+your phone by themselves, and when you open one signed in on the phone
+where you added a username, it withdraws that username by itself. If that
+phone no longer remembers it (after a sign-out, say), it stays until you
+delete your account or email us to remove it. Until it is withdrawn,
+someone still using an earlier version could find you by it.
 
 **Matching limits.** To make matching hard to misuse for looking up
-strangers, each account can check at most 3,000 phone numbers and
-Instagram handles, counted together, in any 24 hours. To enforce that, we
-record how many you checked, from which list, and when, never the hashes
-themselves.
+strangers, each account can check at most 3,000 phone numbers in any 24
+hours (with Instagram usernames counted in, on the earlier versions above).
+To enforce that, we record how many you checked, from which list, and
+when, never the hashes themselves.
 
 The sign-in screen has a limit of its own. When you enter an email
 address there, Sipply checks whether it already has an account, so the
@@ -300,14 +303,11 @@ as a post, make it your profile photo or send it with a drink you add.
 Which of today's posts, and which likes, new followers and tags, you have
 already seen is remembered on the phone only, so nobody is told that you
 looked.
-The phone number and Instagram username you give for finding friends are
-kept on the phone in readable form, because our servers hold only their
-hashes and the app would otherwise ask for them again; **Stop being
-findable** removes them here as well. The Instagram list you import is
-cached on the phone too, so re-checking it does not need another download,
-and **Forget my imported list** in Profile → "..." → Settings → Find
-friends clears it. Signing out clears the Instagram list, the number and
-the username; your collection stays. So the app can offer **Welcome
+The phone number you give for finding friends is kept on the phone in
+readable form, because our servers hold only its hash and the app would
+otherwise ask for it again; **Stop being findable** removes it here as
+well. Signing out clears it, and anything an earlier version kept there
+for Instagram; your collection stays. So the app can offer **Welcome
 back**, the phone keeps the last account's display name, profile photo and
 the way it signed in (Apple, Google, Facebook, phone or email; never the
 number, the address or a password) after you sign out. **Not you? Forget
@@ -372,8 +372,9 @@ of this. Treat anything you post as public to everyone signed in.
 
 **Anyone you share a collection with** can see what that collection's link
 shows (above), until you stop sharing it. The web page for a link is served
-by GitHub Pages, which we use to host this site; the link's code is in the
-part of the address that browsers never send to it.
+by GitHub Pages, which hosts this site (a copy of the site is also on
+Netlify, which serves the page when a link is opened there); the link's
+code is in the part of the address that browsers never send to either.
 
 **Supabase**, our hosting provider, stores the database and photos on our
 behalf, and runs sign-in, including phone sign-in, Sign in with Apple,
@@ -415,10 +416,9 @@ above.
 knows that you use Sipply, under Google's own privacy policy. Sipply sends
 Google nothing else about you or what you do here.
 
-**Meta**, if you use Continue with Facebook, knows that you connected
+**Meta**, if you sign in with Facebook, knows that you connected
 Sipply, under Meta's own privacy policy. Sipply sends Facebook nothing
-else about you or what you do here. Choosing an Instagram download
-involves no connection to Instagram at all.
+else about you or what you do here.
 
 **Our report alerts.** When anyone files a report, a one-line alert goes to
 the private chat channel where reports are picked up. It says why the
@@ -426,16 +426,20 @@ report was made, whether it is about a post or an account, when it was
 filed, and the report's reference number. It carries no names, captions or
 photos; those are read only in the database.
 
-**Resend** delivers the monthly email of drink suggestions to the Sipply
-team. It handles the text of those suggestions, the usernames of the people
+**Resend** delivers Sipply's email. When our authentication provider
+emails you, to confirm a new account or with a link to set or reset your
+password, it sends the message through Resend, which handles your email
+address and the message, with its link, to deliver it. Resend also
+delivers the monthly email of drink suggestions to the
+Sipply team: the text of those suggestions, the usernames of the people
 who sent them and when, and where each photo is stored (never the photo
-itself), and nothing else.
+itself). It is given nothing else.
 
 That is the complete list.
 
 ## Deleting your account
 
-Open **Profile → "..."** (top right) **→ Settings → Delete account**.
+Open **Profile → “...”** (top right) **→ Settings → Delete account**.
 
 This permanently deletes your profile and profile photo, every post you
 have made, the tags on your posts and the tags of you on other people's
@@ -445,7 +449,8 @@ your collections (any link to one stops working), your taste answers and
 saved drinks, your follows in both directions, your blocks, your invite
 links, the drinks
 you added and their photos, the hashes that make you findable, the
-records kept for the matching, song-search and notification limits, your
+records kept for the matching, song-search, join-code and notification
+limits, your
 phones' device tokens, your notification switches and the notes of
 notifications sent to you or about you, and the tournaments
 you host, with your place in anyone else's. If you signed in with your
@@ -456,7 +461,7 @@ Google or Facebook sent when you signed in. On the phone you delete from,
 the collection and the drinks you added are reset and the photos Sipply
 kept for them are removed, your taste answers and saved drinks are
 cleared, and what Sipply remembered there for finding friends (your
-number, your Instagram username, an imported Instagram list) is
+number, and anything an earlier version kept for Instagram) is
 forgotten. It cannot be undone, and your username
 becomes available to someone else.
 
@@ -526,8 +531,8 @@ collections, the tournaments you host or join, the notifications you
 allow, and the sign-in and friend finding you choose to use) and our legitimate interest in keeping
 the app safe (reports, blocks, the notes that stop someone being tagged
 again on a post they left, the text filter, the matching limits, the
-song-search limit, the notification limits and the sign-in screen's
-limit).
+song-search limit, the join-code limit, the notification limits and the
+sign-in screen's limit).
 You may complain to your local data protection authority.
 
 If you are in California: we do not sell or share personal information,

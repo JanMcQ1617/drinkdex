@@ -49,26 +49,28 @@ place, while places others tagged still show by name.
 
 ## Beta App Description
 
-[4,000 max. 1,665 as pasted, recounted for build 33 (25 Oct 2026) the way
-appstore.md counts: bold marks gone, a paragraph's line breaks as spaces.
-The Places line is 70 with its line break; without migration 026 leave it
-out, and it is 1,595, as it was after the Dex and Tournaments swapped
-places (23 Oct 2026). Build 25 was 1,451; the tournament item grew for
-build 30 (1,609) and shortened with the swap.]
+[4,000 max. 1,734 as pasted, recounted for build 40 (3 Nov 2026)
+the way appstore.md counts: bold marks gone, a paragraph's line breaks as
+spaces. It names no total for the Dex: build 40 holds 4,671 entries (899
+cocktails, 1,428 spirits, 2,344 wines), and build 41's wine bottlings move
+that within days. The Places line is 102 with its line
+break; without migration 026 leave it out. The tournament item names the
+join code, which needs migration 028; without it, say "invite them"
+instead of "send them its code". Build 33's was 1,665.]
 
-Sipply is a field guide to cocktails and spirits. Its Dex holds 2,089 entries, made up of 899 cocktails and 1,190 spirits. Each entry carries its glassware and where it comes from; every cocktail carries the build, the measures and the method.
+Sipply is a field guide to cocktails, spirits and wines. Its Dex holds thousands of entries. Each entry carries its glassware and where it comes from; every cocktail carries the build, the measures and the method, and every wine its grapes and region.
 
-Post a drink you have had and it joins your Dex. Add a photo and your own shot replaces the stock artwork on that card from then on. Answer a few questions about what you like, and the Dex opens For you, with the drinks that fit you first.
+Post a drink you have had and it joins your Dex. Posting opens the camera, and your own shot replaces the stock artwork on that card from then on. Answer a few questions about what you like, and the Dex opens For you, with the drinks that fit you first.
 
-This build lets you tag the people you were with on a post, and adds Daily ideas: one notification a day at most, at a time you choose, and only if you turn them on. The Saved tab now holds collections you name and can share by link. The Dex has taste filters, Fruity among them, and its search comes back as soon as you scroll up.
+Wine is back, with the Wine Atlas: every named wine by country or A to Z, and the grapes behind them. The filters show how many drinks each choice leaves. Tournaments run between days you pick on a calendar, and anyone you send its code to can join. Find friends is simpler: contacts, your invite link and username search.
 
 Worth trying:
-- Tagging the bar on a post, and the drink's Where people have had it
+- Tagging the bar on a post, with Current place or a search, and the drink's Where people have had it
 - Tagging someone you follow on a post, and removing yourself from a post that tags you
 - Daily ideas: turn them on in Settings, set the time a few minutes ahead, and check that one arrives (none comes on a day you have posted or added a drink)
 - A collection: make one, add to it, share its link, then stop sharing
-- The Dex in For you and By number, with the taste filters
-- A tournament with a friend who tests too: tap the trophy, second in the tab bar, host one, join it, post, and check the standings, and that the Friends board on the same tab lists you both
+- The Dex: the Wines chip, a wine's On the map, and the filters
+- A tournament with a friend who tests too: tap the trophy, second in the tab bar, host one, send them its code to join, post, and check the standings, and that the Friends board on the same tab lists you both
 - Music from Spotify or Apple Music: it should keep playing when you open Sipply
 - Account deletion and password reset
 
@@ -78,7 +80,10 @@ Anything that looks broken, slow or wrong on your screen is worth reporting.
 
 ## What to Test
 
-[4,000 max. 3,843 as pasted, recounted for build 33 (26 Oct 2026) the
+[Build 40's exact text is `specs/v4.14/wtt-40.txt` (3,343 characters,
+counted 3 Nov 2026): paste that for build 40. The list below is the
+standing set, updated for build 40 (3,793 as pasted; 3,916 with
+the sign-in item added). Before that: 4,000 max. 3,843 as pasted, recounted for build 33 (26 Oct 2026) the
 same way; 3,966 with the first sign-in item below added to the list, 34
 to spare. Places is new (423 with its line break, after the licence
 rework added iOS 18 and naming the place; 378 before that, and 334
@@ -98,8 +103,8 @@ both are useful.
 Worth poking at:
 
 - **Places.** On iOS 18 or later, post a drink and tap Add place under
-  the caption. Search a bar by name, or tap Show places near me (iOS asks
-  for your location only then; say no once and check search still works).
+  the caption. Search a bar by name, or tap Current place at the top (iOS
+  asks for your location only then; say no once and check search still works).
   Pick one, change its name if you like, and tap Tag this place. Tap the
   place on your post to open its page and try Open in Apple Maps. On the
   drink's own page, check the bar shows under Where people have had it.
@@ -115,24 +120,23 @@ Worth poking at:
   bookmark to save something straight into it. In the collection's "..."
   menu, share its link, open the link on another phone, then Stop sharing
   and check the link no longer works.
-- **The Dex.** 2,089 entries. With taste answers it opens For you, your
-  kinds of drinks first; switch to By number for the plain order. Try the
-  filters (the sliders at the end of the search field), Fruity among them,
-  search, and open a few. Does it stay smooth when you scroll fast?
-- **Tournaments.** Tap the trophy, second in the tab bar. Host one with
-  someone you follow, join it from their account, post a drink from each,
-  and check its card and its page. Each different drink adds one entry, up
-  to 3 a day. Under it, Friends ranks you and the people you follow by
+- **The Dex.** Cocktails, spirits and, back now, wines. With taste
+  answers it opens For you, your kinds of drinks first; switch to By number
+  for the plain order. Try the filters (the sliders at the end of the
+  search field): each choice shows how many drinks it leaves. Search a
+  grape, open a wine and tap On the map. Does it stay smooth when you
+  scroll fast?
+- **Tournaments.** Tap the trophy, second in the tab bar. Host one, pick
+  its days on the calendar and a goal, then join it from a second account
+  with Join with code. Post a drink from each, and check its card and its
+  page. Each different drink adds one entry, up to 3 a day. Under it, Friends ranks you and the people you follow by
   different drinks posted: a new drink adds one, a re-post none. Tap a row
   to open that profile.
-- **Posting a drink.** The + is now at the top of Home, beside the heart
-  (the red key in the tab bar is the Dex now). Type your drink, add a photo
-  and a caption. Does it show up on your profile and in the feed?
-- **Finding people.** Search a username, or match your contacts. Contacts
-  are hashed on your device and never uploaded.
-- **Your Instagram list.** In Find friends, request your followers and
-  following from Instagram, then choose the .zip it sends, without
-  unzipping it. Does it find the people you expected?
+- **Posting a drink.** The + is at the top of Home, beside the heart.
+  Posting opens the camera; the camera roll is one key in it. Add a
+  caption. Does it show up on your profile and in the feed?
+- **Finding people.** Search a username, share your invite link, or match
+  your contacts. Contacts are hashed on your device and never uploaded.
 - **Other people's profiles.** Open someone from the feed or a list. Their
   profile opens as its own page, with Report account and Block in its "..."
   menu.
@@ -186,11 +190,14 @@ Jan's pass on build 33, from spec v4.8 §6.4. Tick each before submitting:
   errors. The build looks like build 32.
 - [ ] After 026: Add place under Tag people; the search finds bars by name
   with location never asked.
-- [ ] Show places near me shows the system prompt with the purpose string
-  from `app.json`. Allow While Using lists venues within 800 m with
+- [ ] Current place, at the top of Add place, shows the system prompt
+  with the purpose string from `app.json` on its first tap. Allow While
+  Using names the place you are in and lists venues within 800 m with
   distances in feet or miles. After Don't Allow, the same row reads
   "Location is off for Sipply in Settings." and opens Settings, and search
-  still works. Precise Location off shows its own line.
+  still works. Precise Location off: the row reads "Precise Location is
+  off in Settings." and opens Settings. (Build 33 had a Show places near
+  me row here; build 37 replaced it.)
 - [ ] Tapping a result shows Tag this place with Apple's map of the venue
   (ink marker, no other points of interest, the Apple Maps logo and Legal
   link visible and Legal tappable) and Name on your post filled with
@@ -268,13 +275,12 @@ retained is the user's own phone hash, which is what makes them findable,
 and it is cleared by "Stop being findable" in Profile → "..." → Settings →
 Find friends.
 
-**Instagram.** There is no Instagram login and no Instagram API. The user
-picks their own Instagram data download (the .zip Instagram sends). It is
-read on the device, and only its followers and following files, and its
-personal information file when there is one, are unpacked; from that last
-file only the user's own username is read, and it is stored, as a hash,
-only if the user accepts it. The usernames are hashed and matched the same way as
-phone numbers, under the same limit.
+[Build 39 and earlier had an **Instagram** paragraph here, for the import
+build 40 removed; it is in this file's git history. Every count below that
+says "sign-in through Instagram" includes it: from build 40, subtract it
+(480 in full, 60 cut to its first sentence), or count
+`specs/v4.14/review-notes-40.txt`, build 40's exact notes, 3,915
+characters.]
 
 ### Add Daily ideas to every build from 25, and tournaments, places and story music when it has them
 

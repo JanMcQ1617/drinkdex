@@ -1,6 +1,6 @@
 # Support
 
-**Last updated: 28 October 2026**
+**Last updated: 3 November 2026**
 
 Sipply is made by one person. There is no support queue and no ticket
 number — there is an email address, and it is read.
@@ -16,7 +16,7 @@ subject and it will be treated that way.
 
 ## Things you can do yourself, right now
 
-**Delete your account.** Profile → **"..."** (top right) → **Settings** →
+**Delete your account.** Profile → **“...”** (top right) → **Settings** →
 **Delete account**. It removes your profile, every post, every photo, your
 likes, your follows in both directions and the tournaments you host. It is
 immediate, it cannot be undone, and you do not need to email anyone first.
@@ -25,27 +25,23 @@ again once you have a signal. If you signed in with Apple or Facebook,
 removing Sipply from that account is done in Apple's or Facebook's
 settings: [Deleting your data](data-deletion) explains how.
 
-**Report a post or an account.** The **"..."** menu on any post or profile
+**Report a post or an account.** The **“...”** menu on any post or profile
 that is not yours → **Report** (**Report account** on a profile). Pick a
 reason. It comes straight to us.
 
-**Block someone.** Same **"..."** menu → **Block**. It takes effect
+**Block someone.** Same **“...”** menu → **Block**. It takes effect
 immediately, it works in both directions, it drops any follow between you,
 and the other person is not told.
 
-**Unblock someone.** Profile → **"..."** → **Settings** → **Blocked
+**Unblock someone.** Profile → **“...”** → **Settings** → **Blocked
 accounts** → **Unblock**. Follows the block dropped do not come back on
 their own.
 
-**Stop being findable by your phone number.** Profile → **"..."** →
+**Stop being findable by your phone number.** Profile → **“...”** →
 **Settings** → **Find friends** → **Stop being findable**. This clears the
 stored hash on the server, not just on your phone.
 
-**Forget an imported Instagram list.** Profile → **"..."** → **Settings** →
-**Find friends** → **Forget my imported list**. Clears the cached list and
-the matches. Your own handle can be cleared separately in the same place.
-
-**Start your collection over.** Profile → **"..."** → **Settings** →
+**Start your collection over.** Profile → **“...”** → **Settings** →
 **Reset collection**. This clears your collected entries and the photos
 saved with them on this phone. It does not delete your account or your
 posts.
@@ -113,7 +109,7 @@ itself, and nothing about them is sent to us.
 posting or saving a drink, Sipply offers them with an example of what you
 would get, and it asks by itself twice at most. Tap **Allow daily ideas**,
 then allow notifications when iOS asks. You can also tick or untick them at
-any time in Profile → **"..."** → **Settings** → **Notifications** →
+any time in Profile → **“...”** → **Settings** → **Notifications** →
 **Daily ideas**. Unticking cancels every idea already planned.
 
 **Change the time.** They come at 6:00 PM unless you change it. With Daily
@@ -137,14 +133,14 @@ ideas ticked, tap **Time** under it, pick a new time, and tap **Done**.
 
 **Tag someone.** When you post a drink, tap **Tag people** under the
 caption, tick who was with you, and tap **Done**. To change the tags on a
-post you already shared, open its **"..."** menu → **Tag people**, where
+post you already shared, open its **“...”** menu → **Tag people**, where
 unticking someone removes their tag.
 
 **Who you can tag.** People you follow, up to 10 on a post. Never yourself,
 and never anyone you have blocked or who has blocked you. Each person you
 tag sees the post in their Activity.
 
-**Remove yourself.** On a post that tags you, open its **"..."** menu →
+**Remove yourself.** On a post that tags you, open its **“...”** menu →
 **Remove me from this post**. The person who posted it is not told, and
 they cannot tag you on that post again.
 
@@ -164,21 +160,21 @@ cafés and hotels can be tagged, never a home or a street address.
 place**, but places other people tagged still show on their posts, and
 their pages list the drinks posted there.
 
-**Remove one, or rename it.** On your own post, open its **"..."** menu →
+**Remove one, or rename it.** On your own post, open its **“...”** menu →
 **Remove place**. **Add place** in the same menu tags a post that has
 none, so to rename a place, remove it and add it again.
 
-**A wrong place on someone's post.** Open the post's **"..."** menu →
+**A wrong place on someone's post.** Open the post's **“...”** menu →
 **Report** → **Wrong place tagged**.
 
-**Location is optional.** **Show places near me** asks for your location
-only when you tap it, and searching by name always works without it. Your
-location goes only to Apple Maps, to find places near you, and is never
-sent to Sipply. Everyone signed in to Sipply can see a place you tag, so
-tag a place after you have left if you would rather not show where you
-are. To change your answer later, open your iPhone's **Settings →
-Privacy & Security → Location Services → Sipply**; if you said no, tapping
-**Show places near me** opens it.
+**Location is optional.** **Current place**, at the top of Add place,
+asks for your location only when you tap it, and searching by name always
+works without it. Your location goes only to Apple Maps, to find the place
+you are in and places near you, and is never sent to Sipply. Everyone
+signed in to Sipply can see a place you tag, so tag a place after you have
+left if you would rather not show where you are. To change your answer
+later, open your iPhone's **Settings → Privacy & Security → Location
+Services → Sipply**; if you said no, tapping **Current place** opens it.
 
 ## Saved collections
 
@@ -194,16 +190,16 @@ collections open, so you can tick the ones it belongs in. Right after you
 tap a bookmark, the bar that says **Saved** has **Save to collection**,
 which does the same. A collection holds up to 200 things.
 
-**Share it by link.** Open the collection, tap **"..."** beside its name →
+**Share it by link.** Open the collection, tap **“...”** beside its name →
 **Share**, and send the link. Anyone with the link can see the
 collection's name, your username and the drinks in it, even without
 Sipply. **Share link** in the same menu sends the same link again.
 
-**Stop sharing.** Same **"..."** menu → **Stop sharing**. The link stops
+**Stop sharing.** Same **“...”** menu → **Stop sharing**. The link stops
 working at once. Sharing again makes a new link, so the old one never
 works again. Someone who saved a copy before you stopped keeps their copy.
 
-**Delete one.** Same **"..."** menu → **Delete collection**. Everything in
+**Delete one.** Same **“...”** menu → **Delete collection**. Everything in
 it stays in All saved, and a shared link stops working. To take out only
 some things, use **Remove items** instead.
 
@@ -236,10 +232,9 @@ posts you make, so treat a post as public.
 your phone, and only the hashes are sent to be compared; they are not
 stored. The [Privacy Policy](privacy) explains this in full.
 
-**It says I have checked a lot of numbers, or run a lot of checks, today.**
-Matching is limited to 3,000 phone numbers and Instagram handles per
-account in any 24 hours, counted together, so that it is hard to misuse for
-looking up strangers. Try again tomorrow.
+**It says I have checked a lot of numbers today.** Matching is limited to
+3,000 phone numbers per account in any 24 hours, so that it is hard to
+misuse for looking up strangers. Try again tomorrow.
 
 **It says my text includes language Sipply does not allow.** Captions, bios,
 display names, usernames and tournament names are checked for slurs and
@@ -255,21 +250,31 @@ A link shared from an older version of the app still opens your profile,
 but no longer follows anyone.
 
 **How do tournaments work?** Tap the trophy, second in the tab bar, then
-**Host a tournament**: give it a name, choose when it starts
-and how long it runs, add a goal if you want one, and invite
-people you follow. A tournament is a shared log: each different drink
-someone posts while it runs adds one entry. With a goal, whoever reaches
-that many entries first wins and the tournament ends there; otherwise, or
-if nobody reaches it, whoever has the most entries at the end wins, and a
-tie goes to whoever got there first. The rules are the same in every
-tournament, and every tournament screen shows them: "Each different drink
-you post while it runs adds one entry, up to 3 a day. Entries are
-counted, never amounts. No prizes, and Apple is not a sponsor. Please
-drink responsibly." The host can end a running tournament early from its
-**"..."** menu, and whoever has the most entries then wins, or delete one
+**Host a tournament**: give it a name, pick its first and last day on the
+calendar (up to 31 days), choose a goal, **Most entries** or **First to** a
+number you set, and invite people you follow if you like. Once it is made
+you get a six-character code, with **Copy** and **Share**; send it to
+anyone you want in it. A tournament is a shared log: each different drink
+someone posts while it runs adds one entry. With **First to**, whoever
+reaches that many entries first wins and the tournament ends there;
+otherwise, or if nobody reaches it, whoever has the most entries at the
+end wins, and a tie goes to whoever got there first. The rules are the
+same in every tournament. Every tournament screen shows "No prizes · Apple
+is not a sponsor · Drink responsibly", and its **i** key opens the full
+rules: "Each different drink you post while it runs adds one entry, up to
+3 a day. Entries are counted, never amounts. No prizes, and Apple is not
+a sponsor. Please drink responsibly." The host can end a running tournament early from its
+**“...”** menu, and whoever has the most entries then wins, or delete one
 that has not finished, and it disappears for everyone in it. Anyone who
 has joined can leave from the same menu before it finishes, but cannot
 rejoin, and an invitation you decline cannot be sent to you again.
+
+**How do I join with a code?** On the Tournaments tab, tap **Join with
+code**, type or paste the six characters (capitals or not), check the
+tournament it shows and tap **Join**. Everyone in a tournament can see its
+code on its page until it ends. A code stops working when the tournament
+ends, and a tournament holds 50 people at most. If you have typed a lot of
+wrong codes, Sipply asks you to try again later.
 
 **What is Friends on the Tournaments tab?** You and the people you follow,
 in order of how many different drinks each has posted. Each drink counts
@@ -291,33 +296,25 @@ you. Tap a row to open that profile.
   the tournament or someone reaches its goal.
 - **Only drinks in the Dex.** A drink you added yourself is not posted, so
   it cannot count.
-- **Only if you have joined.** Until you accept the invitation, nothing of
-  yours is counted. Joining late is fine: once you join, everything you
-  posted since the start counts.
+- **Only if you have joined.** Until you accept the invitation or join
+  with the code, nothing of yours is counted. Joining late is fine: once
+  you join, everything you posted since the start counts.
 - **Deleted posts.** Deleting a post before the tournament ends takes that
   drink out of the count. Once a finished tournament has shown its
   results, they stay as they are.
 
-**Can you connect my Instagram automatically?** No — and not because it is
-unbuilt. No Meta API hands a third-party app your follower or following
-list, and scraping it would put *your* account at risk, not ours. Importing
-your own downloaded list is the only honest version of that feature.
-
-**Which Instagram download do I choose?** In Find friends, tap **Request
-your list**. On Instagram's page, ask for **Followers and following** only;
-any format works, and it usually arrives within half an hour. Then tap
-**Choose the download** and pick the .zip Instagram gave you, as it is,
-without unzipping it. If Sipply says the download is too big, it is the
-full export with every photo in it: request again with only Followers and
-following. The file is read on your phone and never uploaded.
+**Can I find my Instagram friends?** Not through Instagram. Earlier
+versions could match a list you downloaded from Instagram yourself; that
+is gone. In Find friends, tap **Share invite link** and send it to them,
+or find them by username.
 
 **Can I find my Facebook friends?** Not through Facebook: Sipply does not
-ask Facebook for your friends list. Find them by contacts, your Instagram
-list or their username in Find friends.
+ask Facebook for your friends list. Find them by contacts, by username or
+with your invite link in Find friends.
 
-**Does Sipply post to Facebook or Instagram?** No, never. It asks Facebook
-for your name, email and picture, and nothing else, and it has no
-connection to Instagram at all.
+**Does Sipply post to Facebook or Instagram?** No, never. If you sign in
+with Facebook, it asks Facebook for your name, email and picture, and
+nothing else, and it has no connection to Instagram at all.
 
 **How do I stop Sipply using my Facebook account?** Remove Sipply under
 **Apps and websites** in Facebook's settings.

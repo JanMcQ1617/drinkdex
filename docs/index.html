@@ -26,11 +26,16 @@
     it is. Every name, number, style, fact and recipe on this page
     is the catalogue's (src/data/drinks.json, worded through lib/drinkLabels
     as the app words them). If the catalogue changes them, change them here.
-  The counts (2,089 entries, 899 cocktails, 1,190 spirits) and every line
-  about tournaments, saved collections, tags and places are the approved
-  wording in appstore.md and testflight.md, held to App Store guideline 1.4.3:
-  nothing here asks anyone to drink, or to drink more. No ratings, reviews,
-  download counts or user numbers: there are none to show.
+  The counts are floors, not totals (v4.14, 3 Nov 2026: 899 cocktails,
+  1,428 spirits, 2,344 wines, 4,671 in all), because build 41's wine
+  bottlings and the split of spirits and wines move them within days:
+  899 cocktails, 1,400+ spirits, 2,300+ wines, 4,600+ entries. Raise them
+  when the catalogue settles; never write one above what
+  src/data/drinks.json holds. Every line about tournaments, saved
+  collections, tags and places is the approved wording in appstore.md and
+  testflight.md, held to App Store guideline 1.4.3: nothing here asks
+  anyone to drink, or to drink more. No ratings, reviews, download counts
+  or user numbers: there are none to show.
 -->
 <!doctype html>
 <html lang="en">
@@ -40,11 +45,11 @@
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#FFFFFF">
 <title>Sipply, a drinks field guide for iPhone</title>
-<meta name="description" content="A field guide to 2,089 drinks: 899 cocktails with real recipes and 1,190 spirits. Log the ones you have had, keep your own photo of each, and follow friends.">
+<meta name="description" content="A field guide to thousands of drinks: cocktails with their real recipes, spirits and wines. Log the ones you have had, keep your own photo of each, and follow friends.">
 <link rel="icon" href="img/icon.png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <meta property="og:title" content="Sipply, a drinks field guide for iPhone">
-<meta property="og:description" content="A field guide to 2,089 cocktails and spirits, each cocktail with its real recipe.">
+<meta property="og:description" content="A field guide to cocktails, spirits and wines, each cocktail with its real recipe.">
 <meta property="og:image" content="https://janmcq1617.github.io/drinkdex/img/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -157,10 +162,15 @@
   /* ---- The Dex --------------------------------------------------------- */
   .dex-body { display: grid; gap: 40px 56px; margin-top: 40px; }
   @media (min-width: 960px) { .dex-body { grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr); } }
-  .dex-copy { display: grid; gap: 28px; align-content: start; }
+  .dex-copy { display: grid; gap: 28px; align-content: start; container-type: inline-size; }
   .dex-copy .big { font-size: clamp(22px, 2vw, 27px); line-height: 1.32; letter-spacing: -0.022em; font-weight: 500; max-width: 26ch; }
-  .counts { display: flex; flex-wrap: wrap; gap: 8px 40px; margin: 0; padding: 0; list-style: none; }
-  .counts b { display: block; font-size: clamp(40px, 4.4vw, 60px); line-height: 1; letter-spacing: -0.045em; font-weight: 600; font-variant-numeric: tabular-nums; }
+  /* Three counts on one row at every width: sized to the column (cqi), not the window, because
+     beside the grid (960+) the column is 323 to 431px. "899 · 1,400+ · 2,300+" is about 8.3em of
+     numerals, and "cocktails" under the first is wider than "899" on a phone; 9.8cqi of type plus two
+     gaps of 6cqi (20px at least) fits down to a 288px column, a 320px phone.
+     The first two lines are the fallback for a browser without container units. */
+  .counts { display: flex; flex-wrap: wrap; gap: 8px 40px; gap: 8px clamp(20px, 6cqi, 40px); margin: 0; padding: 0; list-style: none; }
+  .counts b { display: block; font-size: clamp(40px, 4.4vw, 60px); font-size: clamp(26px, 9.8cqi, 60px); line-height: 1; letter-spacing: -0.045em; font-weight: 600; font-variant-numeric: tabular-nums; }
   .counts span { display: block; margin-top: 8px; color: var(--muted); font-size: 15px; }
   .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 16px; margin: 0; padding: 0; list-style: none; }
   @media (min-width: 700px) { .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
@@ -418,7 +428,7 @@
         })();
       </script>
       <h1 id="hero-h">A field guide to drinks, and a record of yours.<span class="h1-swash" data-pen="swash" data-size="title" data-delay="2600"></span></h1>
-      <p class="lede">2,089 cocktails and spirits, every cocktail with its real recipe. Post the ones you have had, with your own photo.</p>
+      <p class="lede">Thousands of cocktails, spirits and wines, every cocktail with its real recipe. Post the ones you have had, with your own photo.</p>
       <div class="cta">
         <a class="key ink" id="hero-key" href="https://testflight.apple.com/join/1T5KAfkz" rel="noopener">Join the beta</a>
         <a class="quiet" href="#beta">How the beta works<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chev"/></svg></a>
@@ -446,18 +456,19 @@
   <section class="wrap" id="dex" aria-labelledby="dex-h">
     <div class="head rise">
       <h2 id="dex-h">The Dex</h2>
-      <p class="head-aside">2,089 entries</p>
+      <p class="head-aside">4,600+ entries</p>
     </div>
     <span class="head-rule" data-pen="rule" data-seed="2"></span>
 
     <div class="dex-body">
       <div class="dex-copy rise">
-        <p class="big">Every cocktail and every bottle has an entry: the glass it belongs in, where it comes from, and for every cocktail, the real recipe.</p>
+        <p class="big">Every cocktail, spirit and wine has an entry: the glass it belongs in, where it comes from, and for every cocktail, the real recipe.</p>
         <ul class="counts">
           <li><b>899</b><span>cocktails</span></li>
-          <li><b>1,190</b><span>spirits</span></li>
+          <li><b>1,400+</b><span>spirits</span></li>
+          <li><b>2,300+</b><span>wines</span></li>
         </ul>
-        <p class="body">Search it, filter it by flavour, spirit or kind, or scroll and find something you have never heard of.</p>
+        <p class="body">Search it, filter it by flavour, strength, grape or country, or scroll and find something you have never heard of. Wines lead to the Wine Atlas: its named wines by country, and the grapes behind them.</p>
       </div>
 
       <!-- Eight entries in Dex order, as the grid hangs them: the print, the name in Playfair, the number and the style. -->
@@ -479,7 +490,7 @@
       <div class="print rise"><img src="img/drinks/mai-tai-720.webp" alt="A Mai Tai in a rocks glass, with a lime wheel on a pick and a sprig of mint." width="720" height="720" loading="lazy" decoding="async"></div>
       <div class="spec-copy">
         <h2 id="recipe-h" class="rise">The recipe, the glass, and where it came from</h2>
-        <p class="body rise">Build, measures and method for every cocktail; base, distillation and ageing for every spirit. Written to be read while you mix, not scrolled past.</p>
+        <p class="body rise">Build, measures and method for every cocktail; base, distillation and ageing for every spirit; grapes and region for every wine. Written to be read while you mix, not scrolled past.</p>
 
         <!-- The drink page's spec (DrinkPanels SpecSection), the Mai Tai's as the catalogue has it. -->
         <div class="spec rise">
@@ -572,7 +583,7 @@
           </ul>
         </div>
         <h3>Tournaments</h3>
-        <p>Host a tournament with people you follow: one shared log of the drinks each of you posts between the dates you pick. No prizes, and how much anyone drinks is never counted or shown.</p>
+        <p>Host a tournament: one shared log of the drinks each of you posts between the dates you pick. Invite people you follow, or share its six-character code. No prizes, and how much anyone drinks is never counted or shown.</p>
       </article>
       <article class="cell svd rise">
         <!-- A collection on Saved: its name, shared by link, and its shelf. -->
@@ -604,7 +615,7 @@
           <div class="where-row"><svg class="g-sm" viewBox="0 0 24 24"><use href="#i-pin"/></svg><span class="label"><span>Caffè Centrale</span><span class="muted">2 people</span></span><svg class="g-sm" viewBox="0 0 24 24"><use href="#i-chev"/></svg></div>
         </div>
         <h3>Places</h3>
-        <p>On iOS 18 or later, add the place to a post, found with Apple Maps. A drink's own page shows where people have had it.</p>
+        <p>On iOS 18 or later, add the place to a post: search for it with Apple Maps, or tap Current place. A drink's own page shows where people have had it.</p>
       </article>
     </div>
   </section>

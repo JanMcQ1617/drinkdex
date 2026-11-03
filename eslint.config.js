@@ -7,6 +7,7 @@ module.exports = defineConfig([
   {
     // Edge Functions are Deno code, deployed from the Supabase Dashboard:
     // npm: specifiers and the Deno global are not this app's to lint.
-    ignores: ["dist/*", "supabase/functions/**"],
+    // site-dist is the Netlify site, built from docs/ by scripts/build-site.mjs.
+    ignores: ["dist/*", "site-dist/**", "supabase/functions/**"],
   }
 ]);

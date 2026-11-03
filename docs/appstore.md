@@ -3,28 +3,37 @@
 Paste these into App Store Connect. Written to be pasted, not edited.
 
 Character limits are Apple's; the counts in brackets are what these
-actually use, so there is room to fiddle without going over.
+actually use, so there is room to fiddle without going over. The blocks
+marked `<!-- listing:… -->` are version 1.0's, and
+`node scripts/check-listing.mjs` counts every one of them, checks the
+limits and the keyword rules below, and refuses the words guideline 1.4.3
+would read as asking anyone to drink. Run it after any edit; it prints the
+counts that belong in the brackets.
 
-Every number here was counted out of `src/data/drinks.json` rather than
-remembered. If the Dex grows before you submit, recount — an inflated
-number in a listing is the kind of thing that is easy to write and
-awkward to defend. So is an example drink the Dex no longer has, which
+No listing field gives a total for the Dex any more. It is 4,671 entries
+on 3 Nov 2026 (899 cocktails, 1,428 spirits, 2,344 wines), and build 41's
+wine bottlings and the split of spirits and wines move it within days, so
+the copy says "thousands". If a number ever goes back in, count it out of
+`src/data/drinks.json` on the day you submit, never from memory — an
+inflated number in a listing is the kind of thing that is easy to write
+and awkward to defend. So is an example drink the Dex no longer has, which
 is why the description only names entries that are in the file.
 
-Recount whenever `scripts/*data` changes, from the repo root. It prints
-the total, then a count for each category:
+Recount from the repo root. It prints the total, then a count for each
+category:
 
 ```sh
 node -e 'const d=require("./src/data/drinks.json"),c={};for(const x of d){c[x.category]=(c[x.category]||0)+1}console.log(d.length,c)'
 ```
 
 Then check every drink the description names by searching the file for
-it, and recount the bracketed lengths after any edit.
+it.
 
 ---
 
 ## App Name — 30 max
 
+<!-- listing:name -->
 ```
 Sipply: Drinkdex
 ```
@@ -42,18 +51,23 @@ the keywords.
 
 ## Subtitle — 30 max
 
+<!-- listing:subtitle -->
 ```
-Cocktail recipes and spirits
+Cocktails, spirits and wine
 ```
 
-[28]
+[27]
+
+Wine is back from build 40 (v4.14), so the subtitle names all three
+kinds of entry. Build 39's "Cocktail recipes and spirits" left wine out,
+and "recipes" moves to the keywords instead.
 
 Alternatives, same length class:
 
 ```
-A field guide to 2,089 drinks
+A field guide to drinks
 ```
-[29]
+[23]
 
 ```
 A drink diary and recipe guide
@@ -64,17 +78,17 @@ The subtitle is the line people read in search results, so it names what
 the app holds and never a drink to go and have. Build 25 dropped "Collect
 every drink you try" and "2,089 drinks. Collect them." for guideline 1.4.3:
 both read as a list to drink through. "A field guide to drinking" went
-with them, because it can read as a guide to drinking itself.
-
-The subtitle changes only with a new version, so the field guide
-alternative's 2,089 has to be right on the day you submit. Recount first.
+with them, because it can read as a guide to drinking itself. No
+alternative carries a number: the subtitle changes only with a new
+version, and the Dex's count does not hold still that long.
 
 ---
 
 ## Keywords — 100 max, comma-separated, NO spaces
 
+<!-- listing:keywords -->
 ```
-whisky,whiskey,scotch,bourbon,gin,rum,tequila,mezcal,vodka,brandy,amaro,liqueur,mixology,journal
+recipe,whisky,whiskey,bourbon,gin,rum,tequila,mezcal,vodka,brandy,liqueur,mixology,grape,journal
 ```
 
 [96]
@@ -82,8 +96,11 @@ whisky,whiskey,scotch,bourbon,gin,rum,tequila,mezcal,vodka,brandy,amaro,liqueur,
 Two rules this already follows, both easy to get wrong: **no spaces after
 the commas** (a space costs a character and buys nothing), and **nothing
 repeated from the name or subtitle**. Apple already indexes those, so
-"sipply", "drinkdex", "cocktail", "recipes" and "spirits" would be dead
-weight here.
+"sipply", "drinkdex", "cocktail", "spirit" and "wine" would be dead weight
+here. "recipe" is back in because the subtitle no longer says it, and
+"grape" is new for the wines (a grape search finds the wines made from
+it). "scotch" and "amaro" went to make room; "whisky" and "liqueur" still
+cover them in search.
 
 Singular and plural are indexed together, so there is no point spending
 characters on both.
@@ -92,14 +109,23 @@ Build 25 dropped "bar", "pour" and "tasting" for guideline 1.4.3: each
 reads as going out for a drink or having one. Every word left names a
 kind of drink in the Dex, the craft of mixing them, or the journal.
 
-With either alternative subtitle, "cocktail" is no longer in the subtitle,
-so swap it in for "mezcal":
+With the "A drink diary and recipe guide" subtitle, "recipe" is in the
+subtitle and the three kinds are not, so use:
 
 ```
-cocktail,whisky,whiskey,scotch,bourbon,gin,rum,tequila,vodka,brandy,amaro,liqueur,mixology,journal
+cocktail,spirit,wine,whisky,whiskey,bourbon,gin,rum,tequila,vodka,brandy,liqueur,mixology,grape
 ```
 
-[98]
+[95]
+
+With "A field guide to drinks", put "cocktail" and "wine" in for "grape"
+and "journal":
+
+```
+cocktail,wine,recipe,whisky,whiskey,bourbon,gin,rum,tequila,mezcal,vodka,brandy,liqueur,mixology
+```
+
+[96]
 
 ---
 
@@ -108,11 +134,12 @@ cocktail,whisky,whiskey,scotch,bourbon,gin,rum,tequila,vodka,brandy,amaro,liqueu
 Updatable any time without shipping a build, so this is the line to change
 when the Dex grows or something is worth announcing.
 
+<!-- listing:promotional -->
 ```
-A field guide to 2,089 drinks: 899 cocktails with real recipes and 1,190 spirits. Log the ones you have had, keep your own photo of each, and follow friends.
+A field guide to cocktails, spirits and wines: every cocktail with its real recipe, a Wine Atlas by country and grape. Post the ones you have had, with your own photo.
 ```
 
-[157]
+[167]
 
 Build 25 took out "2,089 drinks waiting to be found" and "see what your
 friends are drinking" for guideline 1.4.3: the first made the Dex a list
@@ -124,18 +151,23 @@ change the start here; it needs no build.
 
 ## Description — 4000 max
 
+<!-- listing:description -->
 ```
 Sipply is a field guide to drinks, and a record of the ones you have had.
 
-The Dex holds 2,089 entries (899 cocktails and 1,190 spirits), and each one tells you the glass it belongs in and where it comes from. Every cocktail carries its real recipe, the proper measures, and the story behind it.
+The Dex holds thousands of entries, cocktails, spirits and wines, and each one tells you the glass it belongs in and where it comes from. Every cocktail carries its real recipe, the proper measures, and the story behind it.
 
 Entries start locked. Post one you have had, with a photo and a caption, and the card turns over and joins your collection.
 
 THE DEX
 
-Search it, filter it by flavour, spirit or kind, or just scroll and find something you have never heard of. Some entries are everywhere — a Margarita, a Negroni. Others are genuinely obscure: a 1930s Mexico City sour the world forgot for seventy years, a whisky forgotten in a warehouse for two decades, a Mallorcan bitter sold against malaria that outlived the malaria.
+Search it, filter it by flavour, strength, grape or country, or just scroll and find something you have never heard of. Some entries are everywhere — a Margarita, a Negroni. Others are genuinely obscure: a 1930s Mexico City sour the world forgot for seventy years, a whisky forgotten in a warehouse for two decades, a Mallorcan bitter sold against malaria that outlived the malaria.
 
 Answer a few questions about your tastes and For you puts the entries closest to them first. By number is one tap away.
+
+WINE
+
+From the classic grapes and regions to every named wine in the Wine Atlas, by country or A to Z, with the grapes behind each one. Search a grape and find the wines made from it.
 
 YOUR SHELF
 
@@ -149,11 +181,9 @@ Save any drink or post to come back to, and sort them into collections. Share a 
 
 PEOPLE
 
-Follow friends and see the drinks they post, with their photos and captions. Tag the people you were with on a post, and they see it in Activity. Find friends by username, or match your contacts — phone numbers are scrambled on your phone before they are compared, and your address book is never uploaded.
+Follow friends and see the drinks they post, with their photos and captions. Tag the people you were with on a post, and they see it in Activity. Find friends by username, send them your invite link, or match your contacts — phone numbers are scrambled on your phone before they are compared, and your address book is never uploaded.
 
-Host a tournament with people you follow: one shared log of the drinks each of you posts between the dates you pick. No prizes, and how much anyone drinks is never counted or shown.
-
-If you would rather bring your Instagram circle, ask Instagram for a copy of your followers and following and hand Sipply the .zip it sends. Sipply never connects to your Instagram account: the file is read on your phone, and the usernames in it are scrambled there before they are compared.
+Host a tournament: one shared log of the drinks each of you posts between the dates you pick. Invite people you follow, or share its six-character code. No prizes, and how much anyone drinks is never counted or shown.
 
 DAILY IDEAS
 
@@ -172,7 +202,7 @@ You can delete your account in Settings, which opens from your profile, without 
 Sipply is for people old enough to drink where they live. Please drink responsibly, and never drive after drinking.
 ```
 
-[2,939, recounted for build 35 (28 Oct 2026) without the Facebook paragraph below; 3,120 with it, as build 25 had it. Comfortably inside 4000, with room if you want to add a line]
+[2,910, counted by `scripts/check-listing.mjs` on 3 Nov 2026 for version 1.0. Comfortably inside 4000]
 
 Build 25 rewrote this for guideline 1.4.3 (apps must not encourage
 drinking or excessive drinking), which the daily ideas bring under closer
@@ -187,34 +217,76 @@ tournament is described as the people in it see it, one shared log of
 their posts; the Tournaments paragraph in the review notes below keeps the
 rules in full for App Review.
 
+For 1.0 (3 Nov 2026): the Dex's counts became "thousands of entries,
+cocktails, spirits and wines"; WINE is new (build 40 restored the wines
+and the Wine Atlas; "search a grape" is the Dex search, which matches
+grapes); the filters are named as build 40 has them; PEOPLE gained the
+invite link and lost the Instagram paragraph, because build 40 removed the
+Instagram import; the tournament paragraph names the join code (migration
+028); and nothing mentions buying, because build 39 removed Buy a bottle
+and Sipply takes no payments.
+
+Places are left out of the description, as they always were: the review
+notes describe them for App Review, and a listing line about bars reads to
+1.4.3 as going out for a drink more easily than the feature itself does.
+
 Dex progress (Stats) is left out on purpose. Its title ladder (Note
 taker, Cataloguer, Archivist, Scholar, Curator, Keeper of the Dex) and
-the line under it ("Next: Cataloguer, at 209 entries", for someone with
-38) were reworded after build 25 to read as a catalogue, not a drinking
-score, but they are still the nearest thing in the app to one, so the
-listing does not point anyone at them.
+the line under it ("Next: Cataloguer, at 233") were reworded after build
+25 to read as a catalogue, not a drinking score, but they are still the
+nearest thing in the app to one, so the listing does not point anyone at
+them.
+
+**With build 41 or later** (its wine bottlings from well-known
+producers), add this sentence to the end of the WINE paragraph, after
+"made from it.", with a space before it. It names its own subject, so it
+stays true wherever the bottlings sit: in the Wine Atlas, under Wines, or
+on a shelf of their own (`specs/v4.15/ranks.md` allows for that).
+
+<!-- listing:description-bottlings -->
+```
+The Dex also holds wine bottlings from well-known producers.
+```
+
+[60, plus 1 for the space: the description becomes 2,971, counted by `scripts/check-listing.mjs` on 3 Nov 2026]
+
+Not before: build 40 has no producer's bottling in it, and a listing line
+the build cannot show is a rejection. On the day build 41's data is in
+`src/data/drinks.json`, check three things before pasting:
+
+- **Glass.** Every bottling has `glassware`. If not, "each one tells you
+  the glass it belongs in" (the description's second paragraph) is no
+  longer true.
+- **Grapes and region.** Every bottling's `composition.components` has a
+  Grapes row and a Region row. If not, "every wine its grapes and region"
+  (testflight.md's Beta App Description) and "grapes and region for every
+  wine" (the site's homepage) must change first. On build 40 all 2,344
+  wines have glassware, Grapes and Region.
+- **The floors.** Recount with the command at the top of this file; the
+  site's homepage shows 1,400+ spirits, 2,300+ wines and 4,600+ entries,
+  and none may sit above the file.
 
 The Facebook paragraph is out of PEOPLE from build 35. It describes a
 build made with `EXPO_PUBLIC_FACEBOOK_SIGN_IN=on` and
-`EXPO_PUBLIC_FACEBOOK_FRIENDS=on`, and build 35 has both off: the friends
-flag from 28 October 2026, while Meta reviews Facebook sign-in without
-`user_friends`, and Continue with Facebook itself from build 35, until
-Meta approves the app (`specs/v4.9/meta-review.md`, §9). Once both are on
-again, paste it back between the tournament paragraph and the Instagram
-one, and the count grows by 181:
+`EXPO_PUBLIC_FACEBOOK_FRIENDS=on`, and every build since has both off: the
+friends flag from 28 October 2026, while Meta reviews Facebook sign-in
+without `user_friends`, and Continue with Facebook itself from build 35,
+until Meta approves the app (`specs/v4.9/meta-review.md`, §9). Once both
+are on again, paste it back after the tournament paragraph, and the count
+grows by 181:
 
 ```
 Continue with Facebook and see which of your Facebook friends are already here. Facebook only shows Sipply the friends who connected it too, and Sipply never posts anything there.
 ```
 
-The tournament paragraph under PEOPLE describes a server with migration
-020 applied, which is what makes tournaments appear. If it is not applied
-when you submit, delete that paragraph, and the count drops by 183.
+The tournament paragraph under PEOPLE describes a server with migrations
+020 and 028 applied: 020 makes tournaments appear, 028 gives them their
+join codes. Without 028, delete "Invite people you follow, or share its
+six-character code. " and put back "with people you follow" after "Host a
+tournament"; without 020, delete the paragraph.
 
 The Tag sentence under PEOPLE needs migration 024 (applied 17 Oct 2026)
-and SAVED's collections need 023 (applied 13 Oct 2026). Without 024,
-delete the sentence that starts "Tag the people", and the count drops
-by 69.
+and SAVED's collections need 023 (applied 13 Oct 2026).
 
 DAILY IDEAS is true of build 25 and every build after it. Settings opens
 from the ••• on the Profile tab, which is what "Settings, which opens from
@@ -224,64 +296,13 @@ your profile" means in the account line.
 
 ## What's New — 4000 max
 
-Not required for a first release. Version 1.0.0 is not on the App Store
-yet, so if build 25 is the first build submitted for review, App Store
-Connect will not ask for this; keep it for the first update.
-
-Written for build 25 against build 15, the last build this section
-described, so it covers every round from v3.2 to v4.3. If the build
-already on the App Store is 24, paste only the first two paragraphs: they
-are build 25's.
-
-```
-Tag people on a post. When you post a drink, tap Tag people and choose up to 10 people you follow who were there. The post shows who you were with, and each person you tag sees it in Activity. Anyone you tag can remove themselves.
-
-Daily ideas, only if you want them: one notification a day, at a time you choose, with a drink to read about, a recipe to write down or something new in the Dex. Sipply asks before any arrive. Change the time or turn them off in Settings, under Notifications.
-
-Saved has a tab of its own. Save any drink or post, sort them into collections, and share a collection by link. Stop sharing whenever you like.
-
-The Dex can follow your tastes. For you puts the drinks that match what you like first, and By number is one tap away. The filters use the same words as the taste questions, Fruity included.
-
-Scroll up in the Dex and the search field and filters come back.
-
-889 of the 899 cocktails now have a photograph.
-
-Home looks like the feed you know: the full photo, then like, share and save, and who liked it.
-
-New to Sipply? A few questions about your tastes come before you sign in.
-
-Sign in with Apple or Google.
-
-Swipe between tabs, and a line under the active tab shows where you are.
-
-Black and white throughout, with less on every screen, so the drink photographs are the only colour.
-```
-
-[1,322]
-
-Guideline 1.4.3 reads this field like the rest of the listing, so every
-line is about the catalogue, recipes, what you have posted or friends,
-and none asks anyone to drink. Daily ideas says "a recipe to write down",
-as the review notes do, rather than the in-app ask's "a recipe to create".
-
-"In Settings, under Notifications" is the in-app ask's own wording.
-Settings opens from the ••• on the Profile tab.
-
-The Tag people paragraph needs migration 024 (applied 17 Oct 2026), and
-collections need 023 (applied 13 Oct 2026). Without 024 the build shows no
-Tag people row, so delete that paragraph.
-
-The photo count was counted out of `src/data/drinkPhotos.ts` against
-`src/data/drinks.json`: 901 of the 2,089 entries have one, 889 cocktails
-and 12 spirits (recounted 24 Oct 2026). Recount after any photo import.
-
-"Apple or Google" is build 35's: it is made with
-`EXPO_PUBLIC_FACEBOOK_SIGN_IN=off`, because in development mode only the
-Meta app's own roles can use Facebook, and everyone else's page hung or
-said the app is not active. Once Meta approves and the app is Live, a
-build with the flag back on (`specs/v4.9/meta-review.md`, §9) makes the
-line "Sign in with Apple, Google or Facebook." again, as build 25 had it
-(the count grows by 10).
+Version 1.0: leave it empty. App Store Connect does not ask for What's
+New on a first release, and there is no earlier version on the App Store
+for it to compare with. Write it for the first update after 1.0, against
+1.0, the same way as the description: about the catalogue, recipes, what
+you have posted or saved, or friends, and never asking anyone to drink.
+(Build 25's draft, written when it looked like the first build to go to
+review, is in this file's git history.)
 
 ---
 
@@ -290,9 +311,21 @@ line "Sign in with Apple, Google or Facebook." again, as build 25 had it
 App Store Connect → the version → **App Review Information → Notes**.
 Start from the Test Information notes in [testflight.md](testflight.md):
 sign-in, user-generated content, tags, account deletion, age rating,
-contacts, Instagram, and the third-party paragraph that matches the build.
-They hold for App Review as they do for Beta App Review. Then add the
-paragraphs below that match the build.
+contacts (and Instagram, up to build 39), and the third-party paragraph
+that matches the build. They hold for App Review as they do for Beta App
+Review. Then add the paragraphs below that match the build.
+
+**For version 1.0 on build 40 (v4.14),** paste
+`specs/v4.14/review-notes-40.txt` as it is: 3,915 characters, 85 to
+spare, counted 3 Nov 2026. It has no Instagram paragraph (build 40 removed
+the import, and build 39's "No Instagram login and no Instagram API."
+described nothing left in the app), a Dex paragraph for the wines, and the
+Tournaments and Places paragraphs below as they are now. For build 41 or
+later, rewrite its Dex paragraph (474) from `src/data/drinks.json` on the
+day: the wine bottlings change its numbers, and it must name them. The
+measurements in the rest of this section are the history up to build 39,
+which still had the Instagram paragraph; recount any set you build from
+them.
 
 The field takes 4,000 characters, and the full set does not fit. Measured
 for build 15 as pasted (bold marks gone, each paragraph's line breaks as
@@ -386,20 +419,29 @@ notifications" became "no notifications but the invite" (28 Oct 2026, +15:
 server without 027, put back "no notifications" (833, or 660). The Friends
 sentence's "no notifications" holds either way: the board sends none.
 
-**Tournaments.** Anyone can hold a friendly tournament with people they
-follow: a shared log, and whoever posts the most different Dex entries
-wins. Each drink counts once, and amounts are never counted or shown.
-Only 3 entries a day count per person, and a drink first posted after the
-day's three never counts later, so nothing rewards posting a lot at once.
-No prizes, no entry fees, no streaks, no meters, no notifications but the
-invite. Every tournament screen shows the rules, ending "No prizes, and
-Apple is not a sponsor. Please drink responsibly." Names pass the caption
-filter. To find it, follow anyone, then tap the trophy, second in the tab
-bar → Host a tournament. The same tab lists you and the people you follow
-by how many different Dex entries each has posted (each drink once,
-ever): no amounts, no per-day counts, no notifications.
+From build 37 (v4.11) the host picks the dates on a calendar (1 to 31
+days) and the goal (Most entries, or First to a number the host sets), and
+the rules are one line on every tournament screen with an "i" key for the
+full text. From build 38 (v4.12), with migration 028 applied, a
+tournament can be made with nobody invited and joined with its
+six-character code. The paragraph below is build 40's, word for word from
+`specs/v4.14/review-notes-40.txt`; builds 30 to 36's longer one (848, with
+the Friends board sentence) is in this file's git history. Without 028,
+delete " or with a code the host shares" and " or Join with code" (it is
+then 615).
 
-[848]
+**Tournaments.** A shared log over 1 to 31 calendar days: most different
+entries wins, or First to a number the host sets. People join by invite
+or with a code the host shares; blocks apply. Each drink counts once;
+amounts are never counted. Only 3 entries a day count per person; a drink
+first posted after them never counts: nothing rewards posting a lot at
+once. No entry fees, streaks or meters. Each tournament screen shows "No
+prizes · Apple is not a sponsor · Drink responsibly"; its "i" key opens
+the full rules, ending "Apple is not a sponsor. Please drink responsibly."
+Names pass the caption filter. To try: trophy tab → Host a tournament or
+Join with code.
+
+[664]
 
 ### Songs on posts — a build with `EXPO_PUBLIC_STORY_MUSIC=tap`
 
@@ -501,20 +543,22 @@ reviewer should find the feature that uses it. Spec v4.8 §4.4 is the
 source; paste it with the Tournaments cut described above.
 
 **Places.** A post can name the bar or restaurant it was had at, found
-with Apple Maps search on the device (MapKit). Only venues can be tagged,
-never a home or an address. Location is When In Use, asked only on a tap
-of Show places near me; search by name works without it, and the device's
-location never reaches our server. Pages count people who had a drink at a
-place, never amounts, prices, deals or rankings. Wrong places are reported
-from the post's "..." menu. Try it on iOS 18 or later: post a drink, then
-Add place.
+with on-device Apple Maps (MapKit). Only venues, never a home or address.
+Location is When In Use, asked only on a tap of Current place, and never
+reaches our server; search by name works without it. Pages count people
+who had a drink at a place, never amounts, prices, deals or rankings.
+Wrong places are reported from the post's "..." menu. Try it on iOS 18+:
+post a drink, then Add place.
 
-[522]
+[458, build 40's, from `specs/v4.14/review-notes-40.txt`. From build 37
+(v4.11) the Current place row, at the top of Add place, is the only thing
+that asks for location; it replaced Show places near me. Build 33's
+paragraph was 522.]
 
 Not for pasting: the guidelines to check on the build before submitting.
 
-- **5.1.1.** Location is asked for on demand (only on a tap of Show places
-  near me), with a purpose string, and search by name works when it is
+- **5.1.1.** Location is asked for on demand (only on a tap of Current
+  place), with a purpose string, and search by name works when it is
   denied.
 - **5.1.5.** Location is directly relevant to the feature (places near
   you), and nothing uses it in the background.
@@ -556,6 +600,16 @@ nothing, and these pages change only when `main` moves. The privacy,
 support and terms pages all resolved on 29 September 2026. Check again
 before you submit — a support URL that 404s is a rejection.
 
+**The same pages are on Netlify too**, at the site's root: `/privacy`,
+`/support`, `/terms` and `/data-deletion` (and the same with `.html`).
+`node scripts/build-site.mjs` renders `docs/` into `site-dist/` as Pages
+does, and `netlify.toml` publishes that folder. Either host can go in
+these fields, but the app's Settings and the sign-up consent open the
+GitHub Pages addresses (`src/app/settings.tsx`,
+`src/components/auth/Consent.tsx`), so keep these on GitHub Pages until
+the app points at the new one, and keep both hosts deployed from the same
+`docs/`.
+
 ### Meta app settings, for Continue with Facebook
 
 Not App Store Connect: these go in the Meta developer app whose App ID and
@@ -590,16 +644,41 @@ accounts made with Facebook in earlier builds keep what Facebook sent
 (the name, the email address, the picture link and Facebook's id), and the
 button comes back once Meta approves the app.
 
+**Version 1.0 (build 40, v4.14): no Yes or No changes, three rows'
+wording does.** Checked 3 Nov 2026 against the policy, `app.json`'s
+privacy manifest and the code:
+
+- **The Instagram import is gone** (build 40). The app no longer reads an
+  Instagram download, sends Instagram hashes for matching or asks for a
+  handle, and it withdraws a handle claimed on that phone by itself
+  (`specs/v4.14/find-friends.md` §3). So Identifiers → User ID loses "the
+  hash of the user's own Instagram handle" (still Yes: the account id and
+  username), and Usage Data → Other Usage Data's matching count is phone
+  numbers only. Handle hashes claimed on build 39 or earlier stay on the
+  server until withdrawn or the column is dropped; version 1.0 never
+  collects one, which is what the label describes.
+- **Buy a bottle is gone** (build 39). Sipply sells nothing and takes no
+  payment, and there is no Stripe or Apple Pay in the app, so Financial
+  Info and Purchases stay **Not collected**, and nothing from
+  `specs/v4.11/shop.md`'s App Privacy plan (Purchases, a shipping address,
+  a payment processor) applies. The privacy manifest never declared them
+  and needs no change.
+- **Tournament join codes** (migration 028) add no type: the code is part
+  of the tournament, in Other User Content, and the count of wrong codes
+  an account types in each hour (never the codes) is a limit like the
+  song-search count, in Other Usage Data. Both rows below now say so.
+
 Apple's test for "collected" is that data leaves the phone and is kept
-longer than it takes to answer the request. So the contact hashes, the
-Instagram hashes and the Facebook friend ids sent for matching (only by a
-build with `EXPO_PUBLIC_FACEBOOK_FRIENDS=on`; with it off none are sent,
-and no answer below changes) are **not**
+longer than it takes to answer the request. So the contact hashes and the
+Facebook friend ids sent for matching (only by a build with
+`EXPO_PUBLIC_FACEBOOK_FRIENDS=on`; with it off none are sent, and no
+answer below changes), and the Instagram hashes builds up to 39 sent, are
+**not**
 collected — they are compared and dropped — and neither is the email
 address the sign-in screen checks for an account. Nothing that stays on the
 phone is collected either: the collection, unposted photos, the cached
-Instagram list (and Facebook list, with that flag on), which posts and
-activity have been seen,
+Facebook list (with that flag on), which posts and activity have been
+seen,
 each account's answer to the screen that asks about notifications from
 other people (from build 34), and the daily ideas (from build 25), which
 are planned and scheduled on the phone with the time, the ideas already
@@ -638,17 +717,17 @@ otherwise:
 | Contact Info → Email Address | Yes | The sign-in address; for Sign in with Apple it may be a Hide My Email relay |
 | Contact Info → Phone Number | Yes | The sign-in number for anyone who signs in by phone, kept by the authentication provider; otherwise only as a salted hash, and only for someone who makes themselves findable. Apple counts a hash as the data it came from |
 | User Content → Photos or Videos | Yes | Post photos, the profile photo, and the photo sent with a drink suggestion. Also covers the link to a Google or Facebook profile picture that Supabase keeps from sign-in, which the app never shows or copies |
-| User Content → Other User Content | Yes | Captions, bios, likes, saves, follows, invites, drink suggestions, reports and the copy a report keeps; tournaments (name, dates, goal, invitations, standings and the host's time zone); the song added to a post; collections (their names and what is in them, and a share link when you make one); tags (the people you tag on a post, and the record kept when someone removes themselves from one, so that post cannot tag them again) |
+| User Content → Other User Content | Yes | Captions, bios, likes, saves, follows, invites, drink suggestions, reports and the copy a report keeps; tournaments (name, dates, goal, invitations, join code, standings and the host's time zone); the song added to a post; collections (their names and what is in them, and a share link when you make one); tags (the people you tag on a post, and the record kept when someone removes themselves from one, so that post cannot tag them again) |
 | Location → Precise Location | Yes | The place a person tags on a post's photo (a bar, restaurant or similar venue chosen from Apple Maps), kept as Apple's Place ID for that venue and the name the person gives it, shown with the post. The Place ID names one venue, so it places the person there as exactly as coordinates would, although no coordinates are stored. The device's own location is used on the phone and by Apple Maps only, and never sent to Sipply. |
-| Identifiers → User ID | Yes | The account id and username; the id Apple or Facebook issues for Sipply, and the id Google issues; the hash of the user's own Instagram handle |
+| Identifiers → User ID | Yes | The account id and username; the id Apple or Facebook issues for Sipply, and the id Google issues |
 | Identifiers → Device ID | Yes, from build 34 (**No** until build 33) | The random installation id Expo's update check sends. Expo keeps it to deliver updates and count installs per version; nothing ties it to an account. From build 34, also the phone's APNs device token: the address Apple issues so that a server can send that phone a notification for Sipply. It is kept with the account (at most five phones) only once the person has allowed notifications from other people, so that a tag, a tournament invite or a new follower reaches that person's phone, and is sent, with each notification's one line, its kind and the in-app link it opens (holding the random id of the post, tournament or person it is about), to Apple's Push Notification service, which delivers it. It comes off the server when the person signs out, turns all three switches off, turns notifications off for Sipply in iOS (read the next time the app opens) or deletes the account |
-| Usage Data → Other Usage Data | Yes | How many phone numbers or handles an account checked, from which list, and when; kept only to enforce the 3,000-a-day matching limit. How many song searches an account made in each hour, never the words; kept only to enforce the 120-an-hour limit. From build 34, when one person last notified another of a tag, and of a tournament invite, never any words; kept only to enforce one of each an hour between the same two people, until either account is deleted. Also, with no account attached, the sign-in screen's hour-long meter of email checks, kept per scrambled IP address |
+| Usage Data → Other Usage Data | Yes | How many phone numbers an account checked, and when; kept only to enforce the 3,000-a-day matching limit. How many song searches an account made in each hour, never the words; kept only to enforce the 120-an-hour limit. How many wrong tournament join codes an account typed in each hour, never the codes; kept only to stop codes being guessed (twenty in about two hours). From build 34, when one person last notified another of a tag, and of a tournament invite, never any words; kept only to enforce one of each an hour between the same two people, until either account is deleted. Also, with no account attached, the sign-in screen's hour-long meter of email checks, kept per scrambled IP address |
 | Other Data → Other Data Types | Yes | Taste answers and saved drinks: what the person usually drinks, which spirits and flavours they like, whether they make drinks at home and what was in their bar, and the drinks they saved, kept with the account so they follow it to a new phone. Owner only, never on the profile. From build 34, also the account's three switches for notifications from other people (tags, invites, new followers), all on until changed. Purposes **App Functionality** and **Product Personalization** (the answers choose the drinks suggested, on the phone, by the same rules for everyone; the switches are App Functionality alone) |
 
 App Functionality covers Other Usage Data: Apple's definition of the
 purpose includes preventing fraud and implementing security measures, which
-is what the matching limit, the song-search limit, the notifications' hour
-between two people and the sign-in meter are. Product Personalization is
+is what the matching limit, the song-search limit, the join-code limit,
+the notifications' hour between two people and the sign-in meter are. Product Personalization is
 Apple's purpose for customising what a person sees, recommendations
 included, which is what the taste answers do; it is not tracking, because
 nothing is combined with other companies' data or shared. Device ID stays
@@ -783,12 +862,16 @@ The first two are what people see in search results without tapping
 through. Lead with the two that carry the scale and the payoff:
 
 1. **The Dex grid**, scrolled to somewhere dense. This is the shot that
-   sells 2,089 entries; nothing else in the app communicates the size of
-   it in one frame.
+   shows the size of the Dex; nothing else in the app communicates it in
+   one frame. A shot with the Dex count in it ("/ 2,327" in build 39's
+   set, `specs/v4.9/appstore-shots`) shows a number the Dex no longer has:
+   retake it on the build you submit.
 2. **An open drink card** with its origin story.
-3. **Posting a drink**, with a real photograph attached.
-4. **The feed**, with a few different people in it.
-5. **Saved**, with a few collections you have named.
+3. **A wine**, open on its page, or the Wine Atlas, so the listing's
+   wines are on screen too.
+4. **Posting a drink**, with a real photograph attached.
+5. **The feed**, with a few different people in it.
+6. **Saved**, with a few collections you have named.
 
 Not Dex progress: its title ladder, even reworded after build 25, is the
 part of the app most likely to read as a score, which the description

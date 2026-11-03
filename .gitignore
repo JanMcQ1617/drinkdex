@@ -45,3 +45,6 @@ example
 # Frames pulled from reference screen recordings (regenerate with ffmpeg; too big for git)
 specs/*/study/frames/
 specs/*/study/sheets/
+
+# The Netlify site, built from docs/ by scripts/build-site.mjs
+site-dist/

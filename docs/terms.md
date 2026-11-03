@@ -1,6 +1,6 @@
 # Terms of Use
 
-**Last updated: 26 October 2026**
+**Last updated: 3 November 2026**
 
 Sipply is a drinks field guide. You collect entries, post what you drink,
 and share it with people you follow. These are the rules for using it.
@@ -66,7 +66,7 @@ app to get around the rules above.
 
 ## Reporting and blocking
 
-Every post and every profile that is not yours has a **"..."** menu with
+Every post and every profile that is not yours has a **“...”** menu with
 **Report** and **Block**.
 
 **Report** asks for a reason and sends it to us. Reports are reviewed and
@@ -125,10 +125,10 @@ not try to be.
 
 ## Tournaments
 
-A tournament is a shared log between a host and people they follow: each
-different drink someone posts while it runs adds one entry, and whoever has
-the most entries at the end wins (or, with a goal, whoever reaches it
-first). Entries are counted, never amounts. Each drink counts once, however
+A tournament is a shared log between a host and the people who join it,
+by invitation or with its code: each different drink someone posts while
+it runs adds one entry, and whoever has the most entries at the end wins
+(or, with a goal, whoever reaches it first). Entries are counted, never amounts. Each drink counts once, however
 often you post it, and **at most three entries count a day**, midnight to
 midnight in the host's time zone. A drink first posted after that day's
 three never counts in that tournament, even if you post it again on a later
@@ -163,7 +163,7 @@ belong to their owners and appear for identification only.
 
 ## Ending it
 
-**You can delete your account at any time** from **Profile → "..."** (top
+**You can delete your account at any time** from **Profile → “...”** (top
 right) **→ Settings → Delete account**. It removes your profile, posts,
 photos, likes, saves, follows, the drinks you added and the tournaments you
 host. It is immediate and cannot be undone. You do not need to ask us. If
