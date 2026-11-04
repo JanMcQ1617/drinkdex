@@ -91,9 +91,9 @@ import { confirmDestructive } from '@/utils/alerts';
 /* from iOS allowing daily ideas.                                       */
 /* ==================================================================== */
 
-const SUPPORT_URL = 'https://janmcq1617.github.io/drinkdex/support';
-const PRIVACY_URL = 'https://janmcq1617.github.io/drinkdex/privacy';
-const TERMS_URL = 'https://janmcq1617.github.io/drinkdex/terms';
+const SUPPORT_URL = 'https://sipply.netlify.app/support';
+const PRIVACY_URL = 'https://sipply.netlify.app/privacy';
+const TERMS_URL = 'https://sipply.netlify.app/terms';
 
 /*
  * What deleting an account removes, said in the confirm before it happens.

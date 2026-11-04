@@ -577,9 +577,16 @@ Not for pasting: the guidelines to check on the build before submitting.
 
 | Field | Value |
 | --- | --- |
-| Privacy Policy URL | `https://janmcq1617.github.io/drinkdex/privacy` |
-| Support URL | `https://janmcq1617.github.io/drinkdex/support` |
-| Marketing URL | leave blank — there is no marketing site, and a dead link is worse than none |
+| Privacy Policy URL | `https://sipply.netlify.app/privacy` |
+| Support URL | `https://sipply.netlify.app/support` |
+| Marketing URL | `https://sipply.netlify.app/` |
+
+Set in App Store Connect on 4 Nov 2026 (the TestFlight privacy URL too), when
+the site moved to Netlify. The app's own links (Settings, and the consent line
+at sign-up) point at the same Netlify pages from build 42. GitHub Pages keeps
+serving the same `docs/`, so build 41 and earlier, and the Meta and Google
+consoles below, which still name github.io, keep working; move those only
+when there is a reason to, since Meta re-reviews a changed privacy URL.
 
 **Pages serves from `main` / `/docs`**, so a branch alone publishes
 nothing, and these pages change only when `main` moves. The privacy,

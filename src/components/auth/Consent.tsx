@@ -18,13 +18,15 @@ import { colors, fonts, space, textRole } from '@/constants/theme';
 /* ==================================================================== */
 
 /*
- * The published documents. Extensionless on purpose — GitHub Pages serves
- * `terms.html` for `/terms`, and these are the exact strings recorded in
- * `docs/appstore.md` as the App Store Connect URLs, so the app and the
- * listing point at one thing rather than two spellings of it.
+ * The published documents, on the Netlify site since 4 Nov 2026. Extensionless
+ * on purpose — the site's `_redirects` serves `terms.html` for `/terms`, and
+ * these are the exact strings recorded in `docs/appstore.md` as the App Store
+ * Connect URLs, so the app and the listing point at one thing rather than two
+ * spellings of it. GitHub Pages still serves the same pages, for builds before
+ * 42 and for the Meta and Google consoles, which keep the github.io links.
  */
-export const TERMS_URL = 'https://janmcq1617.github.io/drinkdex/terms';
-export const PRIVACY_URL = 'https://janmcq1617.github.io/drinkdex/privacy';
+export const TERMS_URL = 'https://sipply.netlify.app/terms';
+export const PRIVACY_URL = 'https://sipply.netlify.app/privacy';
 
 /**
  * The age and terms statement, said where an account is taken up: at the
