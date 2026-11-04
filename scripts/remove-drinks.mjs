@@ -23,11 +23,15 @@
  * the v4.13 image run was half done against Nº 2090-2329 when three of those
  * cards went, and closing up would have moved every number after them. The
  * Dex reads a gap as a gap (dex.tsx's LAST_NUMBER), so the hole is honest.
+ * It is also how a bottling leaves (v4.15): without it every later
+ * bottling's number would move.
  */
 
 import { readdirSync, readFileSync, writeFileSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+
+import { fold } from './lib/dex-merge.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DRINKS = path.join(ROOT, 'src', 'data', 'drinks.json');
@@ -121,7 +125,16 @@ if (problems.length) {
   process.exit(1);
 }
 
-/* Warn — loudly — about any target still sitting in a source file. */
+/*
+ * Warn — loudly — about any target still sitting in a source file.
+ *
+ * The brand layers' rows carry no id: a bottling's is its name folded and
+ * suffixed (merge-spirit-brands' `-sb`, merge-wine-brands' `-wb`), so a row
+ * there is matched by the id its merge would give it. Without this the
+ * guard could never fire for a bottling (v4.15).
+ */
+const BRAND_SUFFIX = { spiritbranddata: '-sb', winebranddata: '-wb' };
+const rowId = (dir, r) => (BRAND_SUFFIX[dir] && typeof r.n === 'string' ? `${fold(r.n)}${BRAND_SUFFIX[dir]}` : r.id);
 const stillSourced = [];
 for (const dir of readdirSync(SCRIPTS)) {
   const full = path.join(SCRIPTS, dir);
@@ -130,7 +143,7 @@ for (const dir of readdirSync(SCRIPTS)) {
     let rows;
     try { rows = JSON.parse(readFileSync(path.join(full, f), 'utf8')); } catch { continue; }
     if (!Array.isArray(rows)) continue;
-    for (const r of rows) if (r && doomed.has(r.id)) stillSourced.push(`${dir}/${f}: ${r.id}`);
+    for (const r of rows) if (r && doomed.has(rowId(dir, r))) stillSourced.push(`${dir}/${f}: ${rowId(dir, r)}`);
   }
 }
 if (stillSourced.length) {

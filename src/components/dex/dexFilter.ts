@@ -122,10 +122,14 @@ export const MAKE_WORD = 'I can make it';
  * grapes, and the variety a grape card is. The atlas has merged the
  * synonyms (Shiraz is Syrah), so a grape is one option however a card
  * names it. Ten atlas cards record no grape, and are in no Grape option.
+ * A bottling (v4.15) is its own grapes where its row names them (Krug
+ * Clos du Mesnil is Chardonnay, not all Le Mesnil permits), else its
+ * appellation's, as any card filed there.
  */
 function grapesOf(d: FacetSource): readonly string[] {
   const link = atlasLinkFor(d.id);
   if (!link) return [];
+  if (link.grapes?.length) return link.grapes;
   const out = new Set<string>();
   for (const w of winesByName(link.wines)) for (const g of grapeNamesOf(w)) out.add(g);
   if (link.grape) out.add(link.grape);

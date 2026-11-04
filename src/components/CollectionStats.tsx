@@ -8,6 +8,7 @@ import { Button, ProgressBar } from '@/components/ui';
 import { CATEGORY_META, CATEGORY_ORDER, colors, layout, space, tabular, textRole } from '@/constants/theme';
 import { COUNT_BY_CATEGORY, formatCount, getDrink, TOTAL } from '@/data';
 import { latestCatch } from '@/lib/cabinet';
+import { LADDER_TOTAL, onLadder } from '@/lib/milestones';
 import { useCollection } from '@/store/collection';
 import { useCustomDrinks } from '@/store/customDrinks';
 import type { DrinkCategory, UnlockRecord } from '@/types';
@@ -19,9 +20,10 @@ import type { DrinkCategory, UnlockRecord } from '@/types';
 /* 5.2 and 5.5), one tap from the Dex's "38 / 2,089" and Profile's "38  */
 /* entries in your Dex ›", top to bottom:                               */
 /*                                                                      */
-/*   the Dex panel   the figure, "of 2,089 in the Dex · 1.8%", the      */
+/*   the Dex panel   the figure, "of 4,671 in the Dex · 1.8%", the      */
 /*                   title and the ladder ruler (Ruler.tsx), then       */
-/*                   "Next: Cataloguer, at 209 entries"                 */
+/*                   "Titles count cocktails and spirits: 38 of 2,327"  */
+/*                   and "Next: Cataloguer, at 233"                     */
 /*   latest entry    its print and name; opens the drink                */
 /*   See your 38     the Dex, filtered to Logged                        */
 /*   by kind         cocktails, spirits and wines, each with its bar    */
@@ -34,6 +36,9 @@ import type { DrinkCategory, UnlockRecord } from '@/types';
 /* SAME NUMBERS AS THE DEX. The figure counts catalogue drinks in the   */
 /* collection, as the Dex's count and Profile's line do, so all three   */
 /* say 38. A drink you added has no number and is not one of them.      */
+/* The title is the one figure here that is not the whole Dex: it reads */
+/* cocktails and spirits only (lib/milestones, v4.15), which the panel  */
+/* says in words under the ruler. The per-kind bars stay every kind.    */
 /*                                                                      */
 /* Reads the local collection only: it works signed out. Static: no     */
 /* entrance animation, so nothing here waits on a frame loop to show.   */
@@ -41,18 +46,21 @@ import type { DrinkCategory, UnlockRecord } from '@/types';
 
 /**
  * The collection's figures: catalogue drinks only (an orphaned or
- * custom id is skipped), and how many of each kind.
+ * custom id is skipped), how many of each kind, and how many of them
+ * a title counts (lib/milestones' ladderCount, in the same pass).
  */
 function deriveStats(unlocks: Record<string, UnlockRecord>) {
   const byCategory: Record<DrinkCategory, number> = { cocktail: 0, spirit: 0, wine: 0 };
   let unlockedCount = 0;
+  let ladder = 0;
   for (const id of Object.keys(unlocks)) {
     const drink = getDrink(id);
     if (!drink) continue;
     unlockedCount += 1;
     byCategory[drink.category] += 1;
+    if (onLadder(drink.category)) ladder += 1;
   }
-  return { unlockedCount, byCategory };
+  return { unlockedCount, byCategory, ladder };
 }
 
 const has = (map: Record<string, unknown>, id: string) => Object.prototype.hasOwnProperty.call(map, id);
@@ -73,7 +81,7 @@ export function CollectionStats({
   onAddDrink: () => void;
 }) {
   const unlocks = useCollection((s) => s.unlocks);
-  const { unlockedCount, byCategory } = useMemo(() => deriveStats(unlocks), [unlocks]);
+  const { unlockedCount, byCategory, ladder } = useMemo(() => deriveStats(unlocks), [unlocks]);
   const latest = useMemo(() => latestCatch(unlocks), [unlocks]);
 
   /*
@@ -92,7 +100,7 @@ export function CollectionStats({
 
   return (
     <View>
-      <DexPanel count={unlockedCount} total={TOTAL} />
+      <DexPanel count={unlockedCount} total={TOTAL} ladder={ladder} ladderTotal={LADDER_TOTAL} />
 
       {/*
         With nothing caught, every figure here is a zero and none of them

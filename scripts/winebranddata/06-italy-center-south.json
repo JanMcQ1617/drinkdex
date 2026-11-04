@@ -1,0 +1,2873 @@
+[
+ {
+  "n": "Antinori Tignanello",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Cabernet Sauvignon",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.antinori.it/en/wines/all-wines/"
+ },
+ {
+  "n": "Antinori Solaia",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Sangiovese",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.antinori.it/en/wines/all-wines/"
+ },
+ {
+  "n": "Antinori Pèppoli Chianti Classico",
+  "s": "Chianti Classico",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Merlot",
+   "Syrah"
+  ],
+  "src": "https://www.antinori.it/en/wines/all-wines/"
+ },
+ {
+  "n": "Antinori Badia a Passignano Chianti Classico Gran Selezione",
+  "s": "Chianti Classico Gran Selezione",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.antinori.it/en/wines/all-wines/"
+ },
+ {
+  "n": "Villa Antinori Chianti Classico Riserva",
+  "s": "Chianti Classico",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.antinori.it/en/wines/all-wines/"
+ },
+ {
+  "n": "Villa Antinori Rosso",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Syrah"
+  ],
+  "src": "https://www.antinori.it/en/wines/all-wines/"
+ },
+ {
+  "n": "Antinori Guado al Tasso Bolgheri Superiore",
+  "s": "Bolgheri",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.antinori.it/en/wines/all-wines/"
+ },
+ {
+  "n": "Antinori Il Bruciato Bolgheri",
+  "s": "Bolgheri",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Syrah"
+  ],
+  "src": "https://www.antinori.it/en/wines/all-wines/"
+ },
+ {
+  "n": "Antinori Scalabrone Bolgheri Rosato",
+  "s": "Bolgheri Rosato",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Rosé",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Syrah"
+  ],
+  "src": "https://www.antinori.it/en/wines/all-wines/"
+ },
+ {
+  "n": "Antinori Pian delle Vigne Brunello di Montalcino",
+  "s": "Brunello di Montalcino",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.antinori.it/en/wines/all-wines/"
+ },
+ {
+  "n": "Antinori La Braccesca Vino Nobile di Montepulciano",
+  "s": "Vino Nobile di Montepulciano",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Merlot"
+  ],
+  "src": "https://www.antinori.it/en/wines/all-wines/"
+ },
+ {
+  "n": "Antinori Castello della Sala Cervaro della Sala",
+  "s": "Chardonnay",
+  "c": "Italy",
+  "region": "Umbria",
+  "colour": "White",
+  "grapes": [
+   "Chardonnay",
+   "Grechetto"
+  ],
+  "src": "https://www.antinori.it/en/wines/all-wines/"
+ },
+ {
+  "n": "Antinori Castello della Sala San Giovanni della Sala Orvieto Classico Superiore",
+  "s": "Orvieto Classico",
+  "c": "Italy",
+  "region": "Umbria",
+  "colour": "White",
+  "grapes": [
+   "Grechetto",
+   "Procanico",
+   "Pinot Bianco",
+   "Viognier"
+  ],
+  "src": "https://www.antinori.it/en/wines/all-wines/"
+ },
+ {
+  "n": "Santa Cristina Toscana Rosso",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Merlot"
+  ],
+  "abv": "13%",
+  "src": "https://www.wine.com/list/wine/santa-cristina-by-antinori/wine-spectator/7155-102378-202"
+ },
+ {
+  "n": "Santa Cristina Chianti Superiore",
+  "s": "Chianti",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "abv": "13%",
+  "src": "https://www.callmewine.com/en/chianti-superiore-santa-cristina-antinori-2024-P64336.htm"
+ },
+ {
+  "n": "Tenuta San Guido Guidalberto",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.tenutasanguido.com/en/wines"
+ },
+ {
+  "n": "Tenuta San Guido Le Difese",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Sangiovese"
+  ],
+  "src": "https://www.tenutasanguido.com/en/wines"
+ },
+ {
+  "n": "Ornellaia Bolgheri Superiore",
+  "s": "Bolgheri",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.ornellaia.com/en/wines/"
+ },
+ {
+  "n": "Le Serre Nuove dell'Ornellaia",
+  "s": "Bolgheri",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Sauvignon",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.ornellaia.com/en/wines/"
+ },
+ {
+  "n": "Le Volte dell'Ornellaia",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Sangiovese",
+   "Cabernet Sauvignon"
+  ],
+  "src": "https://www.ornellaia.com/en/wines/"
+ },
+ {
+  "n": "Poggio alle Gazze dell'Ornellaia",
+  "s": "Sauvignon Blanc",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc",
+   "Vermentino",
+   "Viognier"
+  ],
+  "src": "https://www.ornellaia.com/en/wines/"
+ },
+ {
+  "n": "Masseto",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Merlot"
+  ],
+  "src": "https://www.masseto.com/en/"
+ },
+ {
+  "n": "Frescobaldi Castello di Nipozzano Chianti Rufina Riserva",
+  "s": "Chianti Rufina",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Malvasia Nera",
+   "Colorino",
+   "Merlot"
+  ],
+  "src": "https://www.frescobaldi.com/en/wines/estates/castello-nipozzano"
+ },
+ {
+  "n": "Frescobaldi Montesodi Chianti Rufina Riserva",
+  "s": "Chianti Rufina",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.frescobaldi.com/en/wines/estates/castello-nipozzano"
+ },
+ {
+  "n": "Frescobaldi Mormoreto",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Cabernet Franc",
+   "Merlot",
+   "Petit Verdot"
+  ],
+  "src": "https://www.frescobaldi.com/en/wines/estates/castello-nipozzano"
+ },
+ {
+  "n": "Frescobaldi Tenuta Perano Chianti Classico",
+  "s": "Chianti Classico",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.frescobaldi.com/en/wines/estates/tenuta-perano"
+ },
+ {
+  "n": "Frescobaldi Castiglioni Chianti",
+  "s": "Chianti",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Merlot",
+   "Cabernet Sauvignon"
+  ],
+  "src": "https://www.frescobaldi.com/en/wines/estates/tenuta-castiglioni"
+ },
+ {
+  "n": "Frescobaldi CastelGiocondo Brunello di Montalcino",
+  "s": "Brunello di Montalcino",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.frescobaldi.com/en/wines/estates/tenuta-castelgiocondo"
+ },
+ {
+  "n": "Frescobaldi Castello Pomino Bianco",
+  "s": "Pomino",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "White",
+  "grapes": [
+   "Chardonnay",
+   "Pinot Bianco"
+  ],
+  "src": "https://www.frescobaldi.com/en/wines/estates/castello-pomino"
+ },
+ {
+  "n": "Frescobaldi Rèmole Rosso",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Cabernet Sauvignon"
+  ],
+  "src": "https://www.frescobaldi.com/en/wines/estates/remole"
+ },
+ {
+  "n": "Frescobaldi Tenuta Ammiraglia Massovivo Vermentino",
+  "s": "Vermentino",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "White",
+  "grapes": [
+   "Vermentino"
+  ],
+  "src": "https://www.frescobaldi.com/en/wines/estates/tenuta-ammiraglia"
+ },
+ {
+  "n": "Frescobaldi Tenuta Calimaia Vino Nobile di Montepulciano",
+  "s": "Vino Nobile di Montepulciano",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.frescobaldi.com/en/wines/estates/tenuta-calimaia"
+ },
+ {
+  "n": "Luce della Vite Luce",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Merlot"
+  ],
+  "src": "https://www.falstaff.com/en/wineries/luce-della-vite"
+ },
+ {
+  "n": "Luce della Vite Lucente",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Sangiovese"
+  ],
+  "src": "https://bottleofitaly.com/en/products/toscana-igt-lucente-astucciato-luce"
+ },
+ {
+  "n": "Luce della Vite Brunello di Montalcino",
+  "s": "Brunello di Montalcino",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.falstaff.com/en/wineries/luce-della-vite"
+ },
+ {
+  "n": "Castello Banfi Brunello di Montalcino",
+  "s": "Brunello di Montalcino",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.banfi.it/eng/category/products/montalcino/page/2/"
+ },
+ {
+  "n": "Castello Banfi Poggio all'Oro Brunello di Montalcino Riserva",
+  "s": "Brunello di Montalcino",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.banfi.it/eng/category/products/montalcino/"
+ },
+ {
+  "n": "Castello Banfi Rosso di Montalcino",
+  "s": "Rosso di Montalcino",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.banfi.it/eng/category/products/montalcino/"
+ },
+ {
+  "n": "Castello Banfi SummuS",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Cabernet Sauvignon",
+   "Syrah"
+  ],
+  "src": "https://www.banfi.it/eng/category/products/montalcino/"
+ },
+ {
+  "n": "Castello Banfi ExcelsuS",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.banfi.it/eng/category/products/montalcino/"
+ },
+ {
+  "n": "Castello Banfi San Angelo Pinot Grigio",
+  "s": "Pinot Grigio",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "White",
+  "grapes": [
+   "Pinot Grigio"
+  ],
+  "src": "https://www.banfi.it/eng/category/products/montalcino/"
+ },
+ {
+  "n": "Castello Banfi Florus Moscadello di Montalcino",
+  "s": "Moscadello di Montalcino",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Sweet White",
+  "grapes": [
+   "Moscato Bianco"
+  ],
+  "src": "https://www.banfi.it/eng/category/products/montalcino/"
+ },
+ {
+  "n": "Banfi Centine Rosso",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.banfi.it/eng/category/products/toscana/"
+ },
+ {
+  "n": "Banfi Chianti",
+  "s": "Chianti",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.banfi.it/eng/category/products/toscana/"
+ },
+ {
+  "n": "Banfi Chianti Classico Riserva",
+  "s": "Chianti Classico",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.banfi.it/eng/category/products/toscana/page/2/"
+ },
+ {
+  "n": "Banfi La Pettegola Vermentino",
+  "s": "Vermentino",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "White",
+  "grapes": [
+   "Vermentino"
+  ],
+  "src": "https://www.banfi.it/eng/category/products/toscana/page/2/"
+ },
+ {
+  "n": "Biondi-Santi Brunello di Montalcino",
+  "s": "Brunello di Montalcino",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.biondisanti.it/en/wines/"
+ },
+ {
+  "n": "Biondi-Santi Brunello di Montalcino Riserva",
+  "s": "Brunello di Montalcino",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.biondisanti.it/en/wines/"
+ },
+ {
+  "n": "Biondi-Santi Rosso di Montalcino",
+  "s": "Rosso di Montalcino",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.biondisanti.it/en/wines/"
+ },
+ {
+  "n": "Ruffino Chianti",
+  "s": "Chianti",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Merlot"
+  ],
+  "src": "https://www.ruffino.it/collections/our-wines"
+ },
+ {
+  "n": "Ruffino Riserva Ducale Chianti Classico Riserva",
+  "s": "Chianti Classico",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Merlot",
+   "Cabernet Sauvignon"
+  ],
+  "src": "https://www.ruffino.it/collections/our-wines"
+ },
+ {
+  "n": "Ruffino Riserva Ducale Oro Chianti Classico Gran Selezione",
+  "s": "Chianti Classico Gran Selezione",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Merlot",
+   "Cabernet Sauvignon"
+  ],
+  "src": "https://www.ruffino.it/collections/our-wines"
+ },
+ {
+  "n": "Ruffino Modus",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.ruffino.it/collections/our-wines"
+ },
+ {
+  "n": "Ruffino Greppone Mazzi Brunello di Montalcino",
+  "s": "Brunello di Montalcino",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.ruffino.it/collections/our-wines"
+ },
+ {
+  "n": "Ruffino Orvieto Classico",
+  "s": "Orvieto Classico",
+  "c": "Italy",
+  "region": "Umbria",
+  "colour": "White",
+  "grapes": [
+   "Grechetto",
+   "Procanico"
+  ],
+  "src": "https://www.ruffino.it/collections/our-wines"
+ },
+ {
+  "n": "Castello di Ama Ama Chianti Classico",
+  "s": "Chianti Classico",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Merlot"
+  ],
+  "src": "https://www.castellodiama.com/en/wines/"
+ },
+ {
+  "n": "Castello di Ama San Lorenzo Chianti Classico Gran Selezione",
+  "s": "Chianti Classico Gran Selezione",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Merlot"
+  ],
+  "src": "https://www.castellodiama.com/en/wines/"
+ },
+ {
+  "n": "Castello di Ama L'Apparita",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Merlot"
+  ],
+  "src": "https://www.castellodiama.com/en/wines/"
+ },
+ {
+  "n": "Brancaia Il Blu",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Merlot",
+   "Cabernet Sauvignon"
+  ],
+  "src": "https://www.brancaia.com/en/wines/"
+ },
+ {
+  "n": "Brancaia Ilatraia",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Petit Verdot",
+   "Cabernet Sauvignon",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.brancaia.com/en/wines/"
+ },
+ {
+  "n": "Brancaia Chianti Classico",
+  "s": "Chianti Classico",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.brancaia.com/en/wines/"
+ },
+ {
+  "n": "Mazzei Fonterutoli Chianti Classico",
+  "s": "Chianti Classico",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://us.mazzei.it/pages/castello-di-fonterutoli-wines"
+ },
+ {
+  "n": "Mazzei Ser Lapo Chianti Classico Riserva",
+  "s": "Chianti Classico",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Merlot"
+  ],
+  "src": "https://us.mazzei.it/pages/castello-di-fonterutoli-wines"
+ },
+ {
+  "n": "Mazzei Castello Fonterutoli Chianti Classico Gran Selezione",
+  "s": "Chianti Classico Gran Selezione",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://us.mazzei.it/pages/castello-di-fonterutoli-wines"
+ },
+ {
+  "n": "Mazzei Siepi",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Merlot"
+  ],
+  "src": "https://us.mazzei.it/pages/castello-di-fonterutoli-wines"
+ },
+ {
+  "n": "Mazzei Belguardo Vermentino",
+  "s": "Vermentino",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "White",
+  "grapes": [
+   "Vermentino"
+  ],
+  "src": "https://us.mazzei.it/pages/castello-di-fonterutoli-wines"
+ },
+ {
+  "n": "Mazzei Belguardo Bronzone Morellino di Scansano Riserva",
+  "s": "Morellino di Scansano",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://us.mazzei.it/pages/castello-di-fonterutoli-wines"
+ },
+ {
+  "n": "Mazzei Zisola Noto Rosso",
+  "s": "Noto",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nero d'Avola"
+  ],
+  "src": "https://us.mazzei.it/pages/castello-di-fonterutoli-wines"
+ },
+ {
+  "n": "Mazzei Zisola Doppiozeta Noto Rosso",
+  "s": "Noto",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nero d'Avola"
+  ],
+  "src": "https://us.mazzei.it/pages/castello-di-fonterutoli-wines"
+ },
+ {
+  "n": "Fontodi Flaccianello della Pieve",
+  "s": "Sangiovese",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.fontodi.com/en/Prodotti.html"
+ },
+ {
+  "n": "Fontodi Vigna del Sorbo Chianti Classico Gran Selezione",
+  "s": "Chianti Classico Gran Selezione",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.fontodi.com/en/Prodotti.html"
+ },
+ {
+  "n": "Fontodi Chianti Classico",
+  "s": "Chianti Classico",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.fontodi.com/en/Prodotti.html"
+ },
+ {
+  "n": "Isole e Olena Cepparello",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.isoleeolena.it/en/wines/"
+ },
+ {
+  "n": "Isole e Olena Chianti Classico",
+  "s": "Chianti Classico",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.isoleeolena.it/en/wines/"
+ },
+ {
+  "n": "Argiano Brunello di Montalcino",
+  "s": "Brunello di Montalcino",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://argiano.net/en/wines/"
+ },
+ {
+  "n": "Argiano Rosso di Montalcino",
+  "s": "Rosso di Montalcino",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://argiano.net/en/wines/"
+ },
+ {
+  "n": "Argiano Solengo",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Petit Verdot"
+  ],
+  "src": "https://argiano.net/en/wines/"
+ },
+ {
+  "n": "Tua Rita Redigaffi",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Merlot"
+  ],
+  "src": "https://www.tuarita.it/i-vini/"
+ },
+ {
+  "n": "Cecchi Chianti",
+  "s": "Chianti",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.cecchi.net/en/wines/"
+ },
+ {
+  "n": "Cecchi Storia di Famiglia Chianti Classico",
+  "s": "Chianti Classico",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.cecchi.net/en/wines/"
+ },
+ {
+  "n": "Cecchi Brunello di Montalcino",
+  "s": "Brunello di Montalcino",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.cecchi.net/en/wines/"
+ },
+ {
+  "n": "Cecchi La Mora Morellino di Scansano",
+  "s": "Morellino di Scansano",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.cecchi.net/en/wines/"
+ },
+ {
+  "n": "Cecchi La Campana Montefalco Sagrantino",
+  "s": "Montefalco Sagrantino",
+  "c": "Italy",
+  "region": "Umbria",
+  "colour": "Red",
+  "grapes": [
+   "Sagrantino"
+  ],
+  "src": "https://www.cecchi.net/en/wines/"
+ },
+ {
+  "n": "Nozzole La Forra Chianti Classico Riserva",
+  "s": "Chianti Classico",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.tenutefolonari.com/en/wines/denomination-and-territory/"
+ },
+ {
+  "n": "Nozzole Il Pareto",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon"
+  ],
+  "src": "https://www.tenutefolonari.com/en/wines/denomination-and-territory/"
+ },
+ {
+  "n": "Cabreo Il Borgo",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Cabernet Sauvignon"
+  ],
+  "src": "https://www.tenutefolonari.com/en/wines/denomination-and-territory/"
+ },
+ {
+  "n": "La Fuga Brunello di Montalcino",
+  "s": "Brunello di Montalcino",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.tenutefolonari.com/en/wines/denomination-and-territory/"
+ },
+ {
+  "n": "Monte Antico Toscana Rosso",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Merlot",
+   "Cabernet Sauvignon"
+  ],
+  "src": "https://monteantico.com/"
+ },
+ {
+  "n": "Da Vinci Chianti",
+  "s": "Chianti",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Merlot"
+  ],
+  "src": "https://www.davinciwine.com/"
+ },
+ {
+  "n": "Da Vinci Brunello di Montalcino",
+  "s": "Brunello di Montalcino",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.davinciwine.com/"
+ },
+ {
+  "n": "Poliziano Vino Nobile di Montepulciano",
+  "s": "Vino Nobile di Montepulciano",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://carlettipoliziano.com/en/"
+ },
+ {
+  "n": "Altesino Brunello di Montalcino",
+  "s": "Brunello di Montalcino",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.altesino.it/"
+ },
+ {
+  "n": "Caparzo Brunello di Montalcino",
+  "s": "Brunello di Montalcino",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.caparzo.com/"
+ },
+ {
+  "n": "Querciabella Chianti Classico",
+  "s": "Chianti Classico",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.querciabella.com/"
+ },
+ {
+  "n": "Querciabella Camartina",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Sangiovese"
+  ],
+  "src": "https://www.querciabella.com/"
+ },
+ {
+  "n": "Castello di Gabbiano Chianti Classico Riserva",
+  "s": "Chianti Classico",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Merlot"
+  ],
+  "src": "https://www.castellogabbiano.it/product/chianti-classico-riserva"
+ },
+ {
+  "n": "Castello di Gabbiano Chianti Classico",
+  "s": "Chianti Classico",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://markanthony.kork.ca/en/our-wineries/castello-di-gabbiano/-castello-di-gabbiano-riserva-chianti-classico-docg/2022"
+ },
+ {
+  "n": "Ricasoli Brolio Chianti Classico",
+  "s": "Chianti Classico",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Merlot",
+   "Cabernet Sauvignon"
+  ],
+  "src": "https://eshop.ricasoli.com/us/shop/wines/red-wines"
+ },
+ {
+  "n": "Ricasoli Castello di Brolio Chianti Classico Gran Selezione",
+  "s": "Chianti Classico Gran Selezione",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.falstaff.com/en/wines/ricasoli-2018-castello-di-brolio-chianti-classico-gran-selezione-docg"
+ },
+ {
+  "n": "Rocca delle Macìe Riserva di Fizzano Chianti Classico Gran Selezione",
+  "s": "Chianti Classico Gran Selezione",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Merlot"
+  ],
+  "abv": "14%",
+  "src": "https://www.palmbay.com/wines/famiglia-zingarelli/riserva-di-fizzano-gran-selezione/"
+ },
+ {
+  "n": "Rocca delle Macìe Vernaiolo Chianti",
+  "s": "Chianti",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://profilewinegroup.com/collections/rocca-delle-macie"
+ },
+ {
+  "n": "Le Macchiole Paleo Rosso",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Franc"
+  ],
+  "src": "https://www.leaandsandeman.co.uk/blog/?p=23703"
+ },
+ {
+  "n": "Le Macchiole Messorio",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Merlot"
+  ],
+  "src": "https://www.leaandsandeman.co.uk/blog/?p=23703"
+ },
+ {
+  "n": "Gaja Ca'Marcanda Promis",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Syrah",
+   "Sangiovese"
+  ],
+  "src": "https://www.totalwine.com/brand/gaja"
+ },
+ {
+  "n": "Montevertine Le Pergole Torte",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.millesima-usa.com/montevertine-le-pergole-torte-2014.html"
+ },
+ {
+  "n": "Bibi Graetz Testamatta",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://uritalianwines.com/winery/bibi-graetz-B537.htm"
+ },
+ {
+  "n": "Bibi Graetz Casamatta Rosso",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.mtouton.com/products/italy/tuscany/83551-2018/bibi-graetz-casamatta-rosso"
+ },
+ {
+  "n": "Casanova di Neri Tenuta Nuova Brunello di Montalcino",
+  "s": "Brunello di Montalcino",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://m.wine.com/product/Casanova-di-Neri-Brunello-di-Montalcino-Tenuta-Nuova-2017/877484"
+ },
+ {
+  "n": "Col d'Orcia Poggio al Vento Brunello di Montalcino Riserva",
+  "s": "Brunello di Montalcino",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.falstaff.com/nordics/wines/col-dorcia-2010-brunello-di-montalcino-riserva-poggio-al-vento"
+ },
+ {
+  "n": "Avignonesi Vino Nobile di Montepulciano",
+  "s": "Vino Nobile di Montepulciano",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://cellartours.com/italy/italian-wineries/avignonesi"
+ },
+ {
+  "n": "Avignonesi Desiderio",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Merlot"
+  ],
+  "src": "https://www.falstaff.com/nordics/wines/avignonesi-2021-desiderio-toscana-igt"
+ },
+ {
+  "n": "San Felice Il Grigio Chianti Classico Riserva",
+  "s": "Chianti Classico",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.vino.com/en/selezione/san-felice"
+ },
+ {
+  "n": "San Felice Vigorello",
+  "s": "Toscana (Super Tuscan)",
+  "c": "Italy",
+  "region": "Tuscany",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Petit Verdot"
+  ],
+  "src": "https://www.vino.com/en/selezione/san-felice"
+ },
+ {
+  "n": "Arnaldo Caprai 25 Anni Montefalco Sagrantino",
+  "s": "Montefalco Sagrantino",
+  "c": "Italy",
+  "region": "Umbria",
+  "colour": "Red",
+  "grapes": [
+   "Sagrantino"
+  ],
+  "src": "https://www.arnaldocaprai.it/en/"
+ },
+ {
+  "n": "Arnaldo Caprai Montefalco Rosso",
+  "s": "Montefalco Rosso",
+  "c": "Italy",
+  "region": "Umbria",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Sagrantino",
+   "Merlot"
+  ],
+  "src": "https://www.arnaldocaprai.it/en/"
+ },
+ {
+  "n": "Arnaldo Caprai Grecante Colli Martani Grechetto",
+  "s": "Colli Martani",
+  "c": "Italy",
+  "region": "Umbria",
+  "colour": "White",
+  "grapes": [
+   "Grechetto"
+  ],
+  "src": "https://www.arnaldocaprai.it/en/"
+ },
+ {
+  "n": "Lungarotti Rubesco Vigna Monticchio Torgiano Rosso Riserva",
+  "s": "Torgiano Rosso Riserva",
+  "c": "Italy",
+  "region": "Umbria",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese"
+  ],
+  "src": "https://www.falstaff.com/en/wines/lungarotti-2017-rubesco-vigna-monticchio-torgiano-rosso-riserva-docg"
+ },
+ {
+  "n": "Lungarotti Rubesco Rosso di Torgiano",
+  "s": "Torgiano",
+  "c": "Italy",
+  "region": "Umbria",
+  "colour": "Red",
+  "grapes": [
+   "Sangiovese",
+   "Colorino"
+  ],
+  "src": "https://www.falstaff.com/nordics/wines/lungarotti-2021-rubesco-rosso-di-torgiano-doc"
+ },
+ {
+  "n": "Bigi Vigneto Torricella Orvieto Classico",
+  "s": "Orvieto Classico",
+  "c": "Italy",
+  "region": "Umbria",
+  "colour": "White",
+  "grapes": [
+   "Grechetto",
+   "Procanico"
+  ],
+  "src": "https://www.gruppoitalianovini.it/en/brand/bigi/vini/le-selezioni-di-prestigio/vigneto-torricella-orvieto-classico-secco-doc-64624-06"
+ },
+ {
+  "n": "Falesco Montiano",
+  "s": "Merlot",
+  "c": "Italy",
+  "region": "Lazio",
+  "colour": "Red",
+  "grapes": [
+   "Merlot"
+  ],
+  "abv": "13.6%",
+  "src": "https://www.vinorandum.com/producers/famiglia-cotarella-falesco"
+ },
+ {
+  "n": "Falesco Poggio dei Gelsi Est! Est!! Est!!! di Montefiascone",
+  "s": "Est! Est!! Est!!! di Montefiascone",
+  "c": "Italy",
+  "region": "Lazio",
+  "colour": "White",
+  "grapes": [
+   "Roscetto",
+   "Trebbiano",
+   "Malvasia"
+  ],
+  "src": "https://www.superiore.de/en/wine/latium/famiglia-cotarella/poggio-dei-gelsi-est-est-est-di-montefiascone-dop-2024.html"
+ },
+ {
+  "n": "Fontana Candida Luna Mater Frascati Superiore Riserva",
+  "s": "Frascati Superiore Riserva",
+  "c": "Italy",
+  "region": "Lazio",
+  "colour": "White",
+  "grapes": [
+   "Malvasia Bianca di Candia",
+   "Malvasia del Lazio",
+   "Greco",
+   "Bombino"
+  ],
+  "src": "https://www.gruppoitalianovini.it/en/brand/fontana-candida/vini/le-grandi-selezioni-di-prestigio/luna-mater-frascati-superiore-docg-riserva-64285-06"
+ },
+ {
+  "n": "Umani Ronchi Casal di Serra Verdicchio dei Castelli di Jesi Classico Superiore",
+  "s": "Verdicchio dei Castelli di Jesi",
+  "c": "Italy",
+  "region": "Marche",
+  "colour": "White",
+  "grapes": [
+   "Verdicchio"
+  ],
+  "src": "https://www.umanironchi.com/en/wines-and-territories/all-wines"
+ },
+ {
+  "n": "Umani Ronchi Plenio Castelli di Jesi Verdicchio Riserva",
+  "s": "Castelli di Jesi Verdicchio Riserva",
+  "c": "Italy",
+  "region": "Marche",
+  "colour": "White",
+  "grapes": [
+   "Verdicchio"
+  ],
+  "src": "https://www.umanironchi.com/en/wines-and-territories/all-wines"
+ },
+ {
+  "n": "Umani Ronchi Cùmaro Conero Riserva",
+  "s": "Conero Riserva",
+  "c": "Italy",
+  "region": "Marche",
+  "colour": "Red",
+  "grapes": [
+   "Montepulciano"
+  ],
+  "src": "https://www.umanironchi.com/en/wines-and-territories/all-wines"
+ },
+ {
+  "n": "Umani Ronchi San Lorenzo Rosso Conero",
+  "s": "Rosso Conero",
+  "c": "Italy",
+  "region": "Marche",
+  "colour": "Red",
+  "grapes": [
+   "Montepulciano"
+  ],
+  "src": "https://www.umanironchi.com/en/wines-and-territories/all-wines"
+ },
+ {
+  "n": "Umani Ronchi Jorio Montepulciano d'Abruzzo",
+  "s": "Montepulciano d'Abruzzo",
+  "c": "Italy",
+  "region": "Abruzzo",
+  "colour": "Red",
+  "grapes": [
+   "Montepulciano"
+  ],
+  "src": "https://www.umanironchi.com/en/wines-and-territories/all-wines"
+ },
+ {
+  "n": "Fazi Battaglia Titulus Verdicchio dei Castelli di Jesi Classico",
+  "s": "Verdicchio dei Castelli di Jesi",
+  "c": "Italy",
+  "region": "Marche",
+  "colour": "White",
+  "grapes": [
+   "Verdicchio"
+  ],
+  "src": "https://fazibattaglia.com/en/wines"
+ },
+ {
+  "n": "Masciarelli Montepulciano d'Abruzzo",
+  "s": "Montepulciano d'Abruzzo",
+  "c": "Italy",
+  "region": "Abruzzo",
+  "colour": "Red",
+  "grapes": [
+   "Montepulciano"
+  ],
+  "src": "https://www.masciarelli.it/en/wines/"
+ },
+ {
+  "n": "Masciarelli Trebbiano d'Abruzzo",
+  "s": "Trebbiano d'Abruzzo",
+  "c": "Italy",
+  "region": "Abruzzo",
+  "colour": "White",
+  "grapes": [
+   "Trebbiano"
+  ],
+  "src": "https://www.masciarelli.it/en/wines/"
+ },
+ {
+  "n": "Masciarelli Cerasuolo d'Abruzzo",
+  "s": "Cerasuolo d'Abruzzo",
+  "c": "Italy",
+  "region": "Abruzzo",
+  "colour": "Rosé",
+  "grapes": [
+   "Montepulciano"
+  ],
+  "src": "https://www.masciarelli.it/en/wines/"
+ },
+ {
+  "n": "Masciarelli Abruzzo Pecorino",
+  "s": "Abruzzo Pecorino",
+  "c": "Italy",
+  "region": "Abruzzo",
+  "colour": "White",
+  "grapes": [
+   "Pecorino"
+  ],
+  "src": "https://www.masciarelli.it/en/wines/"
+ },
+ {
+  "n": "Masciarelli Marina Cvetic Montepulciano d'Abruzzo Riserva",
+  "s": "Montepulciano d'Abruzzo",
+  "c": "Italy",
+  "region": "Abruzzo",
+  "colour": "Red",
+  "grapes": [
+   "Montepulciano"
+  ],
+  "src": "https://www.masciarelli.it/en/wines/"
+ },
+ {
+  "n": "Masciarelli Iskra Montepulciano d'Abruzzo Colline Teramane",
+  "s": "Montepulciano d'Abruzzo Colline Teramane",
+  "c": "Italy",
+  "region": "Abruzzo",
+  "colour": "Red",
+  "grapes": [
+   "Montepulciano"
+  ],
+  "src": "https://www.masciarelli.it/en/wines/"
+ },
+ {
+  "n": "Zaccagnini Il Vino dal Tralcetto Montepulciano d'Abruzzo",
+  "s": "Montepulciano d'Abruzzo",
+  "c": "Italy",
+  "region": "Abruzzo",
+  "colour": "Red",
+  "grapes": [
+   "Montepulciano"
+  ],
+  "src": "https://www.superiore.de/en/wine/abruzzo/zaccagnini/tralcetto-montepulciano-d-abruzzo-doc-2023.html"
+ },
+ {
+  "n": "Zaccagnini Il Vino dal Tralcetto Cerasuolo d'Abruzzo",
+  "s": "Cerasuolo d'Abruzzo",
+  "c": "Italy",
+  "region": "Abruzzo",
+  "colour": "Rosé",
+  "grapes": [
+   "Montepulciano"
+  ],
+  "src": "https://www.superiore.de/en/wine/abruzzo/zaccagnini/tralcetto-cerasuolo-d-abruzzo-doc-2025.html"
+ },
+ {
+  "n": "Zaccagnini Il Vino dal Tralcetto Abruzzo Pecorino",
+  "s": "Abruzzo Pecorino",
+  "c": "Italy",
+  "region": "Abruzzo",
+  "colour": "White",
+  "grapes": [
+   "Pecorino"
+  ],
+  "src": "https://www.vino.com/en/produttore/zaccagnini"
+ },
+ {
+  "n": "Fantini Montepulciano d'Abruzzo",
+  "s": "Montepulciano d'Abruzzo",
+  "c": "Italy",
+  "region": "Abruzzo",
+  "colour": "Red",
+  "grapes": [
+   "Montepulciano"
+  ],
+  "src": "https://www.libertywines.co.uk/our-portfolio/FA407-montepulciano-d'abruzzo"
+ },
+ {
+  "n": "Valentini Montepulciano d'Abruzzo",
+  "s": "Montepulciano d'Abruzzo",
+  "c": "Italy",
+  "region": "Abruzzo",
+  "colour": "Red",
+  "grapes": [
+   "Montepulciano"
+  ],
+  "src": "https://bottlebarn.com/collections/abruzzo/products/2017-valentini-montepulciano-dabruzzo"
+ },
+ {
+  "n": "Valentini Trebbiano d'Abruzzo",
+  "s": "Trebbiano d'Abruzzo",
+  "c": "Italy",
+  "region": "Abruzzo",
+  "colour": "White",
+  "grapes": [
+   "Trebbiano"
+  ],
+  "src": "https://www.scattidigusto.it/2020/12/30/trebbiano-dabruzzo-5-vini-da-bere-possibilmente-piu-di-una-volta-nella-vita"
+ },
+ {
+  "n": "Emidio Pepe Trebbiano d'Abruzzo",
+  "s": "Trebbiano d'Abruzzo",
+  "c": "Italy",
+  "region": "Abruzzo",
+  "colour": "White",
+  "grapes": [
+   "Trebbiano"
+  ],
+  "src": "https://primalwine.com/products/emidio-pepe-trebbiano-dabruzzo"
+ },
+ {
+  "n": "Emidio Pepe Montepulciano d'Abruzzo",
+  "s": "Montepulciano d'Abruzzo",
+  "c": "Italy",
+  "region": "Abruzzo",
+  "colour": "Red",
+  "grapes": [
+   "Montepulciano"
+  ],
+  "src": "https://polanerselections.com/?p=24898"
+ },
+ {
+  "n": "Mastroberardino Radici Taurasi",
+  "s": "Taurasi",
+  "c": "Italy",
+  "region": "Campania",
+  "colour": "Red",
+  "grapes": [
+   "Aglianico"
+  ],
+  "src": "https://mastroberardino.com/i-vini/"
+ },
+ {
+  "n": "Mastroberardino Radici Fiano di Avellino",
+  "s": "Fiano di Avellino",
+  "c": "Italy",
+  "region": "Campania",
+  "colour": "White",
+  "grapes": [
+   "Fiano"
+  ],
+  "src": "https://mastroberardino.com/i-vini/"
+ },
+ {
+  "n": "Mastroberardino Fiano di Avellino",
+  "s": "Fiano di Avellino",
+  "c": "Italy",
+  "region": "Campania",
+  "colour": "White",
+  "grapes": [
+   "Fiano"
+  ],
+  "src": "https://mastroberardino.com/i-vini/"
+ },
+ {
+  "n": "Mastroberardino Novaserra Greco di Tufo",
+  "s": "Greco di Tufo",
+  "c": "Italy",
+  "region": "Campania",
+  "colour": "White",
+  "grapes": [
+   "Greco"
+  ],
+  "src": "https://mastroberardino.com/i-vini/"
+ },
+ {
+  "n": "Mastroberardino Greco di Tufo",
+  "s": "Greco di Tufo",
+  "c": "Italy",
+  "region": "Campania",
+  "colour": "White",
+  "grapes": [
+   "Greco"
+  ],
+  "src": "https://mastroberardino.com/i-vini/"
+ },
+ {
+  "n": "Mastroberardino Falanghina del Sannio",
+  "s": "Falanghina del Sannio",
+  "c": "Italy",
+  "region": "Campania",
+  "colour": "White",
+  "grapes": [
+   "Falanghina"
+  ],
+  "src": "https://mastroberardino.com/i-vini/"
+ },
+ {
+  "n": "Mastroberardino Lacryma Christi del Vesuvio Rosso",
+  "s": "Lacryma Christi del Vesuvio",
+  "c": "Italy",
+  "region": "Campania",
+  "colour": "Red",
+  "grapes": [
+   "Piedirosso"
+  ],
+  "src": "https://mastroberardino.com/i-vini/"
+ },
+ {
+  "n": "Mastroberardino Redimore Irpinia Aglianico",
+  "s": "Irpinia",
+  "c": "Italy",
+  "region": "Campania",
+  "colour": "Red",
+  "grapes": [
+   "Aglianico"
+  ],
+  "src": "https://mastroberardino.com/i-vini/"
+ },
+ {
+  "n": "Feudi di San Gregorio Taurasi",
+  "s": "Taurasi",
+  "c": "Italy",
+  "region": "Campania",
+  "colour": "Red",
+  "grapes": [
+   "Aglianico"
+  ],
+  "src": "https://feudi.com/en/wines"
+ },
+ {
+  "n": "Feudi di San Gregorio Serpico Irpinia Aglianico",
+  "s": "Irpinia",
+  "c": "Italy",
+  "region": "Campania",
+  "colour": "Red",
+  "grapes": [
+   "Aglianico"
+  ],
+  "src": "https://feudi.com/en/wines"
+ },
+ {
+  "n": "Feudi di San Gregorio Rubrato Irpinia Aglianico",
+  "s": "Irpinia",
+  "c": "Italy",
+  "region": "Campania",
+  "colour": "Red",
+  "grapes": [
+   "Aglianico"
+  ],
+  "src": "https://bottleofitaly.com/en-us/products/irpinia-aglianico-doc-rubrato-feudi-di-san-gregorio"
+ },
+ {
+  "n": "Feudi di San Gregorio Serrocielo Falanghina del Sannio",
+  "s": "Falanghina del Sannio",
+  "c": "Italy",
+  "region": "Campania",
+  "colour": "White",
+  "grapes": [
+   "Falanghina"
+  ],
+  "src": "https://feudi.com/en/wines"
+ },
+ {
+  "n": "Feudi di San Gregorio Pietracalda Fiano di Avellino Riserva",
+  "s": "Fiano di Avellino",
+  "c": "Italy",
+  "region": "Campania",
+  "colour": "White",
+  "grapes": [
+   "Fiano"
+  ],
+  "src": "https://feudi.com/en/wines"
+ },
+ {
+  "n": "Feudi di San Gregorio Cutizzi Greco di Tufo Riserva",
+  "s": "Greco di Tufo",
+  "c": "Italy",
+  "region": "Campania",
+  "colour": "White",
+  "grapes": [
+   "Greco"
+  ],
+  "src": "https://feudi.com/en/wines"
+ },
+ {
+  "n": "Terredora di Paolo Loggia della Serra Greco di Tufo",
+  "s": "Greco di Tufo",
+  "c": "Italy",
+  "region": "Campania",
+  "colour": "White",
+  "grapes": [
+   "Greco"
+  ],
+  "src": "https://www.openingabottle.com/essential-winemakers-italy/terredora-di-paolo"
+ },
+ {
+  "n": "Terredora di Paolo CampoRe Fiano di Avellino",
+  "s": "Fiano di Avellino",
+  "c": "Italy",
+  "region": "Campania",
+  "colour": "White",
+  "grapes": [
+   "Fiano"
+  ],
+  "src": "https://www.openingabottle.com/essential-winemakers-italy/terredora-di-paolo"
+ },
+ {
+  "n": "Terredora di Paolo Fatica Contadina Taurasi",
+  "s": "Taurasi",
+  "c": "Italy",
+  "region": "Campania",
+  "colour": "Red",
+  "grapes": [
+   "Aglianico"
+  ],
+  "src": "https://www.openingabottle.com/essential-winemakers-italy/terredora-di-paolo"
+ },
+ {
+  "n": "Marisa Cuomo Fiorduva Costa d'Amalfi Furore Bianco",
+  "s": "Costa d'Amalfi",
+  "c": "Italy",
+  "region": "Campania",
+  "colour": "White",
+  "grapes": [
+   "Fenile",
+   "Ginestra",
+   "Ripoli"
+  ],
+  "src": "https://marisacuomo.com/marisa-cuomo-wines.php"
+ },
+ {
+  "n": "Marisa Cuomo Costa d'Amalfi Furore Bianco",
+  "s": "Costa d'Amalfi",
+  "c": "Italy",
+  "region": "Campania",
+  "colour": "White",
+  "grapes": [
+   "Falanghina",
+   "Biancolella"
+  ],
+  "src": "https://marisacuomo.com/marisa-cuomo-wines.php"
+ },
+ {
+  "n": "Elena Fucci Titolo Aglianico del Vulture",
+  "s": "Aglianico del Vulture",
+  "c": "Italy",
+  "region": "Basilicata",
+  "colour": "Red",
+  "grapes": [
+   "Aglianico"
+  ],
+  "src": "https://uritalianwines.com/aglianico-del-vulture-titolo-doc-P3735.htm"
+ },
+ {
+  "n": "Paternoster Don Anselmo Aglianico del Vulture Superiore",
+  "s": "Aglianico del Vulture Superiore",
+  "c": "Italy",
+  "region": "Basilicata",
+  "colour": "Red",
+  "grapes": [
+   "Aglianico"
+  ],
+  "src": "https://uritalianwines.com/aglianico-del-vulture-superiore-don-anselmo-docg-P2122.htm"
+ },
+ {
+  "n": "Librandi Segno Cirò Rosso",
+  "s": "Cirò",
+  "c": "Italy",
+  "region": "Calabria",
+  "colour": "Red",
+  "grapes": [
+   "Gaglioppo"
+  ],
+  "src": "https://www.librandi.it/en/wines"
+ },
+ {
+  "n": "Librandi Duca Sanfelice Cirò Rosso Riserva",
+  "s": "Cirò",
+  "c": "Italy",
+  "region": "Calabria",
+  "colour": "Red",
+  "grapes": [
+   "Gaglioppo"
+  ],
+  "src": "https://www.librandi.it/en/wines"
+ },
+ {
+  "n": "Tormaresca Torcicoda Primitivo",
+  "s": "Salento",
+  "c": "Italy",
+  "region": "Puglia",
+  "colour": "Red",
+  "grapes": [
+   "Primitivo"
+  ],
+  "src": "https://tormaresca.it/en/wines/"
+ },
+ {
+  "n": "Tormaresca Masseria Maìme Negroamaro",
+  "s": "Salento",
+  "c": "Italy",
+  "region": "Puglia",
+  "colour": "Red",
+  "grapes": [
+   "Negroamaro"
+  ],
+  "src": "https://tormaresca.it/en/wines/"
+ },
+ {
+  "n": "Tormaresca Fichimori",
+  "s": "Salento",
+  "c": "Italy",
+  "region": "Puglia",
+  "colour": "Red",
+  "grapes": [
+   "Negroamaro",
+   "Syrah"
+  ],
+  "src": "https://tormaresca.it/en/wines/"
+ },
+ {
+  "n": "Tormaresca Carrubo Primitivo di Manduria",
+  "s": "Primitivo di Manduria",
+  "c": "Italy",
+  "region": "Puglia",
+  "colour": "Red",
+  "grapes": [
+   "Primitivo"
+  ],
+  "src": "https://tormaresca.it/en/wines/"
+ },
+ {
+  "n": "Tormaresca Neprica Primitivo",
+  "s": "Zinfandel",
+  "c": "Italy",
+  "region": "Puglia",
+  "colour": "Red",
+  "grapes": [
+   "Primitivo"
+  ],
+  "src": "https://tormaresca.it/en/wines/"
+ },
+ {
+  "n": "Tormaresca Chardonnay",
+  "s": "Chardonnay",
+  "c": "Italy",
+  "region": "Puglia",
+  "colour": "White",
+  "grapes": [
+   "Chardonnay"
+  ],
+  "src": "https://tormaresca.it/en/wines/"
+ },
+ {
+  "n": "Cantele Salice Salentino Riserva",
+  "s": "Salice Salentino",
+  "c": "Italy",
+  "region": "Puglia",
+  "colour": "Red",
+  "grapes": [
+   "Negroamaro",
+   "Malvasia Nera"
+  ],
+  "src": "https://www.cantele.it/en/wines/"
+ },
+ {
+  "n": "Cantele Primitivo",
+  "s": "Salento",
+  "c": "Italy",
+  "region": "Puglia",
+  "colour": "Red",
+  "grapes": [
+   "Primitivo"
+  ],
+  "src": "https://www.cantele.it/en/wines/"
+ },
+ {
+  "n": "Cantele Negroamaro",
+  "s": "Salento",
+  "c": "Italy",
+  "region": "Puglia",
+  "colour": "Red",
+  "grapes": [
+   "Negroamaro"
+  ],
+  "src": "https://www.cantele.it/en/wines/"
+ },
+ {
+  "n": "Cantele Amativo",
+  "s": "Salento",
+  "c": "Italy",
+  "region": "Puglia",
+  "colour": "Red",
+  "grapes": [
+   "Primitivo",
+   "Negroamaro"
+  ],
+  "src": "https://www.cantele.it/en/wines/"
+ },
+ {
+  "n": "Cantele Teresa Manara Chardonnay",
+  "s": "Chardonnay",
+  "c": "Italy",
+  "region": "Puglia",
+  "colour": "White",
+  "grapes": [
+   "Chardonnay"
+  ],
+  "src": "https://www.cantele.it/en/wines/"
+ },
+ {
+  "n": "Leone de Castris 50° Vendemmia Salice Salentino Riserva",
+  "s": "Salice Salentino",
+  "c": "Italy",
+  "region": "Puglia",
+  "colour": "Red",
+  "grapes": [
+   "Negroamaro",
+   "Malvasia Nera"
+  ],
+  "src": "https://www.leonedecastris.com/en/wines/"
+ },
+ {
+  "n": "Leone de Castris Villa Santera Primitivo di Manduria",
+  "s": "Primitivo di Manduria",
+  "c": "Italy",
+  "region": "Puglia",
+  "colour": "Red",
+  "grapes": [
+   "Primitivo"
+  ],
+  "src": "https://www.leonedecastris.com/en/wines/"
+ },
+ {
+  "n": "San Marzano Sessantanni Primitivo di Manduria",
+  "s": "Primitivo di Manduria",
+  "c": "Italy",
+  "region": "Puglia",
+  "colour": "Red",
+  "grapes": [
+   "Primitivo"
+  ],
+  "src": "https://sanmarzano.wine/en/"
+ },
+ {
+  "n": "San Marzano Talò Primitivo di Manduria",
+  "s": "Primitivo di Manduria",
+  "c": "Italy",
+  "region": "Puglia",
+  "colour": "Red",
+  "grapes": [
+   "Primitivo"
+  ],
+  "src": "https://sanmarzano.wine/en/"
+ },
+ {
+  "n": "San Marzano Il Pumo Primitivo",
+  "s": "Salento",
+  "c": "Italy",
+  "region": "Puglia",
+  "colour": "Red",
+  "grapes": [
+   "Primitivo"
+  ],
+  "src": "https://sanmarzano.wine/en/"
+ },
+ {
+  "n": "San Marzano Il Pumo Negroamaro",
+  "s": "Salento",
+  "c": "Italy",
+  "region": "Puglia",
+  "colour": "Red",
+  "grapes": [
+   "Negroamaro"
+  ],
+  "src": "https://sanmarzano.wine/en/"
+ },
+ {
+  "n": "San Marzano Il Pumo Salice Salentino",
+  "s": "Salice Salentino",
+  "c": "Italy",
+  "region": "Puglia",
+  "colour": "Red",
+  "grapes": [
+   "Negroamaro",
+   "Malvasia Nera"
+  ],
+  "src": "https://sanmarzano.wine/en/"
+ },
+ {
+  "n": "San Marzano F Negroamaro",
+  "s": "Salento",
+  "c": "Italy",
+  "region": "Puglia",
+  "colour": "Red",
+  "grapes": [
+   "Negroamaro"
+  ],
+  "src": "https://sanmarzano.wine/en/"
+ },
+ {
+  "n": "San Marzano 11 Filari Primitivo di Manduria Dolce Naturale",
+  "s": "Primitivo di Manduria Dolce Naturale",
+  "c": "Italy",
+  "region": "Puglia",
+  "colour": "Sweet Red",
+  "grapes": [
+   "Primitivo"
+  ],
+  "src": "https://sanmarzano.wine/en/"
+ },
+ {
+  "n": "A Mano Primitivo",
+  "s": "Zinfandel",
+  "c": "Italy",
+  "region": "Puglia",
+  "colour": "Red",
+  "grapes": [
+   "Primitivo"
+  ],
+  "src": "https://amanowine.com/"
+ },
+ {
+  "n": "Gianfranco Fino Es Primitivo di Manduria",
+  "s": "Primitivo di Manduria",
+  "c": "Italy",
+  "region": "Puglia",
+  "colour": "Red",
+  "grapes": [
+   "Primitivo"
+  ],
+  "src": "https://www.winespectator.com/articles/gianfranco-fino-primitivo-italy"
+ },
+ {
+  "n": "Planeta Chardonnay",
+  "s": "Menfi",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "White",
+  "grapes": [
+   "Chardonnay"
+  ],
+  "src": "https://www.planeta.it/en/wines/"
+ },
+ {
+  "n": "Planeta Cometa",
+  "s": "Menfi",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "White",
+  "grapes": [
+   "Fiano"
+  ],
+  "src": "https://www.planeta.it/en/wines/"
+ },
+ {
+  "n": "Planeta Santa Cecilia",
+  "s": "Noto",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nero d'Avola"
+  ],
+  "src": "https://www.planeta.it/en/wines/"
+ },
+ {
+  "n": "Planeta Cerasuolo di Vittoria",
+  "s": "Cerasuolo di Vittoria",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nero d'Avola",
+   "Frappato"
+  ],
+  "src": "https://www.planeta.it/en/wines/"
+ },
+ {
+  "n": "Planeta Frappato",
+  "s": "Vittoria",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Frappato"
+  ],
+  "src": "https://www.planeta.it/en/wines/"
+ },
+ {
+  "n": "Planeta Etna Rosso Contrada Feudo di Mezzo",
+  "s": "Etna Rosso",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nerello Mascalese"
+  ],
+  "src": "https://www.planeta.it/en/wines/"
+ },
+ {
+  "n": "Planeta La Segreta Rosso",
+  "s": "Sicilia",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nero d'Avola",
+   "Merlot",
+   "Syrah",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.planeta.it/en/wines/"
+ },
+ {
+  "n": "Donnafugata Mille e una Notte",
+  "s": "Sicilia",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nero d'Avola"
+  ],
+  "src": "https://www.donnafugata.it/en/shop/products/wines/red-wines/"
+ },
+ {
+  "n": "Donnafugata Sherazade Nero d'Avola",
+  "s": "Sicilia",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nero d'Avola"
+  ],
+  "src": "https://www.donnafugata.it/en/shop/products/wines/red-wines/"
+ },
+ {
+  "n": "Donnafugata Angheli",
+  "s": "Sicilia",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Sauvignon"
+  ],
+  "src": "https://www.donnafugata.it/en/shop/products/wines/red-wines/"
+ },
+ {
+  "n": "Donnafugata Floramundi Cerasuolo di Vittoria",
+  "s": "Cerasuolo di Vittoria",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nero d'Avola",
+   "Frappato"
+  ],
+  "src": "https://www.donnafugata.it/en/shop/products/wines/red-wines/"
+ },
+ {
+  "n": "Donnafugata Bell'Assai Frappato di Vittoria",
+  "s": "Vittoria",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Frappato"
+  ],
+  "src": "https://www.donnafugata.it/en/shop/products/wines/red-wines/"
+ },
+ {
+  "n": "Donnafugata Sul Vulcano Etna Rosso",
+  "s": "Etna Rosso",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nerello Mascalese"
+  ],
+  "src": "https://www.donnafugata.it/en/shop/products/wines/red-wines/"
+ },
+ {
+  "n": "Donnafugata Sul Vulcano Etna Bianco",
+  "s": "Etna Bianco",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "White",
+  "grapes": [
+   "Carricante"
+  ],
+  "src": "https://www.donnafugata.it/en/shop/products/wines/white-wines/"
+ },
+ {
+  "n": "Donnafugata Chiarandà",
+  "s": "Contessa Entellina",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "White",
+  "grapes": [
+   "Chardonnay"
+  ],
+  "src": "https://www.donnafugata.it/en/shop/products/wines/white-wines/"
+ },
+ {
+  "n": "Donnafugata Sul Vulcano Etna Rosato",
+  "s": "Etna Rosato",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Rosé",
+  "grapes": [
+   "Nerello Mascalese"
+  ],
+  "src": "https://www.donnafugata.it/en/shop/products/wines/rose-wines/"
+ },
+ {
+  "n": "Donnafugata Ben Ryé Passito di Pantelleria",
+  "s": "Passito di Pantelleria",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Sweet White",
+  "grapes": [
+   "Zibibbo"
+  ],
+  "src": "https://www.donnafugata.it/en/shop/products/wines/dessert-wines/"
+ },
+ {
+  "n": "Tasca d'Almerita Rosso del Conte",
+  "s": "Contea di Sclafani",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nero d'Avola",
+   "Perricone"
+  ],
+  "src": "https://tascadalmerita.it/en/wines/"
+ },
+ {
+  "n": "Tasca d'Almerita Regaleali Nero d'Avola",
+  "s": "Sicilia",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nero d'Avola"
+  ],
+  "src": "https://tascadalmerita.it/en/wines/"
+ },
+ {
+  "n": "Tasca d'Almerita Lamùri Nero d'Avola",
+  "s": "Sicilia",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nero d'Avola"
+  ],
+  "src": "https://tascadalmerita.it/en/wines/"
+ },
+ {
+  "n": "Tasca d'Almerita Vigna San Francesco Chardonnay",
+  "s": "Chardonnay",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "White",
+  "grapes": [
+   "Chardonnay"
+  ],
+  "src": "https://tascadalmerita.it/en/wines/"
+ },
+ {
+  "n": "Tasca d'Almerita Tascante Ghiaia Nera Etna Rosso",
+  "s": "Etna Rosso",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nerello Mascalese"
+  ],
+  "src": "https://tascadalmerita.it/en/wines/"
+ },
+ {
+  "n": "Tasca d'Almerita Sallier de La Tour La Monaca Syrah",
+  "s": "Monreale",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Syrah"
+  ],
+  "src": "https://tascadalmerita.it/en/wines/"
+ },
+ {
+  "n": "Cusumano Nero d'Avola",
+  "s": "Nero d'Avola",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nero d'Avola"
+  ],
+  "src": "https://www.cusumano.it/en/monovarietali"
+ },
+ {
+  "n": "Cusumano Syrah",
+  "s": "Syrah / Shiraz",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Syrah"
+  ],
+  "src": "https://www.cusumano.it/en/monovarietali"
+ },
+ {
+  "n": "Cusumano Sàgana",
+  "s": "Nero d'Avola",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nero d'Avola"
+  ],
+  "src": "https://www.cusumano.it/en/wines/"
+ },
+ {
+  "n": "Cusumano Noà",
+  "s": "Sicilia",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nero d'Avola",
+   "Merlot",
+   "Cabernet Sauvignon"
+  ],
+  "src": "https://www.cusumano.it/en/wines/"
+ },
+ {
+  "n": "Cusumano Benuara",
+  "s": "Nero d'Avola",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nero d'Avola",
+   "Syrah"
+  ],
+  "src": "https://www.cusumano.it/en/wines/"
+ },
+ {
+  "n": "Cusumano Jalé",
+  "s": "Chardonnay",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "White",
+  "grapes": [
+   "Chardonnay"
+  ],
+  "src": "https://www.cusumano.it/en/wines/"
+ },
+ {
+  "n": "Cusumano Angimbé",
+  "s": "Chardonnay",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "White",
+  "grapes": [
+   "Chardonnay",
+   "Sauvignon Blanc"
+  ],
+  "src": "https://www.cusumano.it/en/wines/"
+ },
+ {
+  "n": "Duca di Salaparuta Duca Enrico",
+  "s": "Nero d'Avola",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nero d'Avola"
+  ],
+  "src": "https://duca.it/en/wines/"
+ },
+ {
+  "n": "Corvo Nero d'Avola",
+  "s": "Nero d'Avola",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nero d'Avola"
+  ],
+  "src": "https://www.falstaff.com/en/wines/corvo-2022-nero-davola-terre-siciliane-igt"
+ },
+ {
+  "n": "Corvo Rosso",
+  "s": "Nero d'Avola",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nero d'Avola",
+   "Frappato",
+   "Nerello Mascalese"
+  ],
+  "src": "https://duca.it/en/?p=7914"
+ },
+ {
+  "n": "Benanti Pietra Marina Etna Bianco Superiore",
+  "s": "Etna Bianco",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "White",
+  "grapes": [
+   "Carricante"
+  ],
+  "src": "https://www.benanti.it/en/wines/"
+ },
+ {
+  "n": "Benanti Serra della Contessa Etna Rosso Riserva",
+  "s": "Etna Rosso",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nerello Mascalese",
+   "Nerello Cappuccio"
+  ],
+  "src": "https://www.benanti.it/en/wines/"
+ },
+ {
+  "n": "Benanti Etna Rosso",
+  "s": "Etna Rosso",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nerello Mascalese",
+   "Nerello Cappuccio"
+  ],
+  "src": "https://www.benanti.it/en/wines/"
+ },
+ {
+  "n": "Firriato Harmonium Nero d'Avola",
+  "s": "Nero d'Avola",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nero d'Avola"
+  ],
+  "src": "https://firriato.it/wines/?lang=en"
+ },
+ {
+  "n": "Firriato Le Sabbie dell'Etna Rosso",
+  "s": "Etna Rosso",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nerello Mascalese",
+   "Nerello Cappuccio"
+  ],
+  "src": "https://firriato.it/wines/?lang=en"
+ },
+ {
+  "n": "Feudo Arancio Syrah",
+  "s": "Syrah / Shiraz",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Syrah"
+  ],
+  "src": "https://www.feudoarancio.it/it/"
+ },
+ {
+  "n": "Passopisciaro Passorosso Etna Rosso",
+  "s": "Etna Rosso",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nerello Mascalese"
+  ],
+  "abv": "14.5%",
+  "src": "https://www.wine.com/product/passopisciaro-passorosso-2020/1597444"
+ },
+ {
+  "n": "Tenuta delle Terre Nere Etna Rosso",
+  "s": "Etna Rosso",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nerello Mascalese",
+   "Nerello Cappuccio"
+  ],
+  "src": "https://www.tenutaterrenere.com/en/home-english/"
+ },
+ {
+  "n": "Tenuta delle Terre Nere Etna Bianco",
+  "s": "Etna Bianco",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "White",
+  "grapes": [
+   "Carricante",
+   "Catarratto"
+  ],
+  "src": "https://www.tenutaterrenere.com/en/home-english/"
+ },
+ {
+  "n": "COS Cerasuolo di Vittoria Classico",
+  "s": "Cerasuolo di Vittoria",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nero d'Avola",
+   "Frappato"
+  ],
+  "src": "https://winonawine.com/products/cos-2020-cerasuolo-di-vittoria-classico"
+ },
+ {
+  "n": "Valle dell'Acate Iri da Iri Cerasuolo di Vittoria",
+  "s": "Cerasuolo di Vittoria",
+  "c": "Italy",
+  "region": "Sicily",
+  "colour": "Red",
+  "grapes": [
+   "Nero d'Avola",
+   "Frappato"
+  ],
+  "src": "https://www.valledellacate.com/en/"
+ },
+ {
+  "n": "Argiolas Turriga",
+  "s": "Grenache",
+  "c": "Italy",
+  "region": "Sardinia",
+  "colour": "Red",
+  "grapes": [
+   "Cannonau",
+   "Carignano",
+   "Bovale Sardo",
+   "Malvasia Nera"
+  ],
+  "src": "https://www.saratogawine.com/producers/argiolas/"
+ },
+ {
+  "n": "Argiolas Costera Cannonau di Sardegna",
+  "s": "Cannonau di Sardegna",
+  "c": "Italy",
+  "region": "Sardinia",
+  "colour": "Red",
+  "grapes": [
+   "Cannonau"
+  ],
+  "src": "https://www.saratogawine.com/producers/argiolas/"
+ },
+ {
+  "n": "Argiolas Perdera Monica di Sardegna",
+  "s": "Monica di Sardegna",
+  "c": "Italy",
+  "region": "Sardinia",
+  "colour": "Red",
+  "grapes": [
+   "Monica",
+   "Carignano",
+   "Bovale Sardo"
+  ],
+  "src": "https://www.saratogawine.com/producers/argiolas/"
+ },
+ {
+  "n": "Argiolas Costamolino Vermentino di Sardegna",
+  "s": "Vermentino di Sardegna",
+  "c": "Italy",
+  "region": "Sardinia",
+  "colour": "White",
+  "grapes": [
+   "Vermentino"
+  ],
+  "src": "https://www.saratogawine.com/producers/argiolas/"
+ },
+ {
+  "n": "Argiolas Is Argiolas Vermentino di Sardegna",
+  "s": "Vermentino di Sardegna",
+  "c": "Italy",
+  "region": "Sardinia",
+  "colour": "White",
+  "grapes": [
+   "Vermentino"
+  ],
+  "src": "https://www.vinorandum.com/producers/cantina-argiolas"
+ },
+ {
+  "n": "Argiolas Is Solinas Carignano del Sulcis Riserva",
+  "s": "Carignano del Sulcis",
+  "c": "Italy",
+  "region": "Sardinia",
+  "colour": "Red",
+  "grapes": [
+   "Carignano"
+  ],
+  "src": "https://www.vinorandum.com/producers/cantina-argiolas"
+ },
+ {
+  "n": "Sella & Mosca Cannonau di Sardegna Riserva",
+  "s": "Cannonau di Sardegna",
+  "c": "Italy",
+  "region": "Sardinia",
+  "colour": "Red",
+  "grapes": [
+   "Cannonau"
+  ],
+  "abv": "14%",
+  "src": "https://www.vino.com/en/selezione/sella-e-mosca"
+ },
+ {
+  "n": "Sella & Mosca La Cala Vermentino di Sardegna",
+  "s": "Vermentino di Sardegna",
+  "c": "Italy",
+  "region": "Sardinia",
+  "colour": "White",
+  "grapes": [
+   "Vermentino"
+  ],
+  "src": "https://www.falstaff.com/en/wines/sella-mosca-2021-la-cala-vermentino-di-sardegna-doc"
+ },
+ {
+  "n": "Sella & Mosca Marchese di Villamarina Alghero Cabernet Riserva",
+  "s": "Alghero",
+  "c": "Italy",
+  "region": "Sardinia",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon"
+  ],
+  "src": "https://www.vino.com/en/selezione/sella-e-mosca"
+ },
+ {
+  "n": "Cantina Santadi Terre Brune Carignano del Sulcis Superiore",
+  "s": "Carignano del Sulcis",
+  "c": "Italy",
+  "region": "Sardinia",
+  "colour": "Red",
+  "grapes": [
+   "Carignano",
+   "Bovaleddu"
+  ],
+  "src": "https://www.falstaff.com/en/wines/cantina-santadi-2020-terre-brune-carignano-del-sulcis-superiore-doc-1"
+ },
+ {
+  "n": "Cantina Santadi Rocca Rubia Carignano del Sulcis Riserva",
+  "s": "Carignano del Sulcis",
+  "c": "Italy",
+  "region": "Sardinia",
+  "colour": "Red",
+  "grapes": [
+   "Carignano"
+  ],
+  "src": "https://www.falstaff.com/en/wines/cantina-santadi-2021-rocca-rubia-carignano-del-sulcis-riserva-doc-1"
+ },
+ {
+  "n": "Cantina Santadi Villa Solais Vermentino di Sardegna",
+  "s": "Vermentino di Sardegna",
+  "c": "Italy",
+  "region": "Sardinia",
+  "colour": "White",
+  "grapes": [
+   "Vermentino"
+  ],
+  "src": "https://www.falstaff.com/en/wines/cantina-santadi-2016-villa-solais-doc"
+ },
+ {
+  "n": "Vigne Surrau Branu Vermentino di Gallura",
+  "s": "Vermentino di Gallura",
+  "c": "Italy",
+  "region": "Sardinia",
+  "colour": "White",
+  "grapes": [
+   "Vermentino"
+  ],
+  "src": "https://www.vignesurrau.it/en/surrau-wines"
+ },
+ {
+  "n": "Vigne Surrau Sincaru Cannonau di Sardegna",
+  "s": "Cannonau di Sardegna",
+  "c": "Italy",
+  "region": "Sardinia",
+  "colour": "Red",
+  "grapes": [
+   "Cannonau"
+  ],
+  "src": "https://www.vignesurrau.it/en/surrau-wines"
+ },
+ {
+  "n": "Siddùra Maìa Vermentino di Gallura Superiore",
+  "s": "Vermentino di Gallura",
+  "c": "Italy",
+  "region": "Sardinia",
+  "colour": "White",
+  "grapes": [
+   "Vermentino"
+  ],
+  "src": "https://siddura.com/en"
+ },
+ {
+  "n": "Siddùra Èrema Cannonau di Sardegna",
+  "s": "Cannonau di Sardegna",
+  "c": "Italy",
+  "region": "Sardinia",
+  "colour": "Red",
+  "grapes": [
+   "Cannonau"
+  ],
+  "src": "https://siddura.com/en"
+ },
+ {
+  "n": "Pala Soprasole Vermentino di Sardegna",
+  "s": "Vermentino di Sardegna",
+  "c": "Italy",
+  "region": "Sardinia",
+  "colour": "White",
+  "grapes": [
+   "Vermentino"
+  ],
+  "src": "https://www.pala.it/en/"
+ },
+ {
+  "n": "Pala Milleluci Nuragus di Cagliari",
+  "s": "Nuragus di Cagliari",
+  "c": "Italy",
+  "region": "Sardinia",
+  "colour": "White",
+  "grapes": [
+   "Nuragus"
+  ],
+  "src": "https://www.pala.it/en/"
+ }
+]

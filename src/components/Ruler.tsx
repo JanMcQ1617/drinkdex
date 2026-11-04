@@ -4,7 +4,7 @@ import Svg, { Path, Rect } from 'react-native-svg';
 
 import { colors, radius, space, stroke, tabular, textRole } from '@/constants/theme';
 import { formatCount } from '@/data';
-import { MILESTONES, rankTitle } from '@/lib/milestones';
+import { nextRung, rankTitle, rungCounts } from '@/lib/milestones';
 
 /* ==================================================================== */
 /* The ruler, and the Dex panel                                         */
@@ -18,7 +18,10 @@ import { MILESTONES, rankTitle } from '@/lib/milestones';
 /* less-stuff layout took it off both tab screens.                      */
 /*                                                                      */
 /* `ladder` (the Dex panel) labels the title rungs instead of the       */
-/* hundreds, with a notch over the baseline at each rung.               */
+/* hundreds, with a notch over the baseline at each rung. It is drawn   */
+/* over the ladder's own scope, the cocktails and spirits (v4.15,       */
+/* lib/milestones), so its fill, its notches and its figures say the    */
+/* same thing as the title beside them.                                 */
 /* ==================================================================== */
 
 const H = 20;
@@ -35,14 +38,6 @@ const FIGURE_CAP = 1.3;
 /** A centred figure's box: "1,567" at 13pt x 1.3 is about 48pt, with room either side. */
 const FIGURE_W = 64;
 
-/** The counts that reach each rung above the first: ceil(total x pct / 100), as rankTitle requires. */
-export function rungCounts(total: number): { pct: number; title: string; count: number }[] {
-  return MILESTONES.filter((m) => m.pct > 0).map((m) => ({
-    ...m,
-    count: Math.ceil((total * m.pct) / 100),
-  }));
-}
-
 /** "1.8%", and "under 0.1%" rather than a "0.0%" that reads as nothing. */
 export function dexPercent(count: number, total: number): string {
   if (total <= 0 || count <= 0) return '0%';
@@ -54,11 +49,14 @@ export const Ruler = React.memo(function Ruler({
   count,
   total,
   mode = 'scale',
+  label,
 }: {
   count: number;
   total: number;
   /** `scale`: 0 · 500 · 1,000 · 1,500 · total. `ladder`: the rank rungs, notched. */
   mode?: 'scale' | 'ladder';
+  /** What VoiceOver says; "38 of 2,089 in your Dex" unless the rule measures something else. */
+  label?: string;
 }) {
   const [w, setW] = useState(0);
   const onLayout = (e: LayoutChangeEvent) => {
@@ -102,7 +100,7 @@ export const Ruler = React.memo(function Ruler({
     <View
       accessible
       accessibilityRole="progressbar"
-      accessibilityLabel={`${formatCount(count)} of ${formatCount(total)} in your Dex`}
+      accessibilityLabel={label ?? `${formatCount(count)} of ${formatCount(total)} in your Dex`}
       accessibilityValue={{ min: 0, max: total, now: count }}>
       <View onLayout={onLayout} style={styles.rule}>
         {drawn ? (
@@ -145,27 +143,44 @@ export const Ruler = React.memo(function Ruler({
 
 /**
  * The Dex panel (white spec 5.14, Brass's walnut plaque made flat): a wash
- * panel with the figure, "of 2,089 in the Dex · 1.8%", the title word and
- * the ladder ruler, then "Next: Cataloguer, at 209 entries" under it.
- * Dex progress's head. One VoiceOver element for the figure and the title.
+ * panel with the figure, "of 4,671 in the Dex · 1.8%", the title word and
+ * the ladder ruler, then under it "Titles count cocktails and spirits: 38
+ * of 2,327" and "Next: Cataloguer, at 233". Dex progress's head. One
+ * VoiceOver element for the figure and the title.
  *
- * The line under it names the next rung and where it starts, never how
- * many more it takes: a countdown is a target to post toward (App Review
- * 1.4.3). Which rung is next is worked out exactly as before.
+ * TWO SCOPES, SAID AS TWO (v4.15). The figure is the Dex's count, every
+ * kind, the number the Dex and Profile show. The title, the ruler and the
+ * lines under the panel read the ladder: cocktails and spirits, out of the
+ * cocktails and spirits in the Dex (lib/milestones). Wine moves the first
+ * and never the second, and the first line under the panel says so, since
+ * the ruler's fill no longer matches the percentage over it.
+ *
+ * The Next line names the next rung and where it starts, never how many
+ * more it takes: a countdown is a target to post toward (App Review
+ * 1.4.3). Which rung is next is worked out exactly as before
+ * (lib/milestones' nextRung), on the ladder's count.
  */
 export const DexPanel = React.memo(function DexPanel({
   count,
   total,
+  ladder,
+  ladderTotal,
   style,
 }: {
+  /** Catalogue entries logged, every kind. */
   count: number;
+  /** The whole Dex. */
   total: number;
+  /** Of `count`, the ones a title counts (lib/milestones' ladderCount). */
+  ladder: number;
+  /** What a title is a share of (lib/milestones' LADDER_TOTAL). */
+  ladderTotal: number;
   style?: ViewStyle;
 }) {
-  const rank = rankTitle(count, total);
+  const rank = rankTitle(ladder, ladderTotal);
   const caption = `of ${formatCount(total)} in the Dex · ${dexPercent(count, total)}`;
-  // The next rung up, if there is one: the first whose count is still ahead.
-  const next = count > 0 ? rungCounts(total).find((r) => r.count > count) : undefined;
+  const reads = `Titles count cocktails and spirits: ${formatCount(ladder)} of ${formatCount(ladderTotal)}`;
+  const next = nextRung(ladder, ladderTotal);
 
   return (
     <View style={style}>
@@ -186,11 +201,18 @@ export const DexPanel = React.memo(function DexPanel({
             {rank}
           </Text>
         </View>
-        <Ruler count={count} total={total} mode="ladder" />
+        <Ruler count={ladder} total={ladderTotal} mode="ladder" label={reads} />
       </View>
+      {/* Read by the ruler's own label, so VoiceOver hears it once. */}
+      <Text
+        style={[textRole.small, styles.next, tabular]}
+        importantForAccessibility="no"
+        accessibilityElementsHidden>
+        {reads}
+      </Text>
       {next ? (
-        <Text style={[textRole.small, styles.next]}>
-          Next: <Text style={styles.strong}>{next.title}</Text>, at {formatCount(next.count)} entries
+        <Text style={[textRole.small, styles.next, styles.nextAfter]}>
+          Next: <Text style={styles.strong}>{next.title}</Text>, at {formatCount(next.count)}
         </Text>
       ) : null}
     </View>
@@ -216,5 +238,7 @@ const styles = StyleSheet.create({
   ink: { color: colors.text },
   muted: { color: colors.textMuted },
   next: { color: colors.textMuted, marginTop: space.md },
+  /* The second line under the panel sits with the first, not a group apart. */
+  nextAfter: { marginTop: space.xs },
   strong: { fontFamily: textRole.bodyStrong.fontFamily, color: colors.text },
 });

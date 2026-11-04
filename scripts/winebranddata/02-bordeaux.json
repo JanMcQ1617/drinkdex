@@ -1,0 +1,3848 @@
+[
+ {
+  "n": "Château Lafite Rothschild",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://winedirectory.lafite.com/fr/le-repertoire-des-vins/"
+ },
+ {
+  "n": "Carruades de Lafite",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://winedirectory.lafite.com/fr/le-repertoire-des-vins/"
+ },
+ {
+  "n": "Château Latour",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.chateau-latour.com/en"
+ },
+ {
+  "n": "Les Forts de Latour",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.chateau-latour.com/en"
+ },
+ {
+  "n": "Pauillac de Château Latour",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.chateau-latour.com/en"
+ },
+ {
+  "n": "Château Margaux",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.chateau-margaux.com/en"
+ },
+ {
+  "n": "Pavillon Rouge du Château Margaux",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.chateau-margaux.com/en"
+ },
+ {
+  "n": "Margaux du Château Margaux",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.chateau-margaux.com/en"
+ },
+ {
+  "n": "Pavillon Blanc du Château Margaux",
+  "s": "Bordeaux Blanc",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc"
+  ],
+  "src": "https://www.chateau-margaux.com/en"
+ },
+ {
+  "n": "Château Mouton Rothschild",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.chateau-mouton-rothschild.com/en"
+ },
+ {
+  "n": "Le Petit Mouton de Mouton Rothschild",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.chateau-mouton-rothschild.com/en"
+ },
+ {
+  "n": "Mouton Rothschild Aile d'Argent",
+  "s": "Bordeaux Blanc",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc",
+   "Sémillon",
+   "Muscadelle"
+  ],
+  "src": "https://www.chateau-mouton-rothschild.com/en"
+ },
+ {
+  "n": "Château Haut-Brion",
+  "s": "Pessac-Léognan",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.haut-brion.com/en/the-wines/"
+ },
+ {
+  "n": "Château Haut-Brion Blanc",
+  "s": "Pessac-Léognan Blanc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc"
+  ],
+  "src": "https://www.haut-brion.com/en/the-wines/"
+ },
+ {
+  "n": "Le Clarence de Haut-Brion",
+  "s": "Pessac-Léognan",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.haut-brion.com/en/the-wines/"
+ },
+ {
+  "n": "La Clarté de Haut-Brion",
+  "s": "Pessac-Léognan Blanc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc"
+  ],
+  "src": "https://www.haut-brion.com/en/the-wines/"
+ },
+ {
+  "n": "Château La Mission Haut-Brion",
+  "s": "Pessac-Léognan",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.mission-haut-brion.com/en/the-wines/"
+ },
+ {
+  "n": "Château La Mission Haut-Brion Blanc",
+  "s": "Pessac-Léognan Blanc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc"
+  ],
+  "src": "https://www.mission-haut-brion.com/en/the-wines/"
+ },
+ {
+  "n": "La Chapelle de La Mission Haut-Brion",
+  "s": "Pessac-Léognan",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.mission-haut-brion.com/en/the-wines/"
+ },
+ {
+  "n": "Château Rauzan-Ségla",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://gcc-1855.fr/the-1855-grand-cru-classification/"
+ },
+ {
+  "n": "Ségla de Rauzan-Ségla",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.majestic.co.uk/wines/segla-margaux-02251 ; https://finewinedirect.co.uk/products/segla-2019-margaux-chateau-rauzan-segla"
+ },
+ {
+  "n": "Château Rauzan-Gassies",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.domaines-quie.com/"
+ },
+ {
+  "n": "Château Léoville Las Cases",
+  "s": "Saint-Julien",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.domaines-delon.com/"
+ },
+ {
+  "n": "Clos du Marquis",
+  "s": "Saint-Julien",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.domaines-delon.com/"
+ },
+ {
+  "n": "Le Petit Lion de Léoville Las Cases",
+  "s": "Saint-Julien",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.domaines-delon.com/"
+ },
+ {
+  "n": "Château Léoville Poyferré",
+  "s": "Saint-Julien",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.leoville-poyferre.fr/en/the-wines/"
+ },
+ {
+  "n": "Château Léoville Barton",
+  "s": "Saint-Julien",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.leoville-barton.com/en/"
+ },
+ {
+  "n": "La Réserve de Léoville Barton",
+  "s": "Saint-Julien",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.finewinedirect.co.uk/products/la-reserve-de-leoville-barton-2018-st-julien ; https://www.leaandsandeman.co.uk/wine/2013-RESERVE-DE-LEOVILLE-BARTON-Saint-Julien-44167-00.html"
+ },
+ {
+  "n": "Château Durfort-Vivens",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://gcc-1855.fr/the-1855-grand-cru-classification/"
+ },
+ {
+  "n": "Le Relais de Durfort-Vivens",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://greatwine.co.uk/chateau-durfort-vivens-le-relais-de-durfort-vivens-margaux-2016 ; https://squelch.wine/wine/france/bordeaux/durfort-vivens/le-relais-de-durfort-vivens/le-relais-de-durfort-vivens-margaux-6532"
+ },
+ {
+  "n": "Château Gruaud Larose",
+  "s": "Saint-Julien",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.gruaud-larose.com/en/"
+ },
+ {
+  "n": "Sarget de Gruaud Larose",
+  "s": "Saint-Julien",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.gruaud-larose.com/en/"
+ },
+ {
+  "n": "Château Lascombes",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://chateau-lascombes.com/en/the-wines-of-chateau-lascombes/"
+ },
+ {
+  "n": "Chevalier de Lascombes",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://chateau-lascombes.com/en/the-wines-of-chateau-lascombes/"
+ },
+ {
+  "n": "Château Brane-Cantenac",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://gcc-1855.fr/the-1855-grand-cru-classification/"
+ },
+ {
+  "n": "Baron de Brane",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.cavissima.com/en/products/baron-de-brane-2022 ; https://www.langtons.com.au/p/le-baron-de-brane-second-wine-of-chateau-brane-cantenac--margaux-2021-bottle/35010-2021-1.html"
+ },
+ {
+  "n": "Château Pichon Baron",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.pichonbaron.com/en/our-wines"
+ },
+ {
+  "n": "Les Griffons de Pichon Baron",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.pichonbaron.com/en/our-wines"
+ },
+ {
+  "n": "Les Tourelles de Longueville",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Sauvignon"
+  ],
+  "src": "https://www.pichonbaron.com/en/our-wines"
+ },
+ {
+  "n": "Château Pichon Longueville Comtesse de Lalande",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://gcc-1855.fr/the-1855-grand-cru-classification/"
+ },
+ {
+  "n": "Réserve de la Comtesse",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.justerinis.com/fine-wines/france/bordeaux/chateau-pichon-longueville-comtesse-de-lalande/reserve-de-la-comtesse-pauillac/2016 ; https://lagunacellar.com/products/reserve-de-la-comtesse-2016"
+ },
+ {
+  "n": "Château Ducru-Beaucaillou",
+  "s": "Saint-Julien",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.chateau-ducru-beaucaillou.com/"
+ },
+ {
+  "n": "La Croix Ducru-Beaucaillou",
+  "s": "Saint-Julien",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.chateau-ducru-beaucaillou.com/"
+ },
+ {
+  "n": "Château Cos d'Estournel",
+  "s": "Saint-Estèphe",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.estournel.com/fr/"
+ },
+ {
+  "n": "Les Pagodes de Cos",
+  "s": "Saint-Estèphe",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.estournel.com/fr/"
+ },
+ {
+  "n": "Cos d'Estournel Blanc",
+  "s": "Bordeaux Blanc",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc",
+   "Sémillon"
+  ],
+  "src": "https://www.estournel.com/fr/"
+ },
+ {
+  "n": "Goulée by Cos d'Estournel",
+  "s": "Médoc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.estournel.com/fr/"
+ },
+ {
+  "n": "Château Montrose",
+  "s": "Saint-Estèphe",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://gcc-1855.fr/the-1855-grand-cru-classification/"
+ },
+ {
+  "n": "La Dame de Montrose",
+  "s": "Saint-Estèphe",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.cavissima.com/en/products/la-dame-de-montrose-2020 ; https://www.broekmans.be/en/shop/product/wine/24760/la-dame-de-montrose-2021-dubbele-magnum-3l"
+ },
+ {
+  "n": "Château Kirwan",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.chateau-kirwan.com/"
+ },
+ {
+  "n": "Charmes de Kirwan",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.chateau-kirwan.com/"
+ },
+ {
+  "n": "Château d'Issan",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.chateau-issan.com/"
+ },
+ {
+  "n": "Blason d'Issan",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.chateau-issan.com/"
+ },
+ {
+  "n": "Château Lagrange",
+  "s": "Saint-Julien",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://gcc-1855.fr/the-1855-grand-cru-classification/"
+ },
+ {
+  "n": "Les Fiefs de Lagrange",
+  "s": "Saint-Julien",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.millesima-usa.com/les-fiefs-de-lagrange-2024.html ; https://www.vinoscout.de/en/products/les-fiefs-de-lagrange-saint-julien"
+ },
+ {
+  "n": "Château Langoa Barton",
+  "s": "Saint-Julien",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://gcc-1855.fr/the-1855-grand-cru-classification/"
+ },
+ {
+  "n": "Château Giscours",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://gcc-1855.fr/the-1855-grand-cru-classification/"
+ },
+ {
+  "n": "La Sirène de Giscours",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.klwines.com/products/details/2005992 ; https://ruepinard.com/fr/collections/all/products/la-sirene-de-giscours-margaux-2020-12-x-75cl"
+ },
+ {
+  "n": "Château Malescot Saint-Exupéry",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.malescot.com/les-vins/"
+ },
+ {
+  "n": "La Dame de Malescot",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://ruepinard.com/fr/collections/all/products/la-dame-de-malescot-margaux-2018-6-x-75cl ; https://www.saq.com/en/11811933"
+ },
+ {
+  "n": "Château Boyd-Cantenac",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://gcc-1855.fr/the-1855-grand-cru-classification/"
+ },
+ {
+  "n": "Château Cantenac Brown",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://gcc-1855.fr/the-1855-grand-cru-classification/"
+ },
+ {
+  "n": "BriO de Cantenac Brown",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://concierge.totalwine.com/concierge-offers/brio-de-cantenac-brown-margaux-bordeaux-france-2022 ; https://www.majestic.co.uk/wines/brio-de-cantenac-margaux-61359"
+ },
+ {
+  "n": "Château Palmer",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.chateau-palmer.com/"
+ },
+ {
+  "n": "Château Palmer Alter Ego",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.chateau-palmer.com/"
+ },
+ {
+  "n": "Château La Lagune",
+  "s": "Haut-Médoc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://chateau-lalagune.com/"
+ },
+ {
+  "n": "Château Desmirail",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.desmirail.com/"
+ },
+ {
+  "n": "Château Calon Ségur",
+  "s": "Saint-Estèphe",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://gcc-1855.fr/the-1855-grand-cru-classification/"
+ },
+ {
+  "n": "Le Marquis de Calon Ségur",
+  "s": "Saint-Estèphe",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Sauvignon"
+  ],
+  "src": "https://www.millesima-usa.com/le-marquis-de-calon-segur-2021.html ; https://www.cavissima.com/en/products/le-marquis-de-calon-segur-2021"
+ },
+ {
+  "n": "Château Ferrière",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://gcc-1855.fr/the-1855-grand-cru-classification/"
+ },
+ {
+  "n": "Château Marquis d'Alesme",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.marquisdalesme.wine/"
+ },
+ {
+  "n": "Château Saint-Pierre",
+  "s": "Saint-Julien",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.domaines-henri-martin.com/"
+ },
+ {
+  "n": "Château Gloria",
+  "s": "Saint-Julien",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.domaines-henri-martin.com/"
+ },
+ {
+  "n": "Château Talbot",
+  "s": "Saint-Julien",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.chateau-talbot.com/les-vins/"
+ },
+ {
+  "n": "Connétable Talbot",
+  "s": "Saint-Julien",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.chateau-talbot.com/les-vins/"
+ },
+ {
+  "n": "Caillou Blanc du Château Talbot",
+  "s": "Bordeaux Blanc",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc",
+   "Sémillon"
+  ],
+  "src": "https://www.chateau-talbot.com/les-vins/"
+ },
+ {
+  "n": "Château Branaire-Ducru",
+  "s": "Saint-Julien",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.branaire.com/les-millesimes/"
+ },
+ {
+  "n": "Duluc de Branaire-Ducru",
+  "s": "Saint-Julien",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.branaire.com/les-millesimes/"
+ },
+ {
+  "n": "Château Duhart-Milon",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://winedirectory.lafite.com/fr/le-repertoire-des-vins/"
+ },
+ {
+  "n": "Moulin de Duhart",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://winedirectory.lafite.com/fr/le-repertoire-des-vins/"
+ },
+ {
+  "n": "Château Pouget",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.chateau-pouget.com/english/the-wines/the-second-wines/"
+ },
+ {
+  "n": "Château La Tour Carnet",
+  "s": "Haut-Médoc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.chateau-latourcarnet.fr/les-vins"
+ },
+ {
+  "n": "Château Lafon-Rochet",
+  "s": "Saint-Estèphe",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.lafon-rochet.com/"
+ },
+ {
+  "n": "Les Pèlerins de Lafon-Rochet",
+  "s": "Saint-Estèphe",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.lafon-rochet.com/"
+ },
+ {
+  "n": "Château Beychevelle",
+  "s": "Saint-Julien",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.beychevelle.com/"
+ },
+ {
+  "n": "Amiral de Beychevelle",
+  "s": "Saint-Julien",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.beychevelle.com/"
+ },
+ {
+  "n": "Château Prieuré-Lichine",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://prieure-lichine.fr/les-vins-de-prieure-lichine/"
+ },
+ {
+  "n": "Confidences de Prieuré-Lichine",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://prieure-lichine.fr/les-vins-de-prieure-lichine/"
+ },
+ {
+  "n": "Château Marquis de Terme",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://chateau-marquis-de-terme.com/chapitre-les-vins/"
+ },
+ {
+  "n": "Château Pontet-Canet",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.pontet-canet.com/les-millesimes"
+ },
+ {
+  "n": "Château Batailley",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.batailley.com/"
+ },
+ {
+  "n": "Lions de Batailley",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.batailley.com/"
+ },
+ {
+  "n": "Château Haut-Batailley",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://gcc-1855.fr/the-1855-grand-cru-classification/"
+ },
+ {
+  "n": "Haut-Batailley Verso",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Sauvignon"
+  ],
+  "src": "https://www.millesima-usa.com/chateau-haut-batailley-verso-2021.html ; https://www.klwines.com/p/i?i=1845512"
+ },
+ {
+  "n": "Château Grand-Puy-Lacoste",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.chateau-grand-puy-lacoste.com/fr_FR/nos-vins"
+ },
+ {
+  "n": "Château Grand-Puy Ducasse",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://gcc-1855.fr/the-1855-grand-cru-classification/"
+ },
+ {
+  "n": "Prélude à Grand-Puy Ducasse",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.amathusdrinks.com/prelude-a-grand-puy-ducasse-2017 ; https://www.fineandwild.com/products/prelude-grand-puy-ducasse"
+ },
+ {
+  "n": "Château Lynch-Bages",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.lynchbages.com/deguster"
+ },
+ {
+  "n": "Echo de Lynch-Bages",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://millesima-usa.com/echo-de-lynch-bages-2023.html ; https://www.jjbuckley.com/wine-knowledge/recent-offers/2012-echo-de-lynch-bages/1301"
+ },
+ {
+  "n": "Blanc de Lynch-Bages",
+  "s": "Bordeaux Blanc",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc",
+   "Sémillon",
+   "Muscadelle"
+  ],
+  "src": "https://www.millesima-usa.com/blanc-de-lynch-bages-2025.html ; https://www.lcbo.com/en/blanc-de-lynch-bages-bordeaux-2024-46921"
+ },
+ {
+  "n": "Château Lynch-Moussas",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.lynch-moussas.com/"
+ },
+ {
+  "n": "Château Dauzac",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.chateaudauzac.com/"
+ },
+ {
+  "n": "Château d'Armailhac",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.chateau-darmailhac.com/"
+ },
+ {
+  "n": "Château du Tertre",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.chateaudutertre.fr/les-vins/"
+ },
+ {
+  "n": "Les Hauts du Tertre",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.chateaudutertre.fr/les-vins/"
+ },
+ {
+  "n": "Château Haut-Bages Libéral",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://gcc-1855.fr/the-1855-grand-cru-classification/"
+ },
+ {
+  "n": "Château Pédesclaux",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.chateau-pedesclaux.com/"
+ },
+ {
+  "n": "Château Belgrave",
+  "s": "Haut-Médoc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.chateau-belgrave.com/"
+ },
+ {
+  "n": "Château de Camensac",
+  "s": "Haut-Médoc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://chateaucamensac.com/vin-grand-cru-classe-1855/"
+ },
+ {
+  "n": "Château Cos Labory",
+  "s": "Saint-Estèphe",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.cos-labory.com/"
+ },
+ {
+  "n": "Château Clerc Milon",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.chateau-clerc-milon.com/"
+ },
+ {
+  "n": "Pastourelle de Clerc Milon",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.chateau-clerc-milon.com/"
+ },
+ {
+  "n": "Château Croizet-Bages",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.domaines-quie.com/"
+ },
+ {
+  "n": "Château Bel Orme Tronquoy de Lalande",
+  "s": "Haut-Médoc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.domaines-quie.com/"
+ },
+ {
+  "n": "Château Cantemerle",
+  "s": "Haut-Médoc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.cantemerle.com/"
+ },
+ {
+  "n": "Château Potensac",
+  "s": "Médoc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.domaines-delon.com/"
+ },
+ {
+  "n": "Château Ormes de Pez",
+  "s": "Saint-Estèphe",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.ormesdepez.com/"
+ },
+ {
+  "n": "Château Phélan Ségur",
+  "s": "Saint-Estèphe",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.phelansegur.com/"
+ },
+ {
+  "n": "Château Meyney",
+  "s": "Saint-Estèphe",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.marketviewliquor.com/product/chateau-meyney-saint-estephe-bordeaux-750ml ; https://www.saratogawine.com/product/chateau-meyney-saint-estephe-2023-750ml-2/"
+ },
+ {
+  "n": "Château de Pez",
+  "s": "Saint-Estèphe",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://chateaudepez.com/le-vin/"
+ },
+ {
+  "n": "Château Haut-Marbuzet",
+  "s": "Saint-Estèphe",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.thienpontwine.com/en/our-collection/by-producer/chateau-haut-marbuzet ; https://www.leaandsandeman.co.uk/wine/2024-CHATEAU-HAUT-MARBUZET-Saint-Estephe-93675-00.html"
+ },
+ {
+  "n": "Château Sociando-Mallet",
+  "s": "Haut-Médoc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.sociandomallet.com/fr/les-vins.aspx"
+ },
+ {
+  "n": "Château Chasse-Spleen",
+  "s": "Moulis-en-Médoc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.wine.com/list/wine/chateau-chasse-spleen/moulis/7155-102848-107094 ; https://www.cavissima.com/en/collections/bordeaux-chateau-chasse-spleen"
+ },
+ {
+  "n": "Château Poujeaux",
+  "s": "Moulis-en-Médoc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://caskcartel.com/products/2000-chateau-poujeaux-moulis-en-medoc ; https://bordeauxindex.com/fine-wine/france/bordeaux/pouj-2012"
+ },
+ {
+  "n": "Château Fourcas Hosten",
+  "s": "Listrac-Médoc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.fourcas-hosten.com/"
+ },
+ {
+  "n": "Château Siran",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc",
+   "Petit Verdot"
+  ],
+  "src": "https://www.chateausiran.com/"
+ },
+ {
+  "n": "Château Larose-Trintaudon",
+  "s": "Haut-Médoc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.larose-trintaudon.com/"
+ },
+ {
+  "n": "Château Lanessan",
+  "s": "Haut-Médoc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.leaandsandeman.co.uk/wine/2024-CHATEAU-LANESSAN-Cru-Bourgeois-Haut-Medoc-93931-00.html ; https://tanners-wines.co.uk/products/chateau-lanessan-haut-medoc-2020"
+ },
+ {
+  "n": "Château Citran",
+  "s": "Haut-Médoc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.chateau-citran.com/fr/chateau-citran-vins.html"
+ },
+ {
+  "n": "Château Magnol",
+  "s": "Haut-Médoc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Sauvignon"
+  ],
+  "src": "https://www.barton-guestier.com/our-wines/"
+ },
+ {
+  "n": "Château Greysac",
+  "s": "Médoc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.rollandeby.com/"
+ },
+ {
+  "n": "Château Rollan de By",
+  "s": "Médoc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Sauvignon"
+  ],
+  "src": "https://www.rollandeby.com/"
+ },
+ {
+  "n": "Loudenne Le Château Rouge",
+  "s": "Médoc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.chateau-loudenne.com/"
+ },
+ {
+  "n": "Château Patache d'Aux",
+  "s": "Médoc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.thecorkscrew.ie/products/chateau-patache-d-aux-medoc-cru-bourgeois-magnum-2018 ; https://lifford.com/products/chateau-patache-daux"
+ },
+ {
+  "n": "Château Pape Clément",
+  "s": "Pessac-Léognan",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.bernard-magrez.com/"
+ },
+ {
+  "n": "Château Pape Clément Blanc",
+  "s": "Pessac-Léognan Blanc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc",
+   "Sémillon"
+  ],
+  "src": "https://www.justerinis.com/fine-wines/france/bordeaux/chateau-pape-clement/chateau-pape-clement-blanc-pessac-leognan ; https://www.cavissima.com/en/products/chateau-pape-clement-blanc-2020"
+ },
+ {
+  "n": "Château Smith Haut Lafitte",
+  "s": "Pessac-Léognan",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.smith-haut-lafitte.com/en/"
+ },
+ {
+  "n": "Château Smith Haut Lafitte Blanc",
+  "s": "Pessac-Léognan Blanc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc",
+   "Sauvignon Gris",
+   "Sémillon"
+  ],
+  "src": "https://www.smith-haut-lafitte.com/en/"
+ },
+ {
+  "n": "Le Petit Haut Lafitte",
+  "s": "Pessac-Léognan",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.smith-haut-lafitte.com/en/"
+ },
+ {
+  "n": "Les Hauts de Smith",
+  "s": "Pessac-Léognan",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.smith-haut-lafitte.com/en/"
+ },
+ {
+  "n": "Domaine de Chevalier",
+  "s": "Pessac-Léognan",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.domainedechevalier.com/"
+ },
+ {
+  "n": "Domaine de Chevalier Blanc",
+  "s": "Pessac-Léognan Blanc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc",
+   "Sémillon"
+  ],
+  "src": "https://www.tanners-wines.co.uk/products/domaine-de-chevalier-blanc-grand-cru-classe-pessac-leognan-2025-en-primeur-case-of-6 ; https://www.pogoswine.com/products/domaine-de-chevalier-blanc-2020-750ml"
+ },
+ {
+  "n": "L'Esprit de Chevalier",
+  "s": "Pessac-Léognan",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.domainedechevalier.com/"
+ },
+ {
+  "n": "Château Haut-Bailly",
+  "s": "Pessac-Léognan",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.haut-bailly.com/nos-vins/"
+ },
+ {
+  "n": "Haut-Bailly II",
+  "s": "Pessac-Léognan",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.totalwine.com/wine/deals/red-wine/bordeaux-blend/haut-bailly-ii/p/1000920750 ; https://www.cavissima.com/en/products/haut-bailly-ii-2025"
+ },
+ {
+  "n": "Château Malartic-Lagravière",
+  "s": "Pessac-Léognan",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.malartic-lagraviere.com/"
+ },
+ {
+  "n": "La Réserve de Malartic",
+  "s": "Pessac-Léognan",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://adnams.co.uk/products/reserve-de-malartic-rouge-2016-pessac-leognan ; https://www.comptoirdesmillesimes.com/malartic-lagraviere/la-reserve-de-malartic-2015.html"
+ },
+ {
+  "n": "Château Carbonnieux",
+  "s": "Pessac-Léognan",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.carbonnieux.com/"
+ },
+ {
+  "n": "Château Carbonnieux Blanc",
+  "s": "Pessac-Léognan Blanc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc",
+   "Sémillon"
+  ],
+  "src": "https://www.carbonnieux.com/"
+ },
+ {
+  "n": "La Croix de Carbonnieux",
+  "s": "Pessac-Léognan",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.carbonnieux.com/"
+ },
+ {
+  "n": "Château de Fieuzal",
+  "s": "Pessac-Léognan",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.fieuzal.com/en/wines"
+ },
+ {
+  "n": "Château Olivier",
+  "s": "Pessac-Léognan",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.chateau-olivier.com/en/our-wines/"
+ },
+ {
+  "n": "Château Latour-Martillac",
+  "s": "Pessac-Léognan",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.latourmartillac.com/les-vins/"
+ },
+ {
+  "n": "Château Bouscaut",
+  "s": "Pessac-Léognan",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.chateau-bouscaut.com/"
+ },
+ {
+  "n": "Château Larrivet Haut-Brion",
+  "s": "Pessac-Léognan",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.larrivethautbrion.fr/"
+ },
+ {
+  "n": "Château Couhins-Lurton Blanc",
+  "s": "Pessac-Léognan Blanc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc"
+  ],
+  "src": "https://www.andrelurton.com/nos-vins/"
+ },
+ {
+  "n": "Château La Louvière Rouge",
+  "s": "Pessac-Léognan",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.andrelurton.com/nos-vins/"
+ },
+ {
+  "n": "Château La Louvière Blanc",
+  "s": "Pessac-Léognan Blanc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc",
+   "Sémillon"
+  ],
+  "src": "https://www.andrelurton.com/nos-vins/"
+ },
+ {
+  "n": "Château de Rochemorin Rouge",
+  "s": "Pessac-Léognan",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.andrelurton.com/nos-vins/"
+ },
+ {
+  "n": "Château La Garde",
+  "s": "Pessac-Léognan",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.dourthe.com/en/our-wines/"
+ },
+ {
+  "n": "Château Rahoul",
+  "s": "Graves",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Sauvignon"
+  ],
+  "src": "https://www.dourthe.com/en/our-wines/"
+ },
+ {
+  "n": "Château Cheval Blanc",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Franc",
+   "Merlot"
+  ],
+  "src": "https://www.chateau-chevalblanc.com/en/"
+ },
+ {
+  "n": "Le Petit Cheval",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.chateau-chevalblanc.com/en/"
+ },
+ {
+  "n": "Le Petit Cheval Blanc",
+  "s": "Bordeaux Blanc",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc",
+   "Sémillon"
+  ],
+  "src": "https://www.chateau-chevalblanc.com/en/"
+ },
+ {
+  "n": "Château Ausone",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Franc",
+   "Merlot"
+  ],
+  "src": "https://www.chateau-ausone.fr/"
+ },
+ {
+  "n": "Chapelle d'Ausone",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Franc",
+   "Merlot"
+  ],
+  "src": "https://www.cavissima.com/en/products/chapelle-dausone-2020 ; https://tanners-wines.co.uk/products/la-chapelle-dausone-saint-emilion-2022-en-primeur-case-of-6"
+ },
+ {
+  "n": "Château Angelus",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.angelus.com/en/the-wines.html"
+ },
+ {
+  "n": "Carillon d'Angelus",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.angelus.com/en/the-wines.html"
+ },
+ {
+  "n": "N°3 d'Angelus",
+  "s": "Saint-Émilion",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.angelus.com/en/the-wines.html"
+ },
+ {
+  "n": "Château Figeac",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Cabernet Franc",
+   "Merlot"
+  ],
+  "src": "https://www.chateau-figeac.com/en/the-wine/"
+ },
+ {
+  "n": "Petit-Figeac",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Cabernet Franc",
+   "Merlot"
+  ],
+  "src": "https://www.chateau-figeac.com/en/the-wine/"
+ },
+ {
+  "n": "Château Pavie",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.vignoblesperse.com/"
+ },
+ {
+  "n": "Château Pavie-Decesse",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.vignoblesperse.com/"
+ },
+ {
+  "n": "Château Canon",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://agccse.fr/wp-content/uploads/2022/09/Dossier-de-presse-Nouveau-classement-des-vins-de-Saint-Emilion-2022.pdf"
+ },
+ {
+  "n": "Croix Canon",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://hedonism.co.uk/products/croix-canon-2014 ; https://www.leaandsandeman.co.uk/wine/2020-CROIX-CANON-Grand-Cru-Saint-Emilion-45431-00.html"
+ },
+ {
+  "n": "Château Bélair-Monange",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.moueix.com/"
+ },
+ {
+  "n": "Château Troplong Mondot",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://agccse.fr/wp-content/uploads/2022/09/Dossier-de-presse-Nouveau-classement-des-vins-de-Saint-Emilion-2022.pdf"
+ },
+ {
+  "n": "Mondot",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.millesima-usa.com/mondot-2020-d-cc-3.html ; https://www.wine-republic.co.uk/a/p/products/2019-mondot-by-troplong-mondot-saint-emilion-grand-cru"
+ },
+ {
+  "n": "Château Valandraud",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://agccse.fr/wp-content/uploads/2022/09/Dossier-de-presse-Nouveau-classement-des-vins-de-Saint-Emilion-2022.pdf"
+ },
+ {
+  "n": "Clos Fourtet",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://agccse.fr/wp-content/uploads/2022/09/Dossier-de-presse-Nouveau-classement-des-vins-de-Saint-Emilion-2022.pdf"
+ },
+ {
+  "n": "La Closerie de Fourtet",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.saratogawine.com/product/la-closerie-de-fourtet-saint-emilion-grand-cru-2018-750ml/ ; https://www.cavissima.com/en/products/la-closerie-de-fourtet-2014"
+ },
+ {
+  "n": "Château Larcis Ducasse",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://agccse.fr/wp-content/uploads/2022/09/Dossier-de-presse-Nouveau-classement-des-vins-de-Saint-Emilion-2022.pdf"
+ },
+ {
+  "n": "Château Pavie Macquin",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.pavie-macquin.com/les-vins/"
+ },
+ {
+  "n": "Château Canon La Gaffelière",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.neipperg.com/"
+ },
+ {
+  "n": "La Mondotte",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.neipperg.com/"
+ },
+ {
+  "n": "Clos de l'Oratoire",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.neipperg.com/"
+ },
+ {
+  "n": "Château d'Aiguilhe",
+  "s": "Castillon-Côtes de Bordeaux",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.neipperg.com/"
+ },
+ {
+  "n": "Château Trottevieille",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://agccse.fr/wp-content/uploads/2022/09/Dossier-de-presse-Nouveau-classement-des-vins-de-Saint-Emilion-2022.pdf"
+ },
+ {
+  "n": "Château Beau-Séjour Bécot",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://agccse.fr/wp-content/uploads/2022/09/Dossier-de-presse-Nouveau-classement-des-vins-de-Saint-Emilion-2022.pdf"
+ },
+ {
+  "n": "Château La Gaffelière",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.klwines.com/products/details/1671828 ; https://www.laithwaites.co.uk/product/chateau-la-gaffeliere-2022/0920722"
+ },
+ {
+  "n": "Château Grand Mayne",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.grand-mayne.com/"
+ },
+ {
+  "n": "Château Fombrauge",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.bernard-magrez.com/"
+ },
+ {
+  "n": "Château Quintus",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.chateau-quintus.com/en/"
+ },
+ {
+  "n": "Dragon de Quintus",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.chateau-quintus.com/en/"
+ },
+ {
+  "n": "Château La Dominique",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.chateau-ladominique.com/decouvrir-nos-vins/"
+ },
+ {
+  "n": "Château Tertre Rotebœuf",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.saratogawine.com/product/chateau-tertre-roteboeuf-st-emilion-2021-750ml/ ; https://www.leaandsandeman.co.uk/wine/2025-CHATEAU-LE-TERTRE-ROTEBOEUF-Grand-Cru-Classe-Saint-Emilion-106914-00.html"
+ },
+ {
+  "n": "Château Monbousquet",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://agccse.fr/wp-content/uploads/2022/09/Dossier-de-presse-Nouveau-classement-des-vins-de-Saint-Emilion-2022.pdf"
+ },
+ {
+  "n": "Château Soutard",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://agccse.fr/wp-content/uploads/2022/09/Dossier-de-presse-Nouveau-classement-des-vins-de-Saint-Emilion-2022.pdf"
+ },
+ {
+  "n": "Château Franc Mayne",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://agccse.fr/wp-content/uploads/2022/09/Dossier-de-presse-Nouveau-classement-des-vins-de-Saint-Emilion-2022.pdf"
+ },
+ {
+  "n": "Clos Saint-Martin",
+  "s": "Saint-Émilion Grand Cru",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://agccse.fr/wp-content/uploads/2022/09/Dossier-de-presse-Nouveau-classement-des-vins-de-Saint-Emilion-2022.pdf"
+ },
+ {
+  "n": "Petrus",
+  "s": "Pomerol",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot"
+  ],
+  "src": "https://www.saratogawine.com/?p=485470 ; https://benchmarkwine.com/winery/1401-petrus"
+ },
+ {
+  "n": "Le Pin",
+  "s": "Pomerol",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot"
+  ],
+  "src": "https://www.leaandsandeman.co.uk/wine/2024-CHATEAU-LE-PIN-Pomerol-93680-00.html ; https://www.finewinedirect.co.uk/collections/le-pin/products/chateau-le-pin"
+ },
+ {
+  "n": "Château Lafleur",
+  "s": "Pomerol",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Franc",
+   "Merlot"
+  ],
+  "src": "https://www.cavissima.com/en/products/chateau-lafleur-2022 ; https://www.finewinedirect.co.uk/collections/fine-wine/products/chateau-lafleur-2022"
+ },
+ {
+  "n": "Les Pensées de Lafleur",
+  "s": "Pomerol",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://sf.flatiron-wines.com/collections/boost-all/products/chateau-lafleur-pomerol-pensees-de-lafleur-2023-750ml ; https://farsonsdirect.com/products/les-pensees-de-lafleur"
+ },
+ {
+  "n": "Vieux Château Certan",
+  "s": "Pomerol",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://caskcartel.com/products/2019-vieux-chateau-certan-pomerol ; https://bordeauxindex.com/fine-wine/producer/vieux_chateau_certan"
+ },
+ {
+  "n": "Château L'Évangile",
+  "s": "Pomerol",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://winedirectory.lafite.com/fr/le-repertoire-des-vins/"
+ },
+ {
+  "n": "Blason de L'Évangile",
+  "s": "Pomerol",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://winedirectory.lafite.com/fr/le-repertoire-des-vins/"
+ },
+ {
+  "n": "Château La Conseillante",
+  "s": "Pomerol",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.la-conseillante.com/"
+ },
+ {
+  "n": "Château Trotanoy",
+  "s": "Pomerol",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.moueix.com/"
+ },
+ {
+  "n": "Espérance de Trotanoy",
+  "s": "Pomerol",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.moueix.com/"
+ },
+ {
+  "n": "Château La Fleur-Pétrus",
+  "s": "Pomerol",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.moueix.com/"
+ },
+ {
+  "n": "Château Hosanna",
+  "s": "Pomerol",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.moueix.com/"
+ },
+ {
+  "n": "Château L'Église-Clinet",
+  "s": "Pomerol",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://wine.sothebys.com/collections/leglise-clinet ; https://www.thienpontwine.com/en/our-collection/by-producer/chateau-l-eglise-clinet"
+ },
+ {
+  "n": "Château Clinet",
+  "s": "Pomerol",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.chateauclinet.com/"
+ },
+ {
+  "n": "Château Nénin",
+  "s": "Pomerol",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.domaines-delon.com/"
+ },
+ {
+  "n": "Château Gazin",
+  "s": "Pomerol",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.gazin.com/"
+ },
+ {
+  "n": "Château Le Gay",
+  "s": "Pomerol",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.saratogawine.com/product/chateau-le-gay-pomerol-2022-750ml/ ; https://bordeauxindex.com/fine-wine/france/bordeaux/lega-2012"
+ },
+ {
+  "n": "Château Beauregard",
+  "s": "Pomerol",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.chateau-beauregard.com/"
+ },
+ {
+  "n": "Benjamin de Beauregard",
+  "s": "Pomerol",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.chateau-beauregard.com/"
+ },
+ {
+  "n": "Château Petit-Village",
+  "s": "Pomerol",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.petit-village.com/"
+ },
+ {
+  "n": "Château La Pointe",
+  "s": "Pomerol",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.chateaulapointe.com/"
+ },
+ {
+  "n": "Château Rouget",
+  "s": "Pomerol",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.chateau-rouget.com/"
+ },
+ {
+  "n": "Château de Barbe Blanche",
+  "s": "Lussac-Saint-Émilion",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.andrelurton.com/nos-vins/"
+ },
+ {
+  "n": "Château d'Yquem",
+  "s": "Sauternes",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc"
+  ],
+  "src": "https://www.yquem.fr/en/"
+ },
+ {
+  "n": "Y d'Yquem",
+  "s": "Bordeaux Blanc",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc",
+   "Sémillon"
+  ],
+  "src": "https://www.klwines.com/p/i?i=2058753 ; https://www.totalwine.com/wine/white-wine/bordeaux-blend/y-dyquem-bordeaux-blanc/p/1005522750"
+ },
+ {
+  "n": "Château La Tour Blanche",
+  "s": "Sauternes",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://www.tour-blanche.com/vins"
+ },
+ {
+  "n": "Château Lafaurie-Peyraguey",
+  "s": "Sauternes",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://www.millesima-usa.com/chateau-lafaurie-peyraguey-2023-b-cb-12.html ; https://shopsk.com/products/chateau-lafaurie-peyraguey-1st-grand-cru-classe-sauternes-375ml"
+ },
+ {
+  "n": "Clos Haut-Peyraguey",
+  "s": "Sauternes",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://www.bernard-magrez.com/"
+ },
+ {
+  "n": "Château de Rayne Vigneau",
+  "s": "Sauternes",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://www.raynevigneau.fr/"
+ },
+ {
+  "n": "Madame de Rayne",
+  "s": "Sauternes",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://www.raynevigneau.fr/"
+ },
+ {
+  "n": "Le Sec de Rayne Vigneau",
+  "s": "Bordeaux Blanc",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc",
+   "Sémillon"
+  ],
+  "src": "https://www.raynevigneau.fr/"
+ },
+ {
+  "n": "Château Suduiraut",
+  "s": "Sauternes",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://gcc-1855.fr/the-1855-grand-cru-classification/"
+ },
+ {
+  "n": "Lions de Suduiraut",
+  "s": "Sauternes",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://www.idealwine.com/en/buy-a-wine/2717132-1-bottle-Lions-de-Suduiraut-2025-White ; https://specsonline.com/shop/wine/lions-de-suduiraut-half-bottle-sauternes-4/"
+ },
+ {
+  "n": "Château Coutet",
+  "s": "Barsac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://www.chateaucoutet.com/les-vins/"
+ },
+ {
+  "n": "Château Climens",
+  "s": "Barsac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://gcc-1855.fr/the-1855-grand-cru-classification/"
+ },
+ {
+  "n": "Cyprès de Climens",
+  "s": "Barsac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://robersonwine.com/products/chateau-climens-cypres-de-climens-barsac ; https://www.tanners-wines.co.uk/les-cypres-de-climens-barsac-2016-half"
+ },
+ {
+  "n": "Château Guiraud",
+  "s": "Sauternes",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://www.chateauguiraud.com/"
+ },
+ {
+  "n": "Petit Guiraud",
+  "s": "Sauternes",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://www.chateauguiraud.com/"
+ },
+ {
+  "n": "Château Rieussec",
+  "s": "Sauternes",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://winedirectory.lafite.com/fr/le-repertoire-des-vins/"
+ },
+ {
+  "n": "Carmes de Rieussec",
+  "s": "Sauternes",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://winedirectory.lafite.com/fr/le-repertoire-des-vins/"
+ },
+ {
+  "n": "R de Rieussec",
+  "s": "Bordeaux Blanc",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc",
+   "Sémillon"
+  ],
+  "src": "https://winedirectory.lafite.com/fr/le-repertoire-des-vins/"
+ },
+ {
+  "n": "Château Rabaud-Promis",
+  "s": "Sauternes",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://www.rabaud-promis.com/wine/"
+ },
+ {
+  "n": "Château Sigalas Rabaud",
+  "s": "Sauternes",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://www.chateau-sigalas-rabaud.com/"
+ },
+ {
+  "n": "Lieutenant de Sigalas",
+  "s": "Sauternes",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://www.chateau-sigalas-rabaud.com/"
+ },
+ {
+  "n": "Château de Myrat",
+  "s": "Barsac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://www.chateaudemyrat.fr/"
+ },
+ {
+  "n": "Château Doisy-Daëne",
+  "s": "Barsac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://www.leaandsandeman.co.uk/wine/2024-CHATEAU-DOISY-DAENE-2eme-Cru-Classe-Barsac-94112-00.html ; https://www.totalwine.com/wine/dessert-fortified-wine/bordeaux-blend/chateau-doisy-daene-sauternes/p/21417750"
+ },
+ {
+  "n": "Château Doisy-Dubroca",
+  "s": "Barsac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://gcc-1855.fr/the-1855-grand-cru-classification/"
+ },
+ {
+  "n": "Château Doisy-Védrines",
+  "s": "Barsac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://gcc-1855.fr/the-1855-grand-cru-classification/"
+ },
+ {
+  "n": "Château d'Arche",
+  "s": "Sauternes",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://www.chateau-arche.fr/"
+ },
+ {
+  "n": "Château Filhot",
+  "s": "Sauternes",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://www.filhot.com/"
+ },
+ {
+  "n": "Château Broustet",
+  "s": "Barsac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://gcc-1855.fr/the-1855-grand-cru-classification/"
+ },
+ {
+  "n": "Château Nairac",
+  "s": "Barsac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://gcc-1855.fr/the-1855-grand-cru-classification/"
+ },
+ {
+  "n": "Château de Malle",
+  "s": "Sauternes",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://gcc-1855.fr/the-1855-grand-cru-classification/"
+ },
+ {
+  "n": "Château Romer",
+  "s": "Sauternes",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://gcc-1855.fr/the-1855-grand-cru-classification/"
+ },
+ {
+  "n": "Château Lamothe Guignard",
+  "s": "Sauternes",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://www.chateau-lamothe-guignard.fr/"
+ },
+ {
+  "n": "Château de Fargues",
+  "s": "Sauternes",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://www.saratogawine.com/product/chateau-de-fargues-sauternes-2010-750ml-3/ ; https://www.leaandsandeman.co.uk/wine/2019-CHATEAU-DE-FARGUES-1er-Cru-Classe-Sauternes-42885-00.html"
+ },
+ {
+  "n": "Château Raymond-Lafon",
+  "s": "Sauternes",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://www.saratogawine.com/product/chateau-raymond-lafon-sauternes-2001-750ml/ ; https://nyc.flatiron-wines.com/products/chateau-raymond-lafon-sauternes-1998-375ml-ack092825-wk39-auc"
+ },
+ {
+  "n": "Mouton Cadet Rouge",
+  "s": "Bordeaux Rouge",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Sauvignon",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.moutoncadet.com/fr/collections-mouton-cadet/"
+ },
+ {
+  "n": "Mouton Cadet Blanc",
+  "s": "Bordeaux Blanc",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc",
+   "Sémillon",
+   "Muscadelle"
+  ],
+  "src": "https://www.moutoncadet.com/fr/collections-mouton-cadet/"
+ },
+ {
+  "n": "Mouton Cadet Rosé",
+  "s": "Bordeaux Rosé",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "Rosé",
+  "grapes": [
+   "Merlot",
+   "Cabernet Sauvignon",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.moutoncadet.com/fr/collections-mouton-cadet/"
+ },
+ {
+  "n": "Réserve Mouton Cadet Médoc",
+  "s": "Médoc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.moutoncadet.com/fr/collections-mouton-cadet/"
+ },
+ {
+  "n": "Réserve Mouton Cadet Haut-Médoc",
+  "s": "Haut-Médoc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.moutoncadet.com/fr/collections-mouton-cadet/"
+ },
+ {
+  "n": "Réserve Mouton Cadet Saint-Émilion",
+  "s": "Saint-Émilion",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.moutoncadet.com/fr/collections-mouton-cadet/"
+ },
+ {
+  "n": "Réserve Mouton Cadet Pauillac",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.moutoncadet.com/fr/collections-mouton-cadet/"
+ },
+ {
+  "n": "Réserve Mouton Cadet Margaux",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.moutoncadet.com/fr/collections-mouton-cadet/"
+ },
+ {
+  "n": "Réserve Mouton Cadet Graves Blanc",
+  "s": "Graves Blanc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc",
+   "Sémillon"
+  ],
+  "src": "https://www.moutoncadet.com/fr/collections-mouton-cadet/"
+ },
+ {
+  "n": "Réserve Mouton Cadet Sauternes",
+  "s": "Sauternes",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://www.moutoncadet.com/fr/collections-mouton-cadet/"
+ },
+ {
+  "n": "Baron Philippe de Rothschild Agneau Rouge",
+  "s": "Bordeaux Rouge",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Sauvignon"
+  ],
+  "src": "https://www.vinoscout.de/en/products/agneau-rouge-bordeaux ; https://www.saq.com/page/en/saqcom/red-wine/baron-philippe-de-rothschild-agneau-rouge-selection-bordeaux/13730871"
+ },
+ {
+  "n": "Baron Philippe de Rothschild Agneau Blanc",
+  "s": "Bordeaux Blanc",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc",
+   "Sémillon"
+  ],
+  "src": "https://www.vinoscout.de/en/products/agneau-blanc-bordeaux ; https://mistermeister.de/en/white-wine/4522481-white-wine-philippe-de-rothschild-agneau-blanc-aoc-bordeaux-3262152000759.html"
+ },
+ {
+  "n": "Clarendelle Bordeaux Rouge",
+  "s": "Bordeaux Rouge",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Sauvignon",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.clarendelle.com/"
+ },
+ {
+  "n": "Clarendelle Bordeaux Blanc",
+  "s": "Bordeaux Blanc",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc",
+   "Sémillon",
+   "Muscadelle"
+  ],
+  "src": "https://www.clarendelle.com/"
+ },
+ {
+  "n": "Clarendelle Bordeaux Rosé",
+  "s": "Bordeaux Rosé",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "Rosé",
+  "grapes": [
+   "Merlot",
+   "Cabernet Sauvignon",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.clarendelle.com/"
+ },
+ {
+  "n": "Clarendelle Médoc",
+  "s": "Médoc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.clarendelle.com/"
+ },
+ {
+  "n": "Clarendelle Saint-Émilion",
+  "s": "Saint-Émilion",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.clarendelle.com/"
+ },
+ {
+  "n": "Les Légendes R Rouge",
+  "s": "Bordeaux Rouge",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Sauvignon"
+  ],
+  "src": "https://www.lafite.com/fr/les-legendes-r/"
+ },
+ {
+  "n": "Les Légendes R Blanc",
+  "s": "Bordeaux Blanc",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc",
+   "Sémillon"
+  ],
+  "src": "https://www.lafite.com/fr/les-legendes-r/"
+ },
+ {
+  "n": "Les Légendes R Médoc",
+  "s": "Médoc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.lafite.com/fr/les-legendes-r/"
+ },
+ {
+  "n": "Les Légendes R Saint-Émilion",
+  "s": "Saint-Émilion",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.lafite.com/fr/les-legendes-r/"
+ },
+ {
+  "n": "Les Légendes R Pauillac",
+  "s": "Pauillac",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.lafite.com/fr/les-legendes-r/"
+ },
+ {
+  "n": "Château Bonnet Rouge",
+  "s": "Bordeaux Rouge",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Sauvignon",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.andrelurton.com/nos-vins/"
+ },
+ {
+  "n": "Château Bonnet Blanc",
+  "s": "Entre-Deux-Mers",
+  "c": "France",
+  "region": "Bordeaux (Entre-Deux-Mers)",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc",
+   "Sémillon",
+   "Muscadelle"
+  ],
+  "src": "https://www.andrelurton.com/nos-vins/"
+ },
+ {
+  "n": "Château Bonnet Rosé",
+  "s": "Bordeaux Rosé",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "Rosé",
+  "grapes": [
+   "Merlot",
+   "Cabernet Sauvignon",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.andrelurton.com/nos-vins/"
+ },
+ {
+  "n": "Dourthe N°1 Rouge",
+  "s": "Bordeaux Rouge",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Sauvignon"
+  ],
+  "src": "https://www.dourthe.com/en/our-wines/"
+ },
+ {
+  "n": "Dourthe N°1 Blanc",
+  "s": "Bordeaux Blanc",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc"
+  ],
+  "src": "https://www.dourthe.com/en/our-wines/"
+ },
+ {
+  "n": "Dourthe La Grande Cuvée Rouge",
+  "s": "Bordeaux Rouge",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Sauvignon"
+  ],
+  "src": "https://www.dourthe.com/en/our-wines/"
+ },
+ {
+  "n": "Château Pey La Tour",
+  "s": "Bordeaux Supérieur",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Sauvignon",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.dourthe.com/en/our-wines/"
+ },
+ {
+  "n": "Barton & Guestier Bordeaux Rouge",
+  "s": "Bordeaux Rouge",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Sauvignon",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.barton-guestier.com/our-wines/aoc-wines-b-g-appellations/"
+ },
+ {
+  "n": "Barton & Guestier Bordeaux Blanc",
+  "s": "Bordeaux Blanc",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc",
+   "Sémillon"
+  ],
+  "src": "https://www.barton-guestier.com/our-wines/aoc-wines-b-g-appellations/"
+ },
+ {
+  "n": "Barton & Guestier Médoc",
+  "s": "Médoc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.barton-guestier.com/our-wines/aoc-wines-b-g-appellations/"
+ },
+ {
+  "n": "Barton & Guestier Margaux",
+  "s": "Margaux",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://www.barton-guestier.com/our-wines/aoc-wines-b-g-appellations/"
+ },
+ {
+  "n": "Barton & Guestier Saint-Emilion",
+  "s": "Saint-Émilion",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.barton-guestier.com/our-wines/aoc-wines-b-g-appellations/"
+ },
+ {
+  "n": "Barton & Guestier Sauternes",
+  "s": "Sauternes",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Sweet White",
+  "grapes": [
+   "Sémillon",
+   "Sauvignon Blanc",
+   "Muscadelle"
+  ],
+  "src": "https://www.barton-guestier.com/our-wines/aoc-wines-b-g-appellations/"
+ },
+ {
+  "n": "B&G Crémant de Bordeaux",
+  "s": "Crémant de Bordeaux",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "Sparkling",
+  "grapes": [
+   "Sémillon",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.barton-guestier.com/our-wines/"
+ },
+ {
+  "n": "Thomas Barton Réserve Médoc",
+  "s": "Médoc",
+  "c": "France",
+  "region": "Bordeaux (Left Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Cabernet Sauvignon",
+   "Merlot"
+  ],
+  "src": "https://photiadesgroup.com/portfolio/thomas-barton-reserve-medoc/ ; https://thewineilove.com/thomas-barton-reserve-medoc-wine-2375.html"
+ },
+ {
+  "n": "Thomas Barton Réserve Saint-Émilion",
+  "s": "Saint-Émilion",
+  "c": "France",
+  "region": "Bordeaux (Right Bank)",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Franc"
+  ],
+  "src": "https://caskcartel.com/products/2019-barton-guestier-thomas-barton-reserve-saint-emilion ; https://s3.amazonaws.com/hoth.bizango/assets/31551/Thomas_Barton_Reserve_Saint_Emilion_2023_Tech_Sheet.pdf"
+ },
+ {
+  "n": "Sichel Sirius Bordeaux Rouge",
+  "s": "Bordeaux Rouge",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Sauvignon",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.willowpark.net/collections/premium-red-wine/products/aglc-sirius-bordeaux-rouge-sichel-700583 ; https://www.flaschenpost.ch/en/sirius-aoc-bordeaux-rouge-maison-sichel_maison-sichel-sa"
+ },
+ {
+  "n": "Sichel Sirius Bordeaux Blanc",
+  "s": "Bordeaux Blanc",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc",
+   "Sémillon"
+  ],
+  "src": "https://www.willowpark.net/products/aglc-sirius-bordeaux-blanc-sichel-700575"
+ },
+ {
+  "n": "Baron de Lestac Bordeaux Rouge",
+  "s": "Bordeaux Rouge",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Sauvignon",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.barondelestac.com/en/nos-vins/bordeaux-rouge"
+ },
+ {
+  "n": "Baron de Lestac Bordeaux Blanc",
+  "s": "Bordeaux Blanc",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc",
+   "Sémillon"
+  ],
+  "src": "https://www.barondelestac.com/en/nos-vins/bordeaux-blanc"
+ },
+ {
+  "n": "Prestige de Calvet Bordeaux Rouge",
+  "s": "Bordeaux Rouge",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Sauvignon"
+  ],
+  "src": "https://www.ocado.com/products/prestige-de-calvet-bordeaux-merlot-cabernet-sauvignon-rouge-81434011 ; https://mcgrocer.com/products/prestige-de-calvet-bordeaux-75cl"
+ },
+ {
+  "n": "Michel Lynch Bordeaux Rouge",
+  "s": "Bordeaux Rouge",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Sauvignon"
+  ],
+  "src": "https://jmcazes.com/fr/michel-lynch/certifie-AB ; https://wineonline.ie/products/817"
+ },
+ {
+  "n": "Michel Lynch Bordeaux Blanc",
+  "s": "Bordeaux Blanc",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "White",
+  "grapes": [
+   "Sauvignon Blanc",
+   "Sémillon"
+  ],
+  "src": "https://vinissimus.com/en/wine/michel-lynch-bordeaux-blanc ; https://www.winespectrum.com/wine/2019-michel-lynch-white-bordeaux/"
+ },
+ {
+  "n": "Kressmann Grande Réserve Bordeaux Rouge",
+  "s": "Bordeaux Rouge",
+  "c": "France",
+  "region": "Bordeaux",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Cabernet Sauvignon",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.bienmanger.com/2F3517_Bordeaux_Grande_Reserve_Kressman_Red_Bordeaux.html ; https://www.vinissimus.com/en/wine/kressmann-bordeaux-rouge-grande-reserve"
+ }
+]

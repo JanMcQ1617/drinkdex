@@ -2,8 +2,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist, type StateStorage } from 'zustand/middleware';
 
-import { getDrink, TOTAL } from '@/data';
-import { MILESTONES, milestoneCrossed, rankTitle } from '@/lib/milestones';
+import { getDrink } from '@/data';
+import { LADDER_TOTAL, ladderCount, MILESTONES, milestoneCrossed, onLadder, rankTitle } from '@/lib/milestones';
 import { discardAllPhotos, discardPhoto, rebase } from '@/lib/pour';
 import { useCelebrate } from '@/store/celebrate';
 import type { UnlockRecord } from '@/types';
@@ -55,9 +55,9 @@ const guardedStorage: StateStorage = {
 /* Rehydration                                                          */
 /* ==================================================================== */
 
-/** Index into MILESTONES of the rung `count` entries holds, or -1. */
+/** Index into MILESTONES of the rung `count` ladder entries (cocktails and spirits) hold, or -1. */
 const rungAt = (count: number) =>
-  MILESTONES.findIndex((m) => m.title === rankTitle(count, TOTAL));
+  MILESTONES.findIndex((m) => m.title === rankTitle(count, LADDER_TOTAL));
 
 interface Saved {
   unlocks?: Record<string, UnlockRecord>;
@@ -98,11 +98,23 @@ function settle(saved: Saved | undefined) {
       else retired[id] = next;
     }
   }
-  const count = Object.keys(unlocks).length;
-  // Seeded from the count too, so a collection saved before this field
-  // existed does not re-award the rank it already holds.
+  /*
+   * Seeded from the count too, so a collection saved before this field
+   * existed does not re-award the rank it already holds.
+   *
+   * The same line is what keeps v4.15's re-reading quiet. Taking wine out
+   * of the ladder (lib/milestones) raises the title of anyone whose share
+   * of cocktails and spirits is higher than their share of the whole Dex
+   * was: 300 of them read Note taker against 4,671 and read Cataloguer
+   * against 2,327. That rise is the ladder changing, not a pour, so it is
+   * recorded here as already held, at the first launch of the build, and
+   * no card says "Cataloguer" for it; the next rung up still celebrates
+   * when a pour crosses it. bestRung is never lowered: a title heard once
+   * is not heard again, even by someone whose wines had earned it in
+   * build 40 and whose cocktails and spirits now read lower.
+   */
   const kept = typeof saved?.bestRung === 'number' ? saved.bestRung : -1;
-  const bestRung = Math.max(kept, rungAt(count));
+  const bestRung = Math.max(kept, rungAt(ladderCount(unlocks)));
   return { unlocks, retired, bestRung };
 }
 
@@ -153,9 +165,14 @@ export const useCollection = create<CollectionState>()(
        */
       const enter = (record: UnlockRecord) => {
         const { unlocks: prev, bestRung } = get();
-        const before = Object.keys(prev).length;
-        const after = before + 1;
-        const rung = milestoneCrossed(before, after, TOTAL);
+        /*
+         * Counted on the ladder: cocktails and spirits only. A wine is a new
+         * entry like any other (the collected card, the Dex's count) but
+         * leaves the ladder where it was, so it crosses no rung.
+         */
+        const before = ladderCount(prev);
+        const after = onLadder(getDrink(record.drinkId)?.category) ? before + 1 : before;
+        const rung = milestoneCrossed(before, after, LADDER_TOTAL);
         const rungIndex = rung ? MILESTONES.indexOf(rung) : -1;
         /*
          * A rung celebrates once. Relocking an entry and logging another

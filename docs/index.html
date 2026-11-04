@@ -26,11 +26,10 @@
     it is. Every name, number, style, fact and recipe on this page
     is the catalogue's (src/data/drinks.json, worded through lib/drinkLabels
     as the app words them). If the catalogue changes them, change them here.
-  The counts are floors, not totals (v4.14, 3 Nov 2026: 899 cocktails,
-  1,428 spirits, 2,344 wines, 4,671 in all), because build 41's wine
-  bottlings and the split of spirits and wines move them within days:
-  899 cocktails, 1,400+ spirits, 2,300+ wines, 4,600+ entries. Raise them
-  when the catalogue settles; never write one above what
+  The counts are floors, not totals (build 41, 3 Nov 2026: 899 cocktails,
+  1,428 spirits, 5,558 wines of which 3,214 are bottles, 7,885 in all):
+  899 cocktails, 1,400+ spirits, 5,500+ wines, 7,800+ entries. Raise them
+  when the catalogue grows; never write one above what
   src/data/drinks.json holds. Every line about tournaments, saved
   collections, tags and places is the approved wording in appstore.md and
   testflight.md, held to App Store guideline 1.4.3: nothing here asks
@@ -165,7 +164,7 @@
   .dex-copy { display: grid; gap: 28px; align-content: start; container-type: inline-size; }
   .dex-copy .big { font-size: clamp(22px, 2vw, 27px); line-height: 1.32; letter-spacing: -0.022em; font-weight: 500; max-width: 26ch; }
   /* Three counts on one row at every width: sized to the column (cqi), not the window, because
-     beside the grid (960+) the column is 323 to 431px. "899 · 1,400+ · 2,300+" is about 8.3em of
+     beside the grid (960+) the column is 323 to 431px. "899 · 1,400+ · 5,500+" is about 8.3em of
      numerals, and "cocktails" under the first is wider than "899" on a phone; 9.8cqi of type plus two
      gaps of 6cqi (20px at least) fits down to a 288px column, a 320px phone.
      The first two lines are the fallback for a browser without container units. */
@@ -456,7 +455,7 @@
   <section class="wrap" id="dex" aria-labelledby="dex-h">
     <div class="head rise">
       <h2 id="dex-h">The Dex</h2>
-      <p class="head-aside">4,600+ entries</p>
+      <p class="head-aside">7,800+ entries</p>
     </div>
     <span class="head-rule" data-pen="rule" data-seed="2"></span>
 
@@ -466,7 +465,7 @@
         <ul class="counts">
           <li><b>899</b><span>cocktails</span></li>
           <li><b>1,400+</b><span>spirits</span></li>
-          <li><b>2,300+</b><span>wines</span></li>
+          <li><b>5,500+</b><span>wines</span></li>
         </ul>
         <p class="body">Search it, filter it by flavour, strength, grape or country, or scroll and find something you have never heard of. Wines lead to the Wine Atlas: its named wines by country, and the grapes behind them.</p>
       </div>

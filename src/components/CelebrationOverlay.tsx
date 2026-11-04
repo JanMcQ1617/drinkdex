@@ -19,6 +19,7 @@ import { colors, layout, radius, space, tabular, textRole } from '@/constants/th
 import { formatCount, getDrink, TOTAL } from '@/data';
 import { photoFor } from '@/data/drinkPhotos';
 import { catalogueCount } from '@/lib/cabinet';
+import { LADDER_TOTAL } from '@/lib/milestones';
 import { useCelebrate, type Celebration } from '@/store/celebrate';
 import { useCollection } from '@/store/collection';
 import type { Drink, UnlockRecord } from '@/types';
@@ -172,10 +173,16 @@ function CatchBody({
  */
 let lastAnnounced = 0;
 
+/*
+ * A title is a share of the cocktails and spirits (lib/milestones), so its
+ * card says that share, "233 of 2,327 cocktails and spirits"; the collected
+ * card says the whole Dex, "of 4,671", as the Dex itself does.
+ */
+const ladderLine = (collected: number) =>
+  `Your Dex now holds ${formatCount(collected)} of ${formatCount(LADDER_TOTAL)} cocktails and spirits`;
+
 function announcement(c: Celebration, collected: number): string {
-  if (c.kind === 'milestone') {
-    return `${c.milestone.title}. Your Dex now holds ${formatCount(c.collected)} of ${formatCount(TOTAL)} entries.`;
-  }
+  if (c.kind === 'milestone') return `${c.milestone.title}. ${ladderLine(c.collected)}.`;
   const name = getDrink(c.drinkId)?.name ?? 'New drink';
   return `${name} logged. ${formatCount(collected)} of ${formatCount(TOTAL)} in your Dex.`;
 }
@@ -243,7 +250,7 @@ export function CelebrationOverlay() {
           {current.milestone.title}
         </Text>
         <Text style={[textRole.small, styles.muted, styles.progress, tabular]}>
-          Your Dex now holds {formatCount(current.collected)} of {formatCount(TOTAL)} entries
+          {ladderLine(current.collected)}
         </Text>
 
         <Button label="Done" onPress={onDismiss} block style={styles.cta} />

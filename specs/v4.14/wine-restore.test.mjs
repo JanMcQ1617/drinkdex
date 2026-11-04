@@ -53,6 +53,13 @@ const DRINKS = JSON.parse(read('src/data/drinks.json'));
 const byId = new Map(DRINKS.map((d) => [d.id, d]));
 const wines = DRINKS.filter((d) => d.category === 'wine');
 const others = DRINKS.filter((d) => d.category !== 'wine');
+/*
+ * The wines that came back. The bottlings (-wb, v4.15) are new wine cards
+ * numbered after these, in the same run; they are not a restore, so the
+ * ids and the sources below are checked without them, and
+ * specs/v4.15/wine-bottles.test.mjs checks them on their own terms.
+ */
+const restored = wines.filter((d) => !d.id.endsWith('-wb'));
 
 /** The Dex's highest number before wine came back (v4.13's last card). */
 const LAST_BEFORE_WINE = 2330;
@@ -75,9 +82,11 @@ const SPIRIT_SHELF = new Set(['Sherry', 'Port', 'Vermouth']);
   const nums = DRINKS.map((d) => d.dexNumber);
   ok(new Set(nums).size === nums.length, `no two cards share a number (${DRINKS.length.toLocaleString('en-US')} cards)`);
   ok(nums.every((n, i) => i === 0 || n > nums[i - 1]), 'drinks.json is in Dex order');
+  /* The restore's own run; the bottlings after it keep their numbers through retirements (specs/v4.15/wine-bottles.test.mjs). */
+  const r = restored.map((d) => d.dexNumber).sort((a, b) => a - b);
+  const run = r.every((n, i) => n === LAST_BEFORE_WINE + 1 + i);
+  ok(run, `the ${restored.length.toLocaleString('en-US')} restored wines run Nº ${r[0]} to ${r[r.length - 1]} with no gap`);
   const w = wines.map((d) => d.dexNumber).sort((a, b) => a - b);
-  const run = w.every((n, i) => n === LAST_BEFORE_WINE + 1 + i);
-  ok(run, `the ${wines.length.toLocaleString('en-US')} wines run Nº ${w[0]} to ${w[w.length - 1]} with no gap`);
   // A card added later numbers after the last wine; none may sit inside the run.
   const inRun = others.filter((d) => d.dexNumber > LAST_BEFORE_WINE && d.dexNumber <= w[w.length - 1]);
   ok(inRun.length === 0, `no cocktail or spirit is numbered inside the wines' run`);
@@ -102,7 +111,7 @@ const SPIRIT_SHELF = new Set(['Sherry', 'Port', 'Vermouth']);
     ok(JSON.stringify(left) === JSON.stringify(expected), `left out: the 5 sakes and the 8 spirit-shelf twins, nothing else (${left.length})`);
     const shelf = preWines.filter((d) => byId.get(d.id)?.category === 'spirit').map((d) => d.id);
     ok(shelf.length === 12 && shelf.every((id) => SPIRIT_SHELF.has(byId.get(id).subcategory)), 'the 12 vermouths, sherries and ports are still spirits');
-    ok(wines.every((d) => preById.has(d.id)), 'every wine is a pre-removal id: nothing new was invented');
+    ok(restored.every((d) => preById.has(d.id)), 'every restored wine is a pre-removal id: nothing new was invented');
     /*
      * The words, field for field, but for the lines reworded for App Review
      * 1.4.3 on the way back: nine classics' nudges to pour more (Gamay's
@@ -135,7 +144,7 @@ const SPIRIT_SHELF = new Set(['Sherry', 'Port', 'Vermouth']);
       'Serve it cold and young. Rosé is one of the few wines where the current vintage is almost always the right one: it fades with keeping rather than improving.';
     const renamed = [];
     const reworded = [];
-    for (const d of wines) {
+    for (const d of restored) {
       const p = preById.get(d.id);
       for (const k of new Set([...Object.keys(d), ...Object.keys(p)])) {
         if (k === 'dexNumber') continue;
@@ -187,7 +196,7 @@ const SPIRIT_SHELF = new Set(['Sherry', 'Port', 'Vermouth']);
     .flatMap((f) => JSON.parse(readFileSync(join(dir, f), 'utf8')));
   const authoredIds = new Set(authored.map((r) => r.id));
   ok(authored.every((r) => byId.get(r.id)?.category === 'wine'), `every winedexdata row is a wine card (${authored.length})`);
-  ok(wines.every((d) => authoredIds.has(d.id) || d.id.endsWith('-wn')), 'every wine card is a winedexdata row or an atlas card');
+  ok(restored.every((d) => authoredIds.has(d.id) || d.id.endsWith('-wn')), 'every restored wine card is a winedexdata row or an atlas card');
   ok(!SAKES.some((id) => authoredIds.has(id)), 'no sake in winedexdata');
 
   const atlas = JSON.parse(read('src/data/wineAtlas.json'));

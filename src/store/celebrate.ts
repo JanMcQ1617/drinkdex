@@ -20,7 +20,11 @@ import type { Milestone } from '@/lib/milestones';
 export type CelebrationInput =
   /** A new entry joined the collection. */
   | { kind: 'collected'; drinkId: string }
-  /** The rank ladder advanced a rung. */
+  /**
+   * The rank ladder advanced a rung. `collected` is the ladder's count
+   * (lib/milestones' ladderCount: cocktails and spirits), the figure the
+   * title is a share of, not the Dex's count, which includes wine.
+   */
   | { kind: 'milestone'; milestone: Milestone; collected: number };
 
 /*

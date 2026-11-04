@@ -193,6 +193,12 @@ export interface AtlasLink {
   wines: string[];
   /** Atlas grape name, for cards that are a variety. */
   grape: string | null;
+  /**
+   * A bottling's own varieties by atlas name (v4.15, -wb cards), where its
+   * row names any the atlas knows: what the Grape filter reads for it, in
+   * place of everything its appellation permits.
+   */
+  grapes?: string[];
   /** Why this card has nothing to link to (the two vermouths). */
   absent?: string;
 }

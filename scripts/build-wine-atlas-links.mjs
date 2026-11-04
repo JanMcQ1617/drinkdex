@@ -20,10 +20,25 @@
  * "Madeira"), a card whose atlas name differs ("Ruby Port" is filed as
  * "Porto Ruby"), and the handful that have no atlas entry at all and should
  * say so rather than link to something approximate.
+ *
+ * THE BOTTLINGS (-wb, scripts/merge-wine-brands.mjs, v4.15) are linked
+ * from their row, never by name: a bottle is on the map where the card it
+ * is filed under is, its one appellation (Château Latour is Pauillac), or
+ * its grape for a bottle filed under a variety ([yellow tail] Shiraz is
+ * Syrah), or nowhere for one filed under a style made anywhere (Bordeaux
+ * Blend). A link to a whole family would say "10 matching appellations"
+ * of one bottle. And a bottle carries `grapes`, its own varieties by atlas
+ * name, where its row names any the atlas knows: the Dex's Grape filter
+ * reads those instead of everything its appellation permits (Krug Clos du
+ * Mesnil is Chardonnay, not Le Mesnil's three). A row's grape is read
+ * against its card before the atlas at large (atlasGrapes): an Argentine
+ * Bonarda is Bonarda Argentina, not Lombardy's Croatina.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+import { atlasGrapes, atlasIndex, bottlingId, isBottling, loadWineBrands, styleCards, styleFacts } from './lib/wine-brands.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const atlas = JSON.parse(readFileSync(join(ROOT, 'src/data/wineAtlas.json'), 'utf8'));
@@ -161,7 +176,27 @@ const onTheMap = (d) =>
 const links = {};
 const problems = [];
 
+const idx = atlasIndex(atlas);
+const styles = styleCards(drinks);
+const bottleRows = new Map(loadWineBrands().map((b) => [bottlingId(b), b]));
+
 for (const d of drinks.filter(onTheMap)) {
+  if (isBottling(d.id)) {
+    const b = bottleRows.get(d.id);
+    const card = b && styles.get(b.s);
+    if (!card) {
+      problems.push(`${d.id} (${d.name}): ${b ? `filed under "${b.s}", which is not a wine card` : 'no row in scripts/winebranddata/'}`);
+      continue;
+    }
+    const facts = styleFacts(card, idx);
+    const grapes = atlasGrapes(b, idx, facts);
+    links[d.id] = {
+      wines: facts.kind === 'place' ? [facts.atlasWine.n] : [],
+      grape: facts.kind === 'variety' ? facts.grape : null,
+      ...(grapes.length ? { grapes } : {}),
+    };
+    continue;
+  }
   if (ABSENT[d.id]) {
     links[d.id] = { wines: [], grape: null, absent: ABSENT[d.id] };
     continue;
@@ -223,7 +258,8 @@ writeFileSync(OUT, text);
 
 const linked = Object.values(links).filter((l) => l.wines.length || l.grape != null).length;
 const absent = Object.values(links).filter((l) => l.absent).length;
+const bottles = Object.keys(links).filter(isBottling).length;
 console.log(
   `wineAtlasLinks.json — ${Object.keys(links).length} wine cards: ` +
-    `${linked} linked, ${absent} intentionally absent`
+    `${linked} linked, ${absent} intentionally absent; ${bottles} of them bottlings`
 );

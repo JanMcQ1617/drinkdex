@@ -10,10 +10,10 @@ limits and the keyword rules below, and refuses the words guideline 1.4.3
 would read as asking anyone to drink. Run it after any edit; it prints the
 counts that belong in the brackets.
 
-No listing field gives a total for the Dex any more. It is 4,671 entries
-on 3 Nov 2026 (899 cocktails, 1,428 spirits, 2,344 wines), and build 41's
-wine bottlings and the split of spirits and wines move it within days, so
-the copy says "thousands". If a number ever goes back in, count it out of
+No listing field gives a total for the Dex any more. It is 7,885 entries
+in build 41 (899 cocktails, 1,428 spirits, 5,558 wines, of which 3,214
+are bottles), and the count moves with every data build, so the copy says
+"thousands" and "more than three thousand real bottles". If a number ever goes back in, count it out of
 `src/data/drinks.json` on the day you submit, never from memory — an
 inflated number in a listing is the kind of thing that is easy to write
 and awkward to defend. So is an example drink the Dex no longer has, which
@@ -167,7 +167,7 @@ Answer a few questions about your tastes and For you puts the entries closest to
 
 WINE
 
-From the classic grapes and regions to every named wine in the Wine Atlas, by country or A to Z, with the grapes behind each one. Search a grape and find the wines made from it.
+From the classic grapes and regions to every named wine in the Wine Atlas, by country or A to Z, with the grapes behind each one. More than three thousand real bottles sit among them, each filed under its appellation or grape. Search a grape or a producer and find its wines.
 
 YOUR SHELF
 
@@ -243,28 +243,14 @@ producers), add this sentence to the end of the WINE paragraph, after
 stays true wherever the bottlings sit: in the Wine Atlas, under Wines, or
 on a shelf of their own (`specs/v4.15/ranks.md` allows for that).
 
-<!-- listing:description-bottlings -->
-```
-The Dex also holds wine bottlings from well-known producers.
-```
-
-[60, plus 1 for the space: the description becomes 2,971, counted by `scripts/check-listing.mjs` on 3 Nov 2026]
-
-Not before: build 40 has no producer's bottling in it, and a listing line
-the build cannot show is a rejection. On the day build 41's data is in
-`src/data/drinks.json`, check three things before pasting:
-
-- **Glass.** Every bottling has `glassware`. If not, "each one tells you
-  the glass it belongs in" (the description's second paragraph) is no
-  longer true.
-- **Grapes and region.** Every bottling's `composition.components` has a
-  Grapes row and a Region row. If not, "every wine its grapes and region"
-  (testflight.md's Beta App Description) and "grapes and region for every
-  wine" (the site's homepage) must change first. On build 40 all 2,344
-  wines have glassware, Grapes and Region.
-- **The floors.** Recount with the command at the top of this file; the
-  site's homepage shows 1,400+ spirits, 2,300+ wines and 4,600+ entries,
-  and none may sit above the file.
+Wine bottlings: build 41 adds 3,214 of them, and the WINE paragraph above
+says so in its second sentence ("More than three thousand real bottles sit
+among them"). It went in on 3 Nov 2026, once `src/data/drinks.json` had
+the bottlings and every one of them had `glassware` and a Grapes and a
+Region row in `composition.components`, so "each one tells you the glass
+it belongs in" and "grapes and region for every wine" stay true. Keep the
+number below the file's: if bottles are ever removed below 3,000, the
+sentence changes first.
 
 The Facebook paragraph is out of PEOPLE from build 35. It describes a
 build made with `EXPO_PUBLIC_FACEBOOK_SIGN_IN=on` and

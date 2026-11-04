@@ -41,7 +41,8 @@ let CARD_OF: Map<string, string> | null = null;
 export function cardOfAtlasWine(name: string): string | undefined {
   if (!CARD_OF) {
     const out = new Map<string, string>();
-    const ids = Object.keys(ATLAS_LINKS);
+    /* Never a bottling (-wb, v4.15): Château Latour links Pauillac, and Pauillac's row opens Pauillac. */
+    const ids = Object.keys(ATLAS_LINKS).filter((id) => !id.endsWith('-wb'));
     for (const id of ids) {
       const wines = ATLAS_LINKS[id].wines;
       if (wines.length === 1 && !out.has(wines[0])) out.set(wines[0], id);
