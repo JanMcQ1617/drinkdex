@@ -55,11 +55,14 @@ const wines = DRINKS.filter((d) => d.category === 'wine');
 const others = DRINKS.filter((d) => d.category !== 'wine');
 /*
  * The wines that came back. The bottlings (-wb, v4.15) are new wine cards
- * numbered after these, in the same run; they are not a restore, so the
- * ids and the sources below are checked without them, and
- * specs/v4.15/wine-bottles.test.mjs checks them on their own terms.
+ * numbered after these, in the same run, and so are the six style cards
+ * v4.16 wrote (California Red Blend, New World Rosé…); they are not a
+ * restore, so the ids and the sources below are checked without them, and
+ * specs/v4.15/wine-bottles.test.mjs and specs/v4.16/style-cards.test.mjs
+ * check them on their own terms.
  */
-const restored = wines.filter((d) => !d.id.endsWith('-wb'));
+const STYLE_CARDS_V416 = new Set(['new-world-moscato', 'sweet-red', 'california-red-blend', 'red-blend', 'new-world-rose', 'white-blend']);
+const restored = wines.filter((d) => !d.id.endsWith('-wb') && !STYLE_CARDS_V416.has(d.id));
 
 /** The Dex's highest number before wine came back (v4.13's last card). */
 const LAST_BEFORE_WINE = 2330;

@@ -2,7 +2,11 @@
  * Promotes the wine bottlings into the Dex as cards (v4.15,
  * specs/v4.15/wine-bottles.md).
  *
- * Run: node scripts/merge-wine-brands.mjs [--dry]
+ * Run: node scripts/merge-wine-brands.mjs [--dry | --check]
+ *
+ *   --check   write nothing; exit 1 if drinks.json is not what this run
+ *             would write (a bottle edited by hand, or a source row changed
+ *             and the merge not re-run). A gate, as the build scripts' are.
  *
  * The wine twin of merge-spirit-brands.mjs. The Dex's wine cards are
  * appellations, styles and grapes (merge-wines.mjs, merge-wine-atlas.mjs):
@@ -26,7 +30,9 @@
  * Merlot) takes its colour's from scripts/lib/wine-styles.mjs, the table
  * the atlas cards are written from, so nothing describes a bottle as
  * something it is not. scripts/lib/wine-brands.mjs (cardDescribes) says
- * which. Rarity is always the card's.
+ * which, and words a card written for several colours keeps for one of
+ * them (cardNotes: New World Moscato's pink and red taste of red berries,
+ * its white of orange blossom). Rarity is always the card's.
  *
  * WHERE A BOTTLE IS. A bottle filed under a place is in the Region option
  * its card is in, as the app's own code works regions out
@@ -63,14 +69,15 @@ import { readFileSync, writeFileSync } from 'node:fs';
 
 import { assertShapePreserved, dexCountry, fold, merge, reportAndGate, validate } from './lib/dex-merge.mjs';
 import { dexRegions } from './lib/dex-regions.mjs';
-import { atlasGrapes, atlasIndex, bottlingId, cardDescribes, isBottling, loadWineBrands, styleCards, styleFacts } from './lib/wine-brands.mjs';
+import { atlasGrapes, atlasIndex, bottlingId, cardDescribes, cardNotes, isBottling, loadWineBrands, styleCards, styleFacts } from './lib/wine-brands.mjs';
 import { STYLE } from './lib/wine-styles.mjs';
 
 const ROOT = new URL('../', import.meta.url);
 const DRINKS = new URL('src/data/drinks.json', ROOT);
 const ATLAS = new URL('src/data/wineAtlas.json', ROOT);
 const OWNER = 'merge-wine-brands.mjs';
-const dry = process.argv.includes('--dry');
+const check = process.argv.includes('--check');
+const dry = check || process.argv.includes('--dry');
 
 const drinks = JSON.parse(readFileSync(DRINKS, 'utf8'));
 const atlas = JSON.parse(readFileSync(ATLAS, 'utf8'));
@@ -225,7 +232,7 @@ for (const b of brands) {
     abv: b.abv ?? (describes ? card.abv : st.abv),
     origin,
     rarity: card.rarity,
-    tastingNotes: describes ? card.tastingNotes : st.notes,
+    tastingNotes: describes ? cardNotes(card, b.colour) : st.notes,
     glassware: describes ? card.glassware : st.glass,
     funFact,
     serve: describes ? card.serve : { temp: st.temp, glass: st.glass, how: st.how, pair: st.pair },
@@ -316,10 +323,19 @@ if (problems.length) {
   process.exit(1);
 }
 
-if (dry) {
+const text = JSON.stringify(out, null, 1) + '\n';
+if (check) {
+  const was = new Map(drinks.map((d) => [d.id, JSON.stringify(d)]));
+  const off = out.filter((d) => was.get(d.id) !== JSON.stringify(d)).map((d) => d.id);
+  if (text === readFileSync(DRINKS, 'utf8')) console.log(`check: drinks.json is what this merge writes (${out.length} entries)`);
+  else {
+    console.error(`check: drinks.json is not what this merge writes (${off.length} ${off.length === 1 ? 'entry differs' : 'entries differ'}${off.length ? `: ${off.slice(0, 5).join(', ')}` : ''}); re-run node scripts/merge-wine-brands.mjs`);
+    process.exitCode = 1;
+  }
+} else if (dry) {
   console.log(`dry run — would write ${out.length} entries (${fresh} new, ${refreshed} refreshed)`);
 } else {
-  writeFileSync(DRINKS, JSON.stringify(out, null, 1) + '\n');
+  writeFileSync(DRINKS, text);
   console.log(`wrote ${out.length} entries — ${fresh} new, ${refreshed} refreshed`);
 }
 const files = new Set(brands.map((b) => b.file)).size;

@@ -26,7 +26,8 @@
 /*      none opens "A A…" or "A É…", and none names its card with the   */
 /*      Dex's qualifier.                                                */
 /*   6. Build 41's review notes and What to Test fit App Store Connect  */
-/*      and count the Dex as it is.                                     */
+/*      and count the Dex as build 41 shipped it (every number to 7899; */
+/*      v4.16's style cards and their bottles follow it).               */
 /*                                                                      */
 /*   node specs/v4.15/wine-bottles.test.mjs                             */
 /* ==================================================================== */
@@ -86,6 +87,14 @@ const RETIRED = new Map([
   [6539, 'EA Tinto'],
 ]);
 
+/*
+ * The style cards v4.16 wrote (specs/v4.16/style-cards.md), numbered
+ * after the bottlings, 7900 to 7905, with the bottles filed under them
+ * after those. specs/v4.16/style-cards.test.mjs checks them; here they are
+ * the one kind of new card that is not a bottling.
+ */
+const STYLE_CARDS_V416 = new Set(['new-world-moscato', 'sweet-red', 'california-red-blend', 'red-blend', 'new-world-rose', 'white-blend']);
+
 /* ---- 1. Nothing moved ---- */
 
 {
@@ -104,14 +113,18 @@ const RETIRED = new Map([
     );
     ok(Math.max(...shipped.map((d) => d.dexNumber)) === LAST_BEFORE, `build 40's highest number is ${LAST_BEFORE}`);
     const fresh = DRINKS.filter((d) => !shipped.some((s) => s.id === d.id));
-    ok(fresh.length === bottles.length && fresh.every((d) => W.isBottling(d.id)), `everything new is a bottling (${fmt(fresh.length)})`);
+    ok(
+      fresh.length === bottles.length + STYLE_CARDS_V416.size && fresh.every((d) => W.isBottling(d.id) || STYLE_CARDS_V416.has(d.id)),
+      `everything new is a bottling or one of v4.16's ${STYLE_CARDS_V416.size} style cards (${fmt(fresh.length)})`,
+    );
   }
   const nums = bottles.map((d) => d.dexNumber).sort((a, b) => a - b);
   const last = nums[nums.length - 1];
-  const run = [...nums, ...RETIRED.keys()].sort((a, b) => a - b);
+  const styleNums = DRINKS.filter((d) => STYLE_CARDS_V416.has(d.id)).map((d) => d.dexNumber).sort((a, b) => a - b);
+  const run = [...nums, ...RETIRED.keys(), ...styleNums].sort((a, b) => a - b);
   ok(
     nums[0] === LAST_BEFORE + 1 && run.every((n, i) => n === LAST_BEFORE + 1 + i),
-    `the ${fmt(bottles.length)} bottlings run Nº ${nums[0]} to ${last}, the only gaps the ${RETIRED.size} retired numbers`,
+    `the ${fmt(bottles.length)} bottlings run Nº ${nums[0]} to ${last}, the only gaps the ${RETIRED.size} retired numbers and v4.16's style cards (${styleNums[0]}–${styleNums[styleNums.length - 1]})`,
   );
   ok(
     [...RETIRED].every(([n, name]) => !DRINKS.some((d) => d.dexNumber === n || d.name === name)),
@@ -344,11 +357,14 @@ function membership(model, wines) {
   ok(bottles.every((d) => d.serve?.how && d.composition?.components?.length >= 3 && d.tastingNotes?.length >= 2), 'every bottling has a serve, three composition lines and tasting notes');
 }
 
-/* ---- 6. Build 41's notes: within App Store Connect's 4,000 characters, and counting what the Dex holds ---- */
+/* ---- 6. Build 41's notes: within App Store Connect's 4,000 characters, and counting what build 41's Dex held ---- */
 
 {
   const fig = (n) => fmt(n);
-  const wineCount = DRINKS.filter((d) => d.category === 'wine').length;
+  /* Build 41's Dex: every number to 7899. What came after (v4.16, 7900 on) is counted by its own build's notes. */
+  const B41 = DRINKS.filter((d) => d.dexNumber <= 7899);
+  const wineCount = B41.filter((d) => d.category === 'wine').length;
+  const bottles41 = B41.filter((d) => W.isBottling(d.id));
   for (const rel of ['specs/v4.15/review-notes-41.txt', 'specs/v4.15/wtt-41.txt']) {
     const n = [...read(rel)].length;
     ok(n <= 4000, `${rel}: ${fmt(n)} characters, App Store Connect's 4,000 at most`);
@@ -359,13 +375,13 @@ function membership(model, wines) {
   ok(old.length === now.length && old.every((l, i) => l === now[i] || l.startsWith('The Dex.')), "only The Dex paragraph differs from build 40's review notes");
   const dex = now.find((l) => l.startsWith('The Dex.')) ?? '';
   ok(
-    dex.includes(`${fig(DRINKS.length)} entries`) && dex.includes(`${fig(wineCount)} wines`) && dex.includes(`${fig(bottles.length)} bottles`),
-    `the review notes count the Dex as it is: ${fig(DRINKS.length)} entries, ${fig(wineCount)} wines, ${fig(bottles.length)} bottles`,
+    dex.includes(`${fig(B41.length)} entries`) && dex.includes(`${fig(wineCount)} wines`) && dex.includes(`${fig(bottles41.length)} bottles`),
+    `the review notes count the Dex as build 41 shipped it: ${fig(B41.length)} entries, ${fig(wineCount)} wines, ${fig(bottles41.length)} bottles`,
   );
   const wtt = read('specs/v4.15/wtt-41.txt');
   const news = (wtt.split('New in this build:')[1]?.split('From the last build')[0] ?? '').split('\n').filter((l) => l.startsWith('- '));
   ok(
-    /^- Real wine bottles\. /.test(news[0] ?? '') && news[0].includes(`${fig(bottles.length)} of them`) && news[0].includes(`${fig(DRINKS.length)} entries`) && /^- Dex titles now count cocktails and spirits only/.test(news[1] ?? ''),
+    /^- Real wine bottles\. /.test(news[0] ?? '') && news[0].includes(`${fig(bottles41.length)} of them`) && news[0].includes(`${fig(B41.length)} entries`) && /^- Dex titles now count cocktails and spirits only/.test(news[1] ?? ''),
     'What to Test leads with the real wine bottles, then the titles counting cocktails and spirits',
   );
   ok(!/title on Dex progress can read lower/.test(wtt), "and drops build 40's known issue that a title can read lower");

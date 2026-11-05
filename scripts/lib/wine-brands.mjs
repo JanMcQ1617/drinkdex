@@ -88,11 +88,41 @@ const FAMILY_COLOUR = {
 };
 
 /**
- * One authored card is two colours. Moscato d'Asti is filed Dessert and is
- * frizzante, and the atlas styles that wine Sparkling, as the research did
- * its ten bottles: they are what the card describes.
+ * The authored cards whose words are written for colours their family
+ * does not say. Moscato d'Asti is filed Dessert and is frizzante, and the
+ * atlas styles that wine Sparkling, as the research did its ten bottles:
+ * both are what the card describes. Two of v4.16's styles
+ * (specs/v4.16/style-cards.md) are filed Dessert, where STYLE files every
+ * sweet wine: Sweet Red, whose words are a sweet red's alone, so a sweet
+ * white filed under it would take the sweet white's words rather than
+ * the red's; and New World Moscato, whose words are written for its pink
+ * and red bottles as well as the white (STYLE's sweet-red words are a
+ * dessert wine's, dried fig and cocoa at cellar temperature, not a light
+ * Moscato's).
  */
-const ALSO = { "Moscato d'Asti": ['Sparkling'] };
+const COLOURS_OF = {
+  "Moscato d'Asti": ['Sweet White', 'Sparkling'],
+  'Sweet Red': ['Sweet Red'],
+  'New World Moscato': ['Sweet White', 'Sweet Rosé', 'Sweet Red'],
+};
+
+/**
+ * Where a card written for several colours words one of them apart.
+ * New World Moscato's tasting notes are the white's (orange blossom,
+ * honey); the pink and the red take a dash of red wine and taste of red
+ * berries, as the card's description says and their producers write
+ * (Barefoot's cherries and raspberries, Sutter Home's and [yellow
+ * tail]'s strawberry). Its serve is written for all three.
+ */
+const NOTES_OF = {
+  'New World Moscato': {
+    'Sweet Rosé': ['muscat grape', 'strawberry', 'raspberry', 'cherry'],
+    'Sweet Red': ['muscat grape', 'strawberry', 'raspberry', 'cherry'],
+  },
+};
+
+/** The tasting notes a bottle of this colour takes from a card whose words describe it. */
+export const cardNotes = (card, colour) => NOTES_OF[card.name]?.[colour] ?? card.tastingNotes;
 
 /**
  * Atlas tiers that name a grape or a recipe, not a place: a Brazilian
@@ -132,7 +162,7 @@ function hardLead(detail, idx) {
  *    (-wn) card says what the atlas says; an authored card says what its
  *    family says, because its words were written for that family: the
  *    Niagara Peninsula card is about icewine, whatever else the atlas
- *    files there;
+ *    files there (or COLOURS_OF says, where they were written for others);
  *  - lead: the grape the card's words are about, if any (hardLead; a
  *    variety card's is its variety). A generated card's words are its
  *    colour's and have none.
@@ -144,7 +174,7 @@ export function styleFacts(card, idx) {
   const kind = variety || (named && NOT_A_PLACE.has(named.t)) ? 'variety' : named ? 'place' : 'style';
   /* A national varietal (Uruguay's Tannat) is its one grape; Meritage is several, and none. */
   const grape = variety ?? (kind === 'variety' && named?.g?.length === 1 ? idx.grapesOf(named)[0] : null);
-  const colours = new Set(generated && named ? [named.s] : [FAMILY_COLOUR[card.subcategory], ...(ALSO[card.name] ?? [])]);
+  const colours = new Set(generated && named ? [named.s] : (COLOURS_OF[card.name] ?? [FAMILY_COLOUR[card.subcategory]]));
   const grapesLine = card.composition?.components?.find((c) => c.label === 'Grapes')?.detail;
   const lead = generated ? null : kind === 'variety' ? grape : hardLead(grapesLine, idx);
   return { kind, atlasWine: named, grape, colours, lead };

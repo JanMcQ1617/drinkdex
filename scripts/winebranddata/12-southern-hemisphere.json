@@ -269,6 +269,51 @@
   "src": "https://www.yellowtailwine.com/en-au/our-wines/"
  },
  {
+  "n": "[yellow tail] Moscato",
+  "s": "New World Moscato",
+  "c": "Australia",
+  "region": "South Eastern Australia",
+  "colour": "Sweet White",
+  "abv": "7.5%",
+  "src": "https://www.yellowtailwine.com/en-au/product/moscato/"
+ },
+ {
+  "n": "[yellow tail] Pink Moscato",
+  "s": "New World Moscato",
+  "c": "Australia",
+  "region": "South Eastern Australia",
+  "colour": "Sweet Rosé",
+  "abv": "7.5%",
+  "src": "https://www.yellowtailwine.com/en-us/product/pink-moscato/"
+ },
+ {
+  "n": "[yellow tail] Rosé",
+  "s": "New World Rosé",
+  "c": "Australia",
+  "region": "South Eastern Australia",
+  "colour": "Rosé",
+  "abv": "12%",
+  "src": "https://www.yellowtailwine.com/en-au/product/rose/"
+ },
+ {
+  "n": "[yellow tail] Big Bold Red",
+  "s": "Red Blend",
+  "c": "Australia",
+  "region": "South Eastern Australia",
+  "colour": "Red",
+  "abv": "13.5%",
+  "src": "https://www.yellowtailwine.com/en-au/product/big-bold-red/"
+ },
+ {
+  "n": "[yellow tail] Jammy Red Roo",
+  "s": "Sweet Red",
+  "c": "Australia",
+  "region": "South Eastern Australia",
+  "colour": "Sweet Red",
+  "abv": "12%",
+  "src": "https://www.yellowtailwine.com/en-gb/product/jammy-red-roo/"
+ },
+ {
   "n": "Jacob's Creek Classic Shiraz",
   "s": "Syrah / Shiraz",
   "c": "Australia",
@@ -345,6 +390,14 @@
    "Sauvignon Blanc"
   ],
   "src": "https://jacobscreek.com/pages/our-wines"
+ },
+ {
+  "n": "Jacob's Creek Classic Moscato",
+  "s": "New World Moscato",
+  "c": "Australia",
+  "region": "South Eastern Australia",
+  "colour": "Sweet White",
+  "src": "https://www.danmurphys.com.au/product/DM_364671/jacob-s-creek-classic-moscato"
  },
  {
   "n": "Jacob's Creek Double Barrel Shiraz",
@@ -458,6 +511,14 @@
   "src": "https://www.lindemans.com/wines/bin-series/bin-95-sauvignon-blanc-US"
  },
  {
+  "n": "Lindeman's Bin 90 Moscato",
+  "s": "New World Moscato",
+  "c": "Australia",
+  "region": "South Eastern Australia",
+  "colour": "Sweet White",
+  "src": "https://www.lindemans.com/wines/bin-series/bin-90-moscato-us"
+ },
+ {
   "n": "Lindeman's Hunter Valley Semillon",
   "s": "Hunter Valley",
   "c": "Australia",
@@ -534,6 +595,14 @@
    "Sauvignon Blanc"
   ],
   "src": "https://www.wolfblass.com/en-au/wines/yellow-label/"
+ },
+ {
+  "n": "Wolf Blass Yellow Label Moscato",
+  "s": "New World Moscato",
+  "c": "Australia",
+  "colour": "Sweet White",
+  "abv": "7%",
+  "src": "https://www.wolfblass.com/en-au/wolf-blass-yellow-label-moscato-2025-8124503.html"
  },
  {
   "n": "Wolf Blass Red Label Shiraz Cabernet",
@@ -940,6 +1009,30 @@
    "Cabernet Sauvignon"
   ],
   "src": "https://19crimes.com/products/19-crimes-cabernet-sauvignon-nv"
+ },
+ {
+  "n": "19 Crimes Red Blend",
+  "s": "Red Blend",
+  "c": "Australia",
+  "region": "South Eastern Australia",
+  "colour": "Red",
+  "src": "https://19crimes.com/products/19-crimes-red-blend-nv"
+ },
+ {
+  "n": "19 Crimes The Banished Dark Red",
+  "s": "Red Blend",
+  "c": "Australia",
+  "region": "South Eastern Australia",
+  "colour": "Red",
+  "src": "https://19crimes.com/products/19-crimes-the-banished-dark-red-nv"
+ },
+ {
+  "n": "19 Crimes Uprising Red Blend",
+  "s": "Red Blend",
+  "c": "Australia",
+  "region": "South Eastern Australia",
+  "colour": "Red",
+  "src": "https://19crimes.com/products/19-crimes-uprising-red-blend-1"
  },
  {
   "n": "Wynns Coonawarra Estate Black Label Cabernet Sauvignon",
@@ -2459,6 +2552,14 @@
   "src": "https://www.kwv.co.za/"
  },
  {
+  "n": "KWV Roodeberg",
+  "s": "Red Blend",
+  "c": "South Africa",
+  "region": "Western Cape",
+  "colour": "Red",
+  "src": "https://kwv.co.za/product/kwv-roodeberg-2024/"
+ },
+ {
   "n": "KWV Cathedral Cellar Pinotage",
   "s": "Pinotage",
   "c": "South Africa",
@@ -2636,6 +2737,18 @@
    "Sauvignon Blanc"
   ],
   "src": "https://www.mulderbosch.co.za/"
+ },
+ {
+  "n": "Mulderbosch Cabernet Sauvignon Rosé",
+  "s": "New World Rosé",
+  "c": "South Africa",
+  "region": "Coastal Region",
+  "colour": "Rosé",
+  "grapes": [
+   "Cabernet Sauvignon"
+  ],
+  "abv": "12.5%",
+  "src": "https://mulderbosch.co.za/wp-content/uploads/2026/10/Mulderbosch-Cabernet-Sauvignon-Rose-2026-Spec-Sheet.pdf"
  },
  {
   "n": "Mulderbosch Faithful Hound",

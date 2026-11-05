@@ -1,0 +1,64 @@
+number,name,producer,style,colour,country,region
+7902,California Red Blend,,California Red Blend,Red,USA,California
+7904,New World Rosé,,New World Rosé,Rosé,New World,
+7900,New World Moscato,,New World Moscato,Sweet White,New World,
+7903,Red Blend,,Red Blend,Red,Worldwide,
+7905,White Blend,,White Blend,White,Worldwide,
+7901,Sweet Red,,Sweet Red,Sweet Red,Worldwide,
+7916,Josh Cellars Legacy Red Blend,Josh Cellars,California Red Blend,Red,USA,California
+7917,Josh Cellars Rosé,Josh Cellars,New World Rosé,Rosé,USA,California
+7918,Barefoot Rich Red Blend,Barefoot,California Red Blend,Red,USA,California
+7923,Barefoot Rosé,Barefoot,New World Rosé,Rosé,USA,California
+7921,Barefoot Moscato,Barefoot,New World Moscato,Sweet White,USA,California
+7922,Barefoot Pink Moscato,Barefoot,New World Moscato,Sweet Rosé,USA,California
+7919,Barefoot Sweet Red Blend,Barefoot,Sweet Red,Sweet Red,USA,California
+7920,Barefoot Red Moscato,Barefoot,New World Moscato,Sweet Red,USA,California
+7915,Meiomi Red Blend,Meiomi,California Red Blend,Red,USA,California
+7907,Conundrum Red,Conundrum,California Red Blend,Red,USA,California
+7906,Conundrum White,Conundrum,White Blend,White,USA,California
+7914,Kendall-Jackson Vintner's Reserve Rosé,Kendall-Jackson,New World Rosé,Rosé,USA,California
+7953,[yellow tail] Big Bold Red,[yellow tail],Red Blend,Red,Australia,South Eastern Australia
+7952,[yellow tail] Rosé,[yellow tail],New World Rosé,Rosé,Australia,South Eastern Australia
+7950,[yellow tail] Moscato,[yellow tail],New World Moscato,Sweet White,Australia,South Eastern Australia
+7951,[yellow tail] Pink Moscato,[yellow tail],New World Moscato,Sweet Rosé,Australia,South Eastern Australia
+7954,[yellow tail] Jammy Red Roo,[yellow tail],Sweet Red,Sweet Red,Australia,South Eastern Australia
+7958,19 Crimes Red Blend,19 Crimes,Red Blend,Red,Australia,South Eastern Australia
+7959,19 Crimes The Banished Dark Red,19 Crimes,Red Blend,Red,Australia,South Eastern Australia
+7960,19 Crimes Uprising Red Blend,19 Crimes,Red Blend,Red,Australia,South Eastern Australia
+7908,Robert Mondavi Private Selection Red Blend,Robert Mondavi,California Red Blend,Red,USA,California
+7909,Woodbridge Red Blend,Woodbridge,California Red Blend,Red,USA,California
+7911,Woodbridge Rosé,Woodbridge,New World Rosé,Rosé,USA,California
+7910,Woodbridge Moscato,Woodbridge,New World Moscato,Sweet White,USA,California
+7936,Sutter Home White Merlot,Sutter Home,New World Rosé,Rosé,USA,California
+7937,Sutter Home Moscato,Sutter Home,New World Moscato,Sweet White,USA,California
+7938,Sutter Home Pink Moscato,Sutter Home,New World Moscato,Sweet Rosé,USA,California
+7939,Sutter Home Red Moscato,Sutter Home,New World Moscato,Sweet Red,USA,California
+7940,Sutter Home Sweet Red,Sutter Home,Sweet Red,Sweet Red,USA,California
+7930,Bogle Essential Red,Bogle,California Red Blend,Red,USA,California
+7931,Bogle Rosé,Bogle,New World Rosé,Rosé,USA,California (Central Valley)
+7924,Apothic Red,Apothic,California Red Blend,Red,USA,California
+7925,Apothic Dark,Apothic,California Red Blend,Red,USA,California
+7926,Apothic Inferno,Apothic,California Red Blend,Red,USA,California
+7927,Apothic Crush,Apothic,California Red Blend,Red,USA,California
+7928,Apothic White,Apothic,White Blend,White,USA,California
+7929,Apothic Rosé,Apothic,New World Rosé,Rosé,USA,California
+7912,Decoy California Red Blend,Decoy,California Red Blend,Red,USA,California
+7913,Decoy California Rosé,Decoy,New World Rosé,Rosé,USA,California
+7941,The Prisoner Red Blend,The Prisoner,California Red Blend,Red,USA,California
+7943,Bread & Butter Red Blend,Bread & Butter,California Red Blend,Red,USA,California
+7944,Bread & Butter Rosé,Bread & Butter,New World Rosé,Rosé,USA,California
+7949,Orin Swift Abstract,Orin Swift,California Red Blend,Red,USA,California
+7945,JUSTIN Rosé,JUSTIN,New World Rosé,Rosé,USA,California (Central Coast)
+7946,DAOU Rosé,DAOU,New World Rosé,Rosé,USA,California (Central Coast)
+7955,Jacob's Creek Classic Moscato,Jacob's Creek,New World Moscato,Sweet White,Australia,South Eastern Australia
+7956,Lindeman's Bin 90 Moscato,Lindeman's,New World Moscato,Sweet White,Australia,South Eastern Australia
+7957,Wolf Blass Yellow Label Moscato,Wolf Blass,New World Moscato,Sweet White,Australia,
+7961,KWV Roodeberg,KWV,Red Blend,Red,South Africa,Western Cape
+7934,Cupcake Vineyards Red Velvet,Cupcake Vineyards,California Red Blend,Red,USA,California
+7935,Cupcake Vineyards Black Forest,Cupcake Vineyards,California Red Blend,Red,USA,California
+7933,Cupcake Vineyards Rosé,Cupcake Vineyards,New World Rosé,Rosé,USA,California
+7932,Cupcake Vineyards Moscato,Cupcake Vineyards,New World Moscato,Sweet White,USA,California
+7942,Unshackled Red Blend,Unshackled,California Red Blend,Red,USA,California
+7947,Ménage à Trois Red Blend,Ménage à Trois,California Red Blend,Red,USA,California
+7948,Ménage à Trois Silk Soft Red Blend,Ménage à Trois,California Red Blend,Red,USA,California
+7962,Mulderbosch Cabernet Sauvignon Rosé,Mulderbosch,New World Rosé,Rosé,South Africa,Coastal Region

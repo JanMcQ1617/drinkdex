@@ -113,6 +113,11 @@ const FORTIFIED_BY_SUBCATEGORY: Record<string, string> = {
  * apart. Two rules are new with v4.14 (the red fortified wines, which had
  * poured the fortified amber, and the red sparkling ones, which had poured
  * a sparkling straw); the rest are the pre-removal rules, less sake's.
+ * v4.16 added the sweet reds and the red and pink Moscatos: they are
+ * filed Dessert, as every sweet wine is, and Dessert pours amber. One
+ * sweet red does not say so in its name: [yellow tail]'s Jammy Red Roo,
+ * the same Shiraz-and-Cabernet blend once sold as Sweet Red Roo, so it is
+ * named here.
  *
  * Rosé is closed at the end as well as anchored at the start: b() only
  * anchors the start, and "Rosette", a sweet white from Bergerac, poured
@@ -122,8 +127,8 @@ const FORTIFIED_BY_SUBCATEGORY: Record<string, string> = {
 const WINE_NAME_RULES: [RegExp, string][] = [
   ...FORTIFIED_NAME_RULES,
   [b('late bottled|crusted|banyuls|maury|mavrodaphne|cape vintage|vintage port'), LIQUID.deepRed],
-  [b('lambrusco|brachetto|sparkling shiraz'), LIQUID.redWine],
-  [b('ros[ée](?![a-z])|blush|white zinfandel'), LIQUID.rose],
+  [b('lambrusco|brachetto|sparkling shiraz|sweet red|red moscato|jammy red roo'), LIQUID.redWine],
+  [b('ros[ée](?![a-z])|blush|white zinfandel|pink moscato'), LIQUID.rose],
   [b('orange wine|skin.contact|amber wine'), LIQUID.orange],
 ];
 

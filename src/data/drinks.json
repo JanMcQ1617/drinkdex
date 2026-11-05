@@ -391559,5 +391559,3218 @@
    "process": "Made to the rules of IGP Côtes de Gascogne for rosé wine."
   },
   "dexNumber": 7899
+ },
+ {
+  "id": "new-world-moscato",
+  "name": "New World Moscato",
+  "category": "wine",
+  "subcategory": "Dessert",
+  "description": "The sweet, light Muscat wine of California and Australia, made in the image of Moscato d'Asti, some bottles with a little of its spritz. Orange blossom and peach in the white; red berries in the pink and the red, which take a dash of red wine.",
+  "abv": "7–12%",
+  "origin": "New World",
+  "rarity": "common",
+  "tastingNotes": [
+   "muscat grape",
+   "orange blossom",
+   "peach",
+   "honey"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Muscat grapes carry far more of the floral compounds linalool and geraniol than most wine grapes, and those survive fermentation, which is why a Moscato smells of orange blossom and fresh grapes.",
+  "dexNumber": 7900,
+  "serve": {
+   "temp": "40-45°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, straight from the fridge: the chill keeps the sweetness lively rather than syrupy, and the light spritz some bottles carry fades as the glass warms. A small pour suits a wine this sweet and perfumed. Look for the fresh-grape, floral scent of Muscat first, with orange blossom and peach in the white and red berries in the pink and the red, held up by just enough acidity.",
+   "pair": [
+    "fresh fruit",
+    "spicy Thai dishes",
+    "almond cake"
+   ]
+  },
+  "composition": {
+   "summary": "Muscat grapes made sweet, most of them low in alcohol, in California and South Eastern Australia.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Muscat of Alexandria (Australia's Muscat Gordo Blanco) and Muscat Blanc à Petits Grains (Muscat Canelli); a little red wine for pink and red Moscato"
+    },
+    {
+     "label": "Region",
+     "detail": "California's warm interior valleys and South Eastern Australia"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fermented cool and stopped early to keep sugar in and alcohol low; some lightly spritzed"
+    },
+    {
+     "label": "Aging",
+     "detail": "None; steel tank, bottled young"
+    }
+   ],
+   "process": "Chilling the wine stops the yeast while much of the grape's sugar is still unfermented, which keeps the alcohol low and the wine sweet."
+  }
+ },
+ {
+  "id": "sweet-red",
+  "name": "Sweet Red",
+  "category": "wine",
+  "subcategory": "Dessert",
+  "description": "A red table wine left plainly sweet: soft, low in tannin and lighter in alcohol than a dry red, tasting of cherry, raspberry and jam. Sold by its sweetness rather than its grapes, which most labels do not name.",
+  "abv": "10–12.5%",
+  "origin": "Worldwide",
+  "rarity": "common",
+  "tastingNotes": [
+   "cherry",
+   "raspberry",
+   "pomegranate",
+   "jam"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One way to sweeten a wine is Süssreserve ('sweet reserve'): unfermented grape juice held back and blended in before bottling. German rules cap it at fifteen percent of the finished wine.",
+  "dexNumber": 7901,
+  "serve": {
+   "temp": "50-55°F, lightly chilled",
+   "glass": "Red wine glass",
+   "how": "Serve it lightly chilled, cooler than a dry red: the cold keeps the sweetness fresh and the fruit bright rather than jammy. A red wine glass and a modest pour suit it, since the sugar carries the flavour a long way. Look for red cherry and raspberry, with little of a dry red's grip.",
+   "pair": [
+    "dark chocolate",
+    "pulled pork",
+    "berry cobbler"
+   ]
+  },
+  "composition": {
+   "summary": "Red grapes made sweet, by stopping the fermentation early or blending back grape juice.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Seldom named on the label; any red variety may go in"
+    },
+    {
+     "label": "Region",
+     "detail": "Made in many wine countries, from California and Australia to Italy and Germany"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fermentation stopped while sugar remains, or unfermented juice blended back"
+    },
+    {
+     "label": "Aging",
+     "detail": "Little or none; steel tank, bottled young"
+    }
+   ],
+   "process": "Leaving sugar in a red softens its tannin and acidity, which is why a sweet red tastes rounder and lighter than a dry one."
+  }
+ },
+ {
+  "id": "california-red-blend",
+  "name": "California Red Blend",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "Often Zinfandel and Petite Sirah at the core, with Syrah, Merlot and Cabernet Sauvignon around them, from vineyards anywhere in the state and sold by the blend rather than the grape. Ripe, dark-fruited and round, and often finished with a little sweetness.",
+  "abv": "12–16%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "blackberry",
+   "black cherry",
+   "mocha",
+   "vanilla"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "Under US federal rules a wine may carry one grape's name only if at least 75% of it is that grape; a red made from several in other shares is sold under a name of its own, as a red blend, or with every grape in it named on the label beside its share.",
+  "dexNumber": 7902,
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it a little below room temperature: these are ripe, often high-alcohol wines, and warmth makes both the alcohol and any sweetness read louder. A red wine glass with some bowl is all it needs, and most bottles are ready when opened; the bigger, oak-heavy ones soften with half an hour of air. Look for dark berry fruit first, then the vanilla and mocha of the barrel.",
+   "pair": [
+    "smoked brisket",
+    "pepperoni pizza",
+    "grilled sausages"
+   ]
+  },
+  "composition": {
+   "summary": "Red grapes in any share, most often Zinfandel, Petite Sirah, Syrah and the Bordeaux grapes, blended from vineyards across California.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Zinfandel and Petite Sirah often lead; Syrah, Merlot, Cabernet Sauvignon, Malbec and Grenache in any share"
+    },
+    {
+     "label": "Region",
+     "detail": "A California appellation: fruit from anywhere in the state, Lodi, Paso Robles and the North Coast among the sources"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Months in oak, often American; some finished in whiskey or bourbon barrels"
+    }
+   ],
+   "process": "Blending lots fermented apart lets a winery keep one style from vintage to vintage, whichever grapes did best that year."
+  }
+ },
+ {
+  "id": "red-blend",
+  "name": "Red Blend",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A red sold by its blend rather than by one grape or one place: Shiraz with Cabernet Sauvignon in Australia, Shiraz and the Bordeaux grapes in South Africa, whatever the winemaker chooses elsewhere. Usually ripe, soft and dark-fruited, and some are left off-dry.",
+  "abv": "12–14.5%",
+  "origin": "Worldwide",
+  "rarity": "common",
+  "tastingNotes": [
+   "plum",
+   "blackberry",
+   "chocolate",
+   "spice"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "Shiraz blended with Cabernet Sauvignon has been made in Australia since the late 1800s, when such reds were sold as 'claret'; Penfolds Grange, first made in the 1950s, is mostly Shiraz with a little Cabernet.",
+  "dexNumber": 7903,
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it slightly cool rather than at full room temperature, which flattens the fruit and brings the alcohol forward. A red wine glass with some bowl is enough; most are made to be opened young and need no decanting. Look for plum and blackberry up front and a soft, rounded finish.",
+   "pair": [
+    "beef burgers",
+    "lamb chops",
+    "barbecued ribs"
+   ]
+  },
+  "composition": {
+   "summary": "Two or more red grapes in any share, sold under a brand rather than a grape's name.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Any reds: Shiraz, Cabernet Sauvignon, Merlot and Durif in Australia; Shiraz and the Bordeaux grapes in South Africa"
+    },
+    {
+     "label": "Region",
+     "detail": "Made wherever red grapes grow; South Eastern Australia and the Western Cape are large sources"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Steel or oak; some finished in spirit barrels"
+    }
+   ],
+   "process": "Blending from many vineyards lets a large winery make the same wine every year, smoothing out what any one grape or site did that vintage."
+  }
+ },
+ {
+  "id": "new-world-rose",
+  "name": "New World Rosé",
+  "category": "wine",
+  "subcategory": "Rosé",
+  "description": "Rosé from California, Australia, South Africa and the rest of the New World, pressed mostly from red grapes, sometimes with a white such as Riesling, Vermentino or Sauvignon Blanc in the blend. Riper and fruitier than the Provence model it often follows, and anything from bone dry to softly sweet.",
+  "abv": "10–14.5%",
+  "origin": "New World",
+  "rarity": "common",
+  "tastingNotes": [
+   "strawberry",
+   "watermelon",
+   "red cherry",
+   "citrus"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "The wine writer Jerry Mead is credited with coining the word 'blush' in 1976, for a pale-pink Cabernet Sauvignon from California's Mill Creek Vineyards; today it usually means a sweeter rosé.",
+  "dexNumber": 7904,
+  "serve": {
+   "temp": "45-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, in a white wine glass rather than a tumbler so the strawberry and citrus have somewhere to go. Read the label for where it sits: the paler bottles tend to finish dry, while the deeper pinks, the ones called blush or White Merlot, carry some sweetness. Look for the current vintage; rosé fades with keeping rather than improving.",
+   "pair": [
+    "grilled salmon",
+    "shrimp tacos",
+    "watermelon and feta salad"
+   ]
+  },
+  "composition": {
+   "summary": "Mostly red grapes given a few hours on their skins, sometimes with a white grape in the blend, made in every New World wine country.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Mostly red: Grenache, Syrah, Pinot Noir, Zinfandel, Merlot and Cabernet Sauvignon among them; sometimes a white such as Riesling, Vermentino or Sauvignon Blanc"
+    },
+    {
+     "label": "Region",
+     "detail": "California, Australia, South Africa, Chile, New Zealand and the rest of the New World"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Pressed straight off the skins, or juice bled from a red's tank after a few hours (saignée), then fermented cool; a white grape sometimes blended in"
+    },
+    {
+     "label": "Aging",
+     "detail": "Stainless steel; released within months of the harvest"
+    }
+   ],
+   "process": "The colour comes from how long the juice sits on the red skins, minutes to hours, and how much white goes into the blend; the sweetness from whether the fermentation is let finish."
+  }
+ },
+ {
+  "id": "white-blend",
+  "name": "White Blend",
+  "category": "wine",
+  "subcategory": "White",
+  "description": "A white sold by its blend rather than one grape: an aromatic variety such as Riesling, Viognier or Muscat for perfume, Chardonnay for body, Sauvignon Blanc or Pinot Grigio for snap. The American ones are often softly off-dry.",
+  "abv": "12–13.5%",
+  "origin": "Worldwide",
+  "rarity": "common",
+  "tastingNotes": [
+   "peach",
+   "apricot",
+   "tropical fruit",
+   "honeysuckle"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Alsace, which labels nearly all its wines by grape, keeps a name for its white blends: Edelzwicker, usually translated 'noble blend', which may mix the region's white varieties in any proportion.",
+  "dexNumber": 7905,
+  "serve": {
+   "temp": "45-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Chill it well but not ice-cold; under about 45°F the perfume of the aromatic grapes shuts down. A standard white wine glass suits it. Look for stone fruit and blossom first, then the rounder Chardonnay middle and a fresh finish; any sweetness shows as a soft, honeyed edge.",
+   "pair": [
+    "Thai green curry",
+    "roast chicken",
+    "fish tacos"
+   ]
+  },
+  "composition": {
+   "summary": "Two or more white grapes in any share, sold under a brand rather than a grape's name.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Any whites: Chardonnay, Sauvignon Blanc, Sémillon, Viognier, Riesling, Pinot Grigio and Muscat among them"
+    },
+    {
+     "label": "Region",
+     "detail": "Made wherever white grapes grow, from Alsace and Bordeaux to California"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Pressed off the skins and fermented cool, each grape apart, then blended"
+    },
+    {
+     "label": "Aging",
+     "detail": "Mostly steel, sometimes a touch of oak for the Chardonnay"
+    }
+   ],
+   "process": "Blending lets a winemaker set perfume against body and acidity in proportions no single grape would give."
+  }
+ },
+ {
+  "id": "conundrumwhite-wb",
+  "name": "Conundrum White",
+  "category": "wine",
+  "subcategory": "White",
+  "description": "A White Blend from California, USA. Made from Chardonnay, Sauvignon Blanc, Semillon and Viognier.",
+  "abv": "12–13.5%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "peach",
+   "apricot",
+   "tropical fruit",
+   "honeysuckle"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 2 White Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "45-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Chill it well but not ice-cold; under about 45°F the perfume of the aromatic grapes shuts down. A standard white wine glass suits it. Look for stone fruit and blossom first, then the rounder Chardonnay middle and a fresh finish; any sweetness shows as a soft, honeyed edge.",
+   "pair": [
+    "Thai green curry",
+    "roast chicken",
+    "fish tacos"
+   ]
+  },
+  "composition": {
+   "summary": "Two or more white grapes in any share, sold under a brand rather than a grape's name.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Chardonnay, Sauvignon Blanc, Semillon and Viognier"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Pressed off the skins and fermented cool, each grape apart, then blended"
+    },
+    {
+     "label": "Aging",
+     "detail": "Mostly steel, sometimes a touch of oak for the Chardonnay"
+    }
+   ],
+   "process": "Blending lets a winemaker set perfume against body and acidity in proportions no single grape would give."
+  },
+  "dexNumber": 7906
+ },
+ {
+  "id": "conundrumred-wb",
+  "name": "Conundrum Red",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A California Red Blend from California, USA.",
+  "abv": "12–16%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "blackberry",
+   "black cherry",
+   "mocha",
+   "vanilla"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 20 California Red Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it a little below room temperature: these are ripe, often high-alcohol wines, and warmth makes both the alcohol and any sweetness read louder. A red wine glass with some bowl is all it needs, and most bottles are ready when opened; the bigger, oak-heavy ones soften with half an hour of air. Look for dark berry fruit first, then the vanilla and mocha of the barrel.",
+   "pair": [
+    "smoked brisket",
+    "pepperoni pizza",
+    "grilled sausages"
+   ]
+  },
+  "composition": {
+   "summary": "Red grapes in any share, most often Zinfandel, Petite Sirah, Syrah and the Bordeaux grapes, blended from vineyards across California.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Zinfandel and Petite Sirah often lead; Syrah, Merlot, Cabernet Sauvignon, Malbec and Grenache in any share"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Months in oak, often American; some finished in whiskey or bourbon barrels"
+    }
+   ],
+   "process": "Blending lots fermented apart lets a winery keep one style from vintage to vintage, whichever grapes did best that year."
+  },
+  "dexNumber": 7907
+ },
+ {
+  "id": "robertmondaviprivateselectionredblend-wb",
+  "name": "Robert Mondavi Private Selection Red Blend",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A California Red Blend from California, USA.",
+  "abv": "12–16%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "blackberry",
+   "black cherry",
+   "mocha",
+   "vanilla"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 20 California Red Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it a little below room temperature: these are ripe, often high-alcohol wines, and warmth makes both the alcohol and any sweetness read louder. A red wine glass with some bowl is all it needs, and most bottles are ready when opened; the bigger, oak-heavy ones soften with half an hour of air. Look for dark berry fruit first, then the vanilla and mocha of the barrel.",
+   "pair": [
+    "smoked brisket",
+    "pepperoni pizza",
+    "grilled sausages"
+   ]
+  },
+  "composition": {
+   "summary": "Red grapes in any share, most often Zinfandel, Petite Sirah, Syrah and the Bordeaux grapes, blended from vineyards across California.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Zinfandel and Petite Sirah often lead; Syrah, Merlot, Cabernet Sauvignon, Malbec and Grenache in any share"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Months in oak, often American; some finished in whiskey or bourbon barrels"
+    }
+   ],
+   "process": "Blending lots fermented apart lets a winery keep one style from vintage to vintage, whichever grapes did best that year."
+  },
+  "dexNumber": 7908
+ },
+ {
+  "id": "woodbridgeredblend-wb",
+  "name": "Woodbridge Red Blend",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A California Red Blend from California, USA.",
+  "abv": "12–16%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "blackberry",
+   "black cherry",
+   "mocha",
+   "vanilla"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 20 California Red Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it a little below room temperature: these are ripe, often high-alcohol wines, and warmth makes both the alcohol and any sweetness read louder. A red wine glass with some bowl is all it needs, and most bottles are ready when opened; the bigger, oak-heavy ones soften with half an hour of air. Look for dark berry fruit first, then the vanilla and mocha of the barrel.",
+   "pair": [
+    "smoked brisket",
+    "pepperoni pizza",
+    "grilled sausages"
+   ]
+  },
+  "composition": {
+   "summary": "Red grapes in any share, most often Zinfandel, Petite Sirah, Syrah and the Bordeaux grapes, blended from vineyards across California.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Zinfandel and Petite Sirah often lead; Syrah, Merlot, Cabernet Sauvignon, Malbec and Grenache in any share"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Months in oak, often American; some finished in whiskey or bourbon barrels"
+    }
+   ],
+   "process": "Blending lots fermented apart lets a winery keep one style from vintage to vintage, whichever grapes did best that year."
+  },
+  "dexNumber": 7909
+ },
+ {
+  "id": "woodbridgemoscato-wb",
+  "name": "Woodbridge Moscato",
+  "category": "wine",
+  "subcategory": "Dessert",
+  "description": "A New World Moscato from California, USA.",
+  "abv": "7–12%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "muscat grape",
+   "orange blossom",
+   "peach",
+   "honey"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 13 New World Moscato bottlings catalogued here.",
+  "serve": {
+   "temp": "40-45°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, straight from the fridge: the chill keeps the sweetness lively rather than syrupy, and the light spritz some bottles carry fades as the glass warms. A small pour suits a wine this sweet and perfumed. Look for the fresh-grape, floral scent of Muscat first, with orange blossom and peach in the white and red berries in the pink and the red, held up by just enough acidity.",
+   "pair": [
+    "fresh fruit",
+    "spicy Thai dishes",
+    "almond cake"
+   ]
+  },
+  "composition": {
+   "summary": "Muscat grapes made sweet, most of them low in alcohol, in California and South Eastern Australia.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Muscat of Alexandria (Australia's Muscat Gordo Blanco) and Muscat Blanc à Petits Grains (Muscat Canelli); a little red wine for pink and red Moscato"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fermented cool and stopped early to keep sugar in and alcohol low; some lightly spritzed"
+    },
+    {
+     "label": "Aging",
+     "detail": "None; steel tank, bottled young"
+    }
+   ],
+   "process": "Chilling the wine stops the yeast while much of the grape's sugar is still unfermented, which keeps the alcohol low and the wine sweet."
+  },
+  "dexNumber": 7910
+ },
+ {
+  "id": "woodbridgerose-wb",
+  "name": "Woodbridge Rosé",
+  "category": "wine",
+  "subcategory": "Rosé",
+  "description": "A New World Rosé from California, USA.",
+  "abv": "10–14.5%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "strawberry",
+   "watermelon",
+   "red cherry",
+   "citrus"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 14 New World Rosé bottlings catalogued here.",
+  "serve": {
+   "temp": "45-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, in a white wine glass rather than a tumbler so the strawberry and citrus have somewhere to go. Read the label for where it sits: the paler bottles tend to finish dry, while the deeper pinks, the ones called blush or White Merlot, carry some sweetness. Look for the current vintage; rosé fades with keeping rather than improving.",
+   "pair": [
+    "grilled salmon",
+    "shrimp tacos",
+    "watermelon and feta salad"
+   ]
+  },
+  "composition": {
+   "summary": "Mostly red grapes given a few hours on their skins, sometimes with a white grape in the blend, made in every New World wine country.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Mostly red: Grenache, Syrah, Pinot Noir, Zinfandel, Merlot and Cabernet Sauvignon among them; sometimes a white such as Riesling, Vermentino or Sauvignon Blanc"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Pressed straight off the skins, or juice bled from a red's tank after a few hours (saignée), then fermented cool; a white grape sometimes blended in"
+    },
+    {
+     "label": "Aging",
+     "detail": "Stainless steel; released within months of the harvest"
+    }
+   ],
+   "process": "The colour comes from how long the juice sits on the red skins, minutes to hours, and how much white goes into the blend; the sweetness from whether the fermentation is let finish."
+  },
+  "dexNumber": 7911
+ },
+ {
+  "id": "decoycaliforniaredblend-wb",
+  "name": "Decoy California Red Blend",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A California Red Blend from California, USA. Made from Zinfandel, Merlot, Cabernet Sauvignon, Petite Sirah, Syrah, Petit Verdot, Grenache, Malbec and Cabernet Franc.",
+  "abv": "12–16%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "blackberry",
+   "black cherry",
+   "mocha",
+   "vanilla"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 20 California Red Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it a little below room temperature: these are ripe, often high-alcohol wines, and warmth makes both the alcohol and any sweetness read louder. A red wine glass with some bowl is all it needs, and most bottles are ready when opened; the bigger, oak-heavy ones soften with half an hour of air. Look for dark berry fruit first, then the vanilla and mocha of the barrel.",
+   "pair": [
+    "smoked brisket",
+    "pepperoni pizza",
+    "grilled sausages"
+   ]
+  },
+  "composition": {
+   "summary": "Red grapes in any share, most often Zinfandel, Petite Sirah, Syrah and the Bordeaux grapes, blended from vineyards across California.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Zinfandel, Merlot, Cabernet Sauvignon, Petite Sirah, Syrah, Petit Verdot, Grenache, Malbec and Cabernet Franc"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Months in oak, often American; some finished in whiskey or bourbon barrels"
+    }
+   ],
+   "process": "Blending lots fermented apart lets a winery keep one style from vintage to vintage, whichever grapes did best that year."
+  },
+  "dexNumber": 7912
+ },
+ {
+  "id": "decoycaliforniarose-wb",
+  "name": "Decoy California Rosé",
+  "category": "wine",
+  "subcategory": "Rosé",
+  "description": "A New World Rosé from California, USA. Made from Syrah, Carignan, Vermentino and Grenache.",
+  "abv": "10–14.5%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "strawberry",
+   "watermelon",
+   "red cherry",
+   "citrus"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 14 New World Rosé bottlings catalogued here.",
+  "serve": {
+   "temp": "45-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, in a white wine glass rather than a tumbler so the strawberry and citrus have somewhere to go. Read the label for where it sits: the paler bottles tend to finish dry, while the deeper pinks, the ones called blush or White Merlot, carry some sweetness. Look for the current vintage; rosé fades with keeping rather than improving.",
+   "pair": [
+    "grilled salmon",
+    "shrimp tacos",
+    "watermelon and feta salad"
+   ]
+  },
+  "composition": {
+   "summary": "Mostly red grapes given a few hours on their skins, sometimes with a white grape in the blend, made in every New World wine country.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Syrah, Carignan, Vermentino and Grenache"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Pressed straight off the skins, or juice bled from a red's tank after a few hours (saignée), then fermented cool; a white grape sometimes blended in"
+    },
+    {
+     "label": "Aging",
+     "detail": "Stainless steel; released within months of the harvest"
+    }
+   ],
+   "process": "The colour comes from how long the juice sits on the red skins, minutes to hours, and how much white goes into the blend; the sweetness from whether the fermentation is let finish."
+  },
+  "dexNumber": 7913
+ },
+ {
+  "id": "kendalljacksonvintnersreserverose-wb",
+  "name": "Kendall-Jackson Vintner's Reserve Rosé",
+  "category": "wine",
+  "subcategory": "Rosé",
+  "description": "A New World Rosé from California, USA. Made from Pinot Noir and Syrah.",
+  "abv": "13.5%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "strawberry",
+   "watermelon",
+   "red cherry",
+   "citrus"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 14 New World Rosé bottlings catalogued here.",
+  "serve": {
+   "temp": "45-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, in a white wine glass rather than a tumbler so the strawberry and citrus have somewhere to go. Read the label for where it sits: the paler bottles tend to finish dry, while the deeper pinks, the ones called blush or White Merlot, carry some sweetness. Look for the current vintage; rosé fades with keeping rather than improving.",
+   "pair": [
+    "grilled salmon",
+    "shrimp tacos",
+    "watermelon and feta salad"
+   ]
+  },
+  "composition": {
+   "summary": "Mostly red grapes given a few hours on their skins, sometimes with a white grape in the blend, made in every New World wine country.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Pinot Noir and Syrah"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Pressed straight off the skins, or juice bled from a red's tank after a few hours (saignée), then fermented cool; a white grape sometimes blended in"
+    },
+    {
+     "label": "Aging",
+     "detail": "Stainless steel; released within months of the harvest"
+    }
+   ],
+   "process": "The colour comes from how long the juice sits on the red skins, minutes to hours, and how much white goes into the blend; the sweetness from whether the fermentation is let finish."
+  },
+  "dexNumber": 7914
+ },
+ {
+  "id": "meiomiredblend-wb",
+  "name": "Meiomi Red Blend",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A California Red Blend from California, USA.",
+  "abv": "12–16%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "blackberry",
+   "black cherry",
+   "mocha",
+   "vanilla"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 20 California Red Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it a little below room temperature: these are ripe, often high-alcohol wines, and warmth makes both the alcohol and any sweetness read louder. A red wine glass with some bowl is all it needs, and most bottles are ready when opened; the bigger, oak-heavy ones soften with half an hour of air. Look for dark berry fruit first, then the vanilla and mocha of the barrel.",
+   "pair": [
+    "smoked brisket",
+    "pepperoni pizza",
+    "grilled sausages"
+   ]
+  },
+  "composition": {
+   "summary": "Red grapes in any share, most often Zinfandel, Petite Sirah, Syrah and the Bordeaux grapes, blended from vineyards across California.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Zinfandel and Petite Sirah often lead; Syrah, Merlot, Cabernet Sauvignon, Malbec and Grenache in any share"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Months in oak, often American; some finished in whiskey or bourbon barrels"
+    }
+   ],
+   "process": "Blending lots fermented apart lets a winery keep one style from vintage to vintage, whichever grapes did best that year."
+  },
+  "dexNumber": 7915
+ },
+ {
+  "id": "joshcellarslegacyredblend-wb",
+  "name": "Josh Cellars Legacy Red Blend",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A California Red Blend from California, USA.",
+  "abv": "12–16%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "blackberry",
+   "black cherry",
+   "mocha",
+   "vanilla"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 20 California Red Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it a little below room temperature: these are ripe, often high-alcohol wines, and warmth makes both the alcohol and any sweetness read louder. A red wine glass with some bowl is all it needs, and most bottles are ready when opened; the bigger, oak-heavy ones soften with half an hour of air. Look for dark berry fruit first, then the vanilla and mocha of the barrel.",
+   "pair": [
+    "smoked brisket",
+    "pepperoni pizza",
+    "grilled sausages"
+   ]
+  },
+  "composition": {
+   "summary": "Red grapes in any share, most often Zinfandel, Petite Sirah, Syrah and the Bordeaux grapes, blended from vineyards across California.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Zinfandel and Petite Sirah often lead; Syrah, Merlot, Cabernet Sauvignon, Malbec and Grenache in any share"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Months in oak, often American; some finished in whiskey or bourbon barrels"
+    }
+   ],
+   "process": "Blending lots fermented apart lets a winery keep one style from vintage to vintage, whichever grapes did best that year."
+  },
+  "dexNumber": 7916
+ },
+ {
+  "id": "joshcellarsrose-wb",
+  "name": "Josh Cellars Rosé",
+  "category": "wine",
+  "subcategory": "Rosé",
+  "description": "A New World Rosé from California, USA.",
+  "abv": "10–14.5%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "strawberry",
+   "watermelon",
+   "red cherry",
+   "citrus"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 14 New World Rosé bottlings catalogued here.",
+  "serve": {
+   "temp": "45-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, in a white wine glass rather than a tumbler so the strawberry and citrus have somewhere to go. Read the label for where it sits: the paler bottles tend to finish dry, while the deeper pinks, the ones called blush or White Merlot, carry some sweetness. Look for the current vintage; rosé fades with keeping rather than improving.",
+   "pair": [
+    "grilled salmon",
+    "shrimp tacos",
+    "watermelon and feta salad"
+   ]
+  },
+  "composition": {
+   "summary": "Mostly red grapes given a few hours on their skins, sometimes with a white grape in the blend, made in every New World wine country.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Mostly red: Grenache, Syrah, Pinot Noir, Zinfandel, Merlot and Cabernet Sauvignon among them; sometimes a white such as Riesling, Vermentino or Sauvignon Blanc"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Pressed straight off the skins, or juice bled from a red's tank after a few hours (saignée), then fermented cool; a white grape sometimes blended in"
+    },
+    {
+     "label": "Aging",
+     "detail": "Stainless steel; released within months of the harvest"
+    }
+   ],
+   "process": "The colour comes from how long the juice sits on the red skins, minutes to hours, and how much white goes into the blend; the sweetness from whether the fermentation is let finish."
+  },
+  "dexNumber": 7917
+ },
+ {
+  "id": "barefootrichredblend-wb",
+  "name": "Barefoot Rich Red Blend",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A California Red Blend from California, USA.",
+  "abv": "12–16%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "blackberry",
+   "black cherry",
+   "mocha",
+   "vanilla"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 20 California Red Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it a little below room temperature: these are ripe, often high-alcohol wines, and warmth makes both the alcohol and any sweetness read louder. A red wine glass with some bowl is all it needs, and most bottles are ready when opened; the bigger, oak-heavy ones soften with half an hour of air. Look for dark berry fruit first, then the vanilla and mocha of the barrel.",
+   "pair": [
+    "smoked brisket",
+    "pepperoni pizza",
+    "grilled sausages"
+   ]
+  },
+  "composition": {
+   "summary": "Red grapes in any share, most often Zinfandel, Petite Sirah, Syrah and the Bordeaux grapes, blended from vineyards across California.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Zinfandel and Petite Sirah often lead; Syrah, Merlot, Cabernet Sauvignon, Malbec and Grenache in any share"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Months in oak, often American; some finished in whiskey or bourbon barrels"
+    }
+   ],
+   "process": "Blending lots fermented apart lets a winery keep one style from vintage to vintage, whichever grapes did best that year."
+  },
+  "dexNumber": 7918
+ },
+ {
+  "id": "barefootsweetredblend-wb",
+  "name": "Barefoot Sweet Red Blend",
+  "category": "wine",
+  "subcategory": "Dessert",
+  "description": "A Sweet Red from California, USA.",
+  "abv": "10–12.5%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "cherry",
+   "raspberry",
+   "pomegranate",
+   "jam"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 3 Sweet Red bottlings catalogued here.",
+  "serve": {
+   "temp": "50-55°F, lightly chilled",
+   "glass": "Red wine glass",
+   "how": "Serve it lightly chilled, cooler than a dry red: the cold keeps the sweetness fresh and the fruit bright rather than jammy. A red wine glass and a modest pour suit it, since the sugar carries the flavour a long way. Look for red cherry and raspberry, with little of a dry red's grip.",
+   "pair": [
+    "dark chocolate",
+    "pulled pork",
+    "berry cobbler"
+   ]
+  },
+  "composition": {
+   "summary": "Red grapes made sweet, by stopping the fermentation early or blending back grape juice.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Seldom named on the label; any red variety may go in"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fermentation stopped while sugar remains, or unfermented juice blended back"
+    },
+    {
+     "label": "Aging",
+     "detail": "Little or none; steel tank, bottled young"
+    }
+   ],
+   "process": "Leaving sugar in a red softens its tannin and acidity, which is why a sweet red tastes rounder and lighter than a dry one."
+  },
+  "dexNumber": 7919
+ },
+ {
+  "id": "barefootredmoscato-wb",
+  "name": "Barefoot Red Moscato",
+  "category": "wine",
+  "subcategory": "Dessert",
+  "description": "A New World Moscato from California, USA.",
+  "abv": "7–12%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "muscat grape",
+   "strawberry",
+   "raspberry",
+   "cherry"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 13 New World Moscato bottlings catalogued here.",
+  "serve": {
+   "temp": "40-45°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, straight from the fridge: the chill keeps the sweetness lively rather than syrupy, and the light spritz some bottles carry fades as the glass warms. A small pour suits a wine this sweet and perfumed. Look for the fresh-grape, floral scent of Muscat first, with orange blossom and peach in the white and red berries in the pink and the red, held up by just enough acidity.",
+   "pair": [
+    "fresh fruit",
+    "spicy Thai dishes",
+    "almond cake"
+   ]
+  },
+  "composition": {
+   "summary": "Muscat grapes made sweet, most of them low in alcohol, in California and South Eastern Australia.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Muscat of Alexandria (Australia's Muscat Gordo Blanco) and Muscat Blanc à Petits Grains (Muscat Canelli); a little red wine for pink and red Moscato"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fermented cool and stopped early to keep sugar in and alcohol low; some lightly spritzed"
+    },
+    {
+     "label": "Aging",
+     "detail": "None; steel tank, bottled young"
+    }
+   ],
+   "process": "Chilling the wine stops the yeast while much of the grape's sugar is still unfermented, which keeps the alcohol low and the wine sweet."
+  },
+  "dexNumber": 7920
+ },
+ {
+  "id": "barefootmoscato-wb",
+  "name": "Barefoot Moscato",
+  "category": "wine",
+  "subcategory": "Dessert",
+  "description": "A New World Moscato from California, USA.",
+  "abv": "7–12%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "muscat grape",
+   "orange blossom",
+   "peach",
+   "honey"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 13 New World Moscato bottlings catalogued here.",
+  "serve": {
+   "temp": "40-45°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, straight from the fridge: the chill keeps the sweetness lively rather than syrupy, and the light spritz some bottles carry fades as the glass warms. A small pour suits a wine this sweet and perfumed. Look for the fresh-grape, floral scent of Muscat first, with orange blossom and peach in the white and red berries in the pink and the red, held up by just enough acidity.",
+   "pair": [
+    "fresh fruit",
+    "spicy Thai dishes",
+    "almond cake"
+   ]
+  },
+  "composition": {
+   "summary": "Muscat grapes made sweet, most of them low in alcohol, in California and South Eastern Australia.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Muscat of Alexandria (Australia's Muscat Gordo Blanco) and Muscat Blanc à Petits Grains (Muscat Canelli); a little red wine for pink and red Moscato"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fermented cool and stopped early to keep sugar in and alcohol low; some lightly spritzed"
+    },
+    {
+     "label": "Aging",
+     "detail": "None; steel tank, bottled young"
+    }
+   ],
+   "process": "Chilling the wine stops the yeast while much of the grape's sugar is still unfermented, which keeps the alcohol low and the wine sweet."
+  },
+  "dexNumber": 7921
+ },
+ {
+  "id": "barefootpinkmoscato-wb",
+  "name": "Barefoot Pink Moscato",
+  "category": "wine",
+  "subcategory": "Dessert",
+  "description": "A New World Moscato from California, USA.",
+  "abv": "7–12%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "muscat grape",
+   "strawberry",
+   "raspberry",
+   "cherry"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 13 New World Moscato bottlings catalogued here.",
+  "serve": {
+   "temp": "40-45°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, straight from the fridge: the chill keeps the sweetness lively rather than syrupy, and the light spritz some bottles carry fades as the glass warms. A small pour suits a wine this sweet and perfumed. Look for the fresh-grape, floral scent of Muscat first, with orange blossom and peach in the white and red berries in the pink and the red, held up by just enough acidity.",
+   "pair": [
+    "fresh fruit",
+    "spicy Thai dishes",
+    "almond cake"
+   ]
+  },
+  "composition": {
+   "summary": "Muscat grapes made sweet, most of them low in alcohol, in California and South Eastern Australia.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Muscat of Alexandria (Australia's Muscat Gordo Blanco) and Muscat Blanc à Petits Grains (Muscat Canelli); a little red wine for pink and red Moscato"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fermented cool and stopped early to keep sugar in and alcohol low; some lightly spritzed"
+    },
+    {
+     "label": "Aging",
+     "detail": "None; steel tank, bottled young"
+    }
+   ],
+   "process": "Chilling the wine stops the yeast while much of the grape's sugar is still unfermented, which keeps the alcohol low and the wine sweet."
+  },
+  "dexNumber": 7922
+ },
+ {
+  "id": "barefootrose-wb",
+  "name": "Barefoot Rosé",
+  "category": "wine",
+  "subcategory": "Rosé",
+  "description": "A New World Rosé from California, USA. Made from Grenache, Zinfandel and Riesling.",
+  "abv": "10–14.5%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "strawberry",
+   "watermelon",
+   "red cherry",
+   "citrus"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 14 New World Rosé bottlings catalogued here.",
+  "serve": {
+   "temp": "45-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, in a white wine glass rather than a tumbler so the strawberry and citrus have somewhere to go. Read the label for where it sits: the paler bottles tend to finish dry, while the deeper pinks, the ones called blush or White Merlot, carry some sweetness. Look for the current vintage; rosé fades with keeping rather than improving.",
+   "pair": [
+    "grilled salmon",
+    "shrimp tacos",
+    "watermelon and feta salad"
+   ]
+  },
+  "composition": {
+   "summary": "Mostly red grapes given a few hours on their skins, sometimes with a white grape in the blend, made in every New World wine country.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Grenache, Zinfandel and Riesling"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Pressed straight off the skins, or juice bled from a red's tank after a few hours (saignée), then fermented cool; a white grape sometimes blended in"
+    },
+    {
+     "label": "Aging",
+     "detail": "Stainless steel; released within months of the harvest"
+    }
+   ],
+   "process": "The colour comes from how long the juice sits on the red skins, minutes to hours, and how much white goes into the blend; the sweetness from whether the fermentation is let finish."
+  },
+  "dexNumber": 7923
+ },
+ {
+  "id": "apothicred-wb",
+  "name": "Apothic Red",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A California Red Blend from California, USA.",
+  "abv": "12–16%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "blackberry",
+   "black cherry",
+   "mocha",
+   "vanilla"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 20 California Red Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it a little below room temperature: these are ripe, often high-alcohol wines, and warmth makes both the alcohol and any sweetness read louder. A red wine glass with some bowl is all it needs, and most bottles are ready when opened; the bigger, oak-heavy ones soften with half an hour of air. Look for dark berry fruit first, then the vanilla and mocha of the barrel.",
+   "pair": [
+    "smoked brisket",
+    "pepperoni pizza",
+    "grilled sausages"
+   ]
+  },
+  "composition": {
+   "summary": "Red grapes in any share, most often Zinfandel, Petite Sirah, Syrah and the Bordeaux grapes, blended from vineyards across California.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Zinfandel and Petite Sirah often lead; Syrah, Merlot, Cabernet Sauvignon, Malbec and Grenache in any share"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Months in oak, often American; some finished in whiskey or bourbon barrels"
+    }
+   ],
+   "process": "Blending lots fermented apart lets a winery keep one style from vintage to vintage, whichever grapes did best that year."
+  },
+  "dexNumber": 7924
+ },
+ {
+  "id": "apothicdark-wb",
+  "name": "Apothic Dark",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A California Red Blend from California, USA.",
+  "abv": "12–16%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "blackberry",
+   "black cherry",
+   "mocha",
+   "vanilla"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 20 California Red Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it a little below room temperature: these are ripe, often high-alcohol wines, and warmth makes both the alcohol and any sweetness read louder. A red wine glass with some bowl is all it needs, and most bottles are ready when opened; the bigger, oak-heavy ones soften with half an hour of air. Look for dark berry fruit first, then the vanilla and mocha of the barrel.",
+   "pair": [
+    "smoked brisket",
+    "pepperoni pizza",
+    "grilled sausages"
+   ]
+  },
+  "composition": {
+   "summary": "Red grapes in any share, most often Zinfandel, Petite Sirah, Syrah and the Bordeaux grapes, blended from vineyards across California.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Zinfandel and Petite Sirah often lead; Syrah, Merlot, Cabernet Sauvignon, Malbec and Grenache in any share"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Months in oak, often American; some finished in whiskey or bourbon barrels"
+    }
+   ],
+   "process": "Blending lots fermented apart lets a winery keep one style from vintage to vintage, whichever grapes did best that year."
+  },
+  "dexNumber": 7925
+ },
+ {
+  "id": "apothicinferno-wb",
+  "name": "Apothic Inferno",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A California Red Blend from California, USA.",
+  "abv": "15.9%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "blackberry",
+   "black cherry",
+   "mocha",
+   "vanilla"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 20 California Red Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it a little below room temperature: these are ripe, often high-alcohol wines, and warmth makes both the alcohol and any sweetness read louder. A red wine glass with some bowl is all it needs, and most bottles are ready when opened; the bigger, oak-heavy ones soften with half an hour of air. Look for dark berry fruit first, then the vanilla and mocha of the barrel.",
+   "pair": [
+    "smoked brisket",
+    "pepperoni pizza",
+    "grilled sausages"
+   ]
+  },
+  "composition": {
+   "summary": "Red grapes in any share, most often Zinfandel, Petite Sirah, Syrah and the Bordeaux grapes, blended from vineyards across California.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Zinfandel and Petite Sirah often lead; Syrah, Merlot, Cabernet Sauvignon, Malbec and Grenache in any share"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Months in oak, often American; some finished in whiskey or bourbon barrels"
+    }
+   ],
+   "process": "Blending lots fermented apart lets a winery keep one style from vintage to vintage, whichever grapes did best that year."
+  },
+  "dexNumber": 7926
+ },
+ {
+  "id": "apothiccrush-wb",
+  "name": "Apothic Crush",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A California Red Blend from California, USA.",
+  "abv": "12–16%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "blackberry",
+   "black cherry",
+   "mocha",
+   "vanilla"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 20 California Red Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it a little below room temperature: these are ripe, often high-alcohol wines, and warmth makes both the alcohol and any sweetness read louder. A red wine glass with some bowl is all it needs, and most bottles are ready when opened; the bigger, oak-heavy ones soften with half an hour of air. Look for dark berry fruit first, then the vanilla and mocha of the barrel.",
+   "pair": [
+    "smoked brisket",
+    "pepperoni pizza",
+    "grilled sausages"
+   ]
+  },
+  "composition": {
+   "summary": "Red grapes in any share, most often Zinfandel, Petite Sirah, Syrah and the Bordeaux grapes, blended from vineyards across California.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Zinfandel and Petite Sirah often lead; Syrah, Merlot, Cabernet Sauvignon, Malbec and Grenache in any share"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Months in oak, often American; some finished in whiskey or bourbon barrels"
+    }
+   ],
+   "process": "Blending lots fermented apart lets a winery keep one style from vintage to vintage, whichever grapes did best that year."
+  },
+  "dexNumber": 7927
+ },
+ {
+  "id": "apothicwhite-wb",
+  "name": "Apothic White",
+  "category": "wine",
+  "subcategory": "White",
+  "description": "A White Blend from California, USA. Made from Chardonnay, Riesling and Pinot Grigio.",
+  "abv": "12–13.5%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "peach",
+   "apricot",
+   "tropical fruit",
+   "honeysuckle"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 2 White Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "45-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Chill it well but not ice-cold; under about 45°F the perfume of the aromatic grapes shuts down. A standard white wine glass suits it. Look for stone fruit and blossom first, then the rounder Chardonnay middle and a fresh finish; any sweetness shows as a soft, honeyed edge.",
+   "pair": [
+    "Thai green curry",
+    "roast chicken",
+    "fish tacos"
+   ]
+  },
+  "composition": {
+   "summary": "Two or more white grapes in any share, sold under a brand rather than a grape's name.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Chardonnay, Riesling and Pinot Grigio"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Pressed off the skins and fermented cool, each grape apart, then blended"
+    },
+    {
+     "label": "Aging",
+     "detail": "Mostly steel, sometimes a touch of oak for the Chardonnay"
+    }
+   ],
+   "process": "Blending lets a winemaker set perfume against body and acidity in proportions no single grape would give."
+  },
+  "dexNumber": 7928
+ },
+ {
+  "id": "apothicrose-wb",
+  "name": "Apothic Rosé",
+  "category": "wine",
+  "subcategory": "Rosé",
+  "description": "A New World Rosé from California, USA.",
+  "abv": "10–14.5%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "strawberry",
+   "watermelon",
+   "red cherry",
+   "citrus"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 14 New World Rosé bottlings catalogued here.",
+  "serve": {
+   "temp": "45-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, in a white wine glass rather than a tumbler so the strawberry and citrus have somewhere to go. Read the label for where it sits: the paler bottles tend to finish dry, while the deeper pinks, the ones called blush or White Merlot, carry some sweetness. Look for the current vintage; rosé fades with keeping rather than improving.",
+   "pair": [
+    "grilled salmon",
+    "shrimp tacos",
+    "watermelon and feta salad"
+   ]
+  },
+  "composition": {
+   "summary": "Mostly red grapes given a few hours on their skins, sometimes with a white grape in the blend, made in every New World wine country.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Mostly red: Grenache, Syrah, Pinot Noir, Zinfandel, Merlot and Cabernet Sauvignon among them; sometimes a white such as Riesling, Vermentino or Sauvignon Blanc"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Pressed straight off the skins, or juice bled from a red's tank after a few hours (saignée), then fermented cool; a white grape sometimes blended in"
+    },
+    {
+     "label": "Aging",
+     "detail": "Stainless steel; released within months of the harvest"
+    }
+   ],
+   "process": "The colour comes from how long the juice sits on the red skins, minutes to hours, and how much white goes into the blend; the sweetness from whether the fermentation is let finish."
+  },
+  "dexNumber": 7929
+ },
+ {
+  "id": "bogleessentialred-wb",
+  "name": "Bogle Essential Red",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A California Red Blend from California, USA. Made from Petite Sirah, Teroldego, Syrah and Zinfandel.",
+  "abv": "14.5%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "blackberry",
+   "black cherry",
+   "mocha",
+   "vanilla"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 20 California Red Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it a little below room temperature: these are ripe, often high-alcohol wines, and warmth makes both the alcohol and any sweetness read louder. A red wine glass with some bowl is all it needs, and most bottles are ready when opened; the bigger, oak-heavy ones soften with half an hour of air. Look for dark berry fruit first, then the vanilla and mocha of the barrel.",
+   "pair": [
+    "smoked brisket",
+    "pepperoni pizza",
+    "grilled sausages"
+   ]
+  },
+  "composition": {
+   "summary": "Red grapes in any share, most often Zinfandel, Petite Sirah, Syrah and the Bordeaux grapes, blended from vineyards across California.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Petite Sirah, Teroldego, Syrah and Zinfandel"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Months in oak, often American; some finished in whiskey or bourbon barrels"
+    }
+   ],
+   "process": "Blending lots fermented apart lets a winery keep one style from vintage to vintage, whichever grapes did best that year."
+  },
+  "dexNumber": 7930
+ },
+ {
+  "id": "boglerose-wb",
+  "name": "Bogle Rosé",
+  "category": "wine",
+  "subcategory": "Rosé",
+  "description": "A New World Rosé from California (Central Valley), USA. Made from Pinot Noir.",
+  "abv": "12%",
+  "origin": "California (Central Valley), USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "strawberry",
+   "watermelon",
+   "red cherry",
+   "citrus"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 14 New World Rosé bottlings catalogued here.",
+  "serve": {
+   "temp": "45-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, in a white wine glass rather than a tumbler so the strawberry and citrus have somewhere to go. Read the label for where it sits: the paler bottles tend to finish dry, while the deeper pinks, the ones called blush or White Merlot, carry some sweetness. Look for the current vintage; rosé fades with keeping rather than improving.",
+   "pair": [
+    "grilled salmon",
+    "shrimp tacos",
+    "watermelon and feta salad"
+   ]
+  },
+  "composition": {
+   "summary": "Mostly red grapes given a few hours on their skins, sometimes with a white grape in the blend, made in every New World wine country.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Pinot Noir"
+    },
+    {
+     "label": "Region",
+     "detail": "California (Central Valley), USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Pressed straight off the skins, or juice bled from a red's tank after a few hours (saignée), then fermented cool; a white grape sometimes blended in"
+    },
+    {
+     "label": "Aging",
+     "detail": "Stainless steel; released within months of the harvest"
+    }
+   ],
+   "process": "The colour comes from how long the juice sits on the red skins, minutes to hours, and how much white goes into the blend; the sweetness from whether the fermentation is let finish."
+  },
+  "dexNumber": 7931
+ },
+ {
+  "id": "cupcakevineyardsmoscato-wb",
+  "name": "Cupcake Vineyards Moscato",
+  "category": "wine",
+  "subcategory": "Dessert",
+  "description": "A New World Moscato from California, USA.",
+  "abv": "7–12%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "muscat grape",
+   "orange blossom",
+   "peach",
+   "honey"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 13 New World Moscato bottlings catalogued here.",
+  "serve": {
+   "temp": "40-45°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, straight from the fridge: the chill keeps the sweetness lively rather than syrupy, and the light spritz some bottles carry fades as the glass warms. A small pour suits a wine this sweet and perfumed. Look for the fresh-grape, floral scent of Muscat first, with orange blossom and peach in the white and red berries in the pink and the red, held up by just enough acidity.",
+   "pair": [
+    "fresh fruit",
+    "spicy Thai dishes",
+    "almond cake"
+   ]
+  },
+  "composition": {
+   "summary": "Muscat grapes made sweet, most of them low in alcohol, in California and South Eastern Australia.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Muscat of Alexandria (Australia's Muscat Gordo Blanco) and Muscat Blanc à Petits Grains (Muscat Canelli); a little red wine for pink and red Moscato"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fermented cool and stopped early to keep sugar in and alcohol low; some lightly spritzed"
+    },
+    {
+     "label": "Aging",
+     "detail": "None; steel tank, bottled young"
+    }
+   ],
+   "process": "Chilling the wine stops the yeast while much of the grape's sugar is still unfermented, which keeps the alcohol low and the wine sweet."
+  },
+  "dexNumber": 7932
+ },
+ {
+  "id": "cupcakevineyardsrose-wb",
+  "name": "Cupcake Vineyards Rosé",
+  "category": "wine",
+  "subcategory": "Rosé",
+  "description": "A New World Rosé from California, USA. Made from Grenache, Pinot Noir, Syrah and Merlot.",
+  "abv": "10–14.5%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "strawberry",
+   "watermelon",
+   "red cherry",
+   "citrus"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 14 New World Rosé bottlings catalogued here.",
+  "serve": {
+   "temp": "45-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, in a white wine glass rather than a tumbler so the strawberry and citrus have somewhere to go. Read the label for where it sits: the paler bottles tend to finish dry, while the deeper pinks, the ones called blush or White Merlot, carry some sweetness. Look for the current vintage; rosé fades with keeping rather than improving.",
+   "pair": [
+    "grilled salmon",
+    "shrimp tacos",
+    "watermelon and feta salad"
+   ]
+  },
+  "composition": {
+   "summary": "Mostly red grapes given a few hours on their skins, sometimes with a white grape in the blend, made in every New World wine country.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Grenache, Pinot Noir, Syrah and Merlot"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Pressed straight off the skins, or juice bled from a red's tank after a few hours (saignée), then fermented cool; a white grape sometimes blended in"
+    },
+    {
+     "label": "Aging",
+     "detail": "Stainless steel; released within months of the harvest"
+    }
+   ],
+   "process": "The colour comes from how long the juice sits on the red skins, minutes to hours, and how much white goes into the blend; the sweetness from whether the fermentation is let finish."
+  },
+  "dexNumber": 7933
+ },
+ {
+  "id": "cupcakevineyardsredvelvet-wb",
+  "name": "Cupcake Vineyards Red Velvet",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A California Red Blend from California, USA. Made from Merlot, Zinfandel and Petite Sirah.",
+  "abv": "12–16%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "blackberry",
+   "black cherry",
+   "mocha",
+   "vanilla"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 20 California Red Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it a little below room temperature: these are ripe, often high-alcohol wines, and warmth makes both the alcohol and any sweetness read louder. A red wine glass with some bowl is all it needs, and most bottles are ready when opened; the bigger, oak-heavy ones soften with half an hour of air. Look for dark berry fruit first, then the vanilla and mocha of the barrel.",
+   "pair": [
+    "smoked brisket",
+    "pepperoni pizza",
+    "grilled sausages"
+   ]
+  },
+  "composition": {
+   "summary": "Red grapes in any share, most often Zinfandel, Petite Sirah, Syrah and the Bordeaux grapes, blended from vineyards across California.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Merlot, Zinfandel and Petite Sirah"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Months in oak, often American; some finished in whiskey or bourbon barrels"
+    }
+   ],
+   "process": "Blending lots fermented apart lets a winery keep one style from vintage to vintage, whichever grapes did best that year."
+  },
+  "dexNumber": 7934
+ },
+ {
+  "id": "cupcakevineyardsblackforest-wb",
+  "name": "Cupcake Vineyards Black Forest",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A California Red Blend from California, USA.",
+  "abv": "12–16%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "blackberry",
+   "black cherry",
+   "mocha",
+   "vanilla"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 20 California Red Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it a little below room temperature: these are ripe, often high-alcohol wines, and warmth makes both the alcohol and any sweetness read louder. A red wine glass with some bowl is all it needs, and most bottles are ready when opened; the bigger, oak-heavy ones soften with half an hour of air. Look for dark berry fruit first, then the vanilla and mocha of the barrel.",
+   "pair": [
+    "smoked brisket",
+    "pepperoni pizza",
+    "grilled sausages"
+   ]
+  },
+  "composition": {
+   "summary": "Red grapes in any share, most often Zinfandel, Petite Sirah, Syrah and the Bordeaux grapes, blended from vineyards across California.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Zinfandel and Petite Sirah often lead; Syrah, Merlot, Cabernet Sauvignon, Malbec and Grenache in any share"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Months in oak, often American; some finished in whiskey or bourbon barrels"
+    }
+   ],
+   "process": "Blending lots fermented apart lets a winery keep one style from vintage to vintage, whichever grapes did best that year."
+  },
+  "dexNumber": 7935
+ },
+ {
+  "id": "sutterhomewhitemerlot-wb",
+  "name": "Sutter Home White Merlot",
+  "category": "wine",
+  "subcategory": "Rosé",
+  "description": "A New World Rosé from California, USA. Made from Merlot.",
+  "abv": "10–14.5%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "strawberry",
+   "watermelon",
+   "red cherry",
+   "citrus"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 14 New World Rosé bottlings catalogued here.",
+  "serve": {
+   "temp": "45-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, in a white wine glass rather than a tumbler so the strawberry and citrus have somewhere to go. Read the label for where it sits: the paler bottles tend to finish dry, while the deeper pinks, the ones called blush or White Merlot, carry some sweetness. Look for the current vintage; rosé fades with keeping rather than improving.",
+   "pair": [
+    "grilled salmon",
+    "shrimp tacos",
+    "watermelon and feta salad"
+   ]
+  },
+  "composition": {
+   "summary": "Mostly red grapes given a few hours on their skins, sometimes with a white grape in the blend, made in every New World wine country.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Merlot"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Pressed straight off the skins, or juice bled from a red's tank after a few hours (saignée), then fermented cool; a white grape sometimes blended in"
+    },
+    {
+     "label": "Aging",
+     "detail": "Stainless steel; released within months of the harvest"
+    }
+   ],
+   "process": "The colour comes from how long the juice sits on the red skins, minutes to hours, and how much white goes into the blend; the sweetness from whether the fermentation is let finish."
+  },
+  "dexNumber": 7936
+ },
+ {
+  "id": "sutterhomemoscato-wb",
+  "name": "Sutter Home Moscato",
+  "category": "wine",
+  "subcategory": "Dessert",
+  "description": "A New World Moscato from California, USA.",
+  "abv": "10.1%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "muscat grape",
+   "orange blossom",
+   "peach",
+   "honey"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 13 New World Moscato bottlings catalogued here.",
+  "serve": {
+   "temp": "40-45°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, straight from the fridge: the chill keeps the sweetness lively rather than syrupy, and the light spritz some bottles carry fades as the glass warms. A small pour suits a wine this sweet and perfumed. Look for the fresh-grape, floral scent of Muscat first, with orange blossom and peach in the white and red berries in the pink and the red, held up by just enough acidity.",
+   "pair": [
+    "fresh fruit",
+    "spicy Thai dishes",
+    "almond cake"
+   ]
+  },
+  "composition": {
+   "summary": "Muscat grapes made sweet, most of them low in alcohol, in California and South Eastern Australia.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Muscat of Alexandria (Australia's Muscat Gordo Blanco) and Muscat Blanc à Petits Grains (Muscat Canelli); a little red wine for pink and red Moscato"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fermented cool and stopped early to keep sugar in and alcohol low; some lightly spritzed"
+    },
+    {
+     "label": "Aging",
+     "detail": "None; steel tank, bottled young"
+    }
+   ],
+   "process": "Chilling the wine stops the yeast while much of the grape's sugar is still unfermented, which keeps the alcohol low and the wine sweet."
+  },
+  "dexNumber": 7937
+ },
+ {
+  "id": "sutterhomepinkmoscato-wb",
+  "name": "Sutter Home Pink Moscato",
+  "category": "wine",
+  "subcategory": "Dessert",
+  "description": "A New World Moscato from California, USA.",
+  "abv": "7–12%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "muscat grape",
+   "strawberry",
+   "raspberry",
+   "cherry"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 13 New World Moscato bottlings catalogued here.",
+  "serve": {
+   "temp": "40-45°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, straight from the fridge: the chill keeps the sweetness lively rather than syrupy, and the light spritz some bottles carry fades as the glass warms. A small pour suits a wine this sweet and perfumed. Look for the fresh-grape, floral scent of Muscat first, with orange blossom and peach in the white and red berries in the pink and the red, held up by just enough acidity.",
+   "pair": [
+    "fresh fruit",
+    "spicy Thai dishes",
+    "almond cake"
+   ]
+  },
+  "composition": {
+   "summary": "Muscat grapes made sweet, most of them low in alcohol, in California and South Eastern Australia.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Muscat of Alexandria (Australia's Muscat Gordo Blanco) and Muscat Blanc à Petits Grains (Muscat Canelli); a little red wine for pink and red Moscato"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fermented cool and stopped early to keep sugar in and alcohol low; some lightly spritzed"
+    },
+    {
+     "label": "Aging",
+     "detail": "None; steel tank, bottled young"
+    }
+   ],
+   "process": "Chilling the wine stops the yeast while much of the grape's sugar is still unfermented, which keeps the alcohol low and the wine sweet."
+  },
+  "dexNumber": 7938
+ },
+ {
+  "id": "sutterhomeredmoscato-wb",
+  "name": "Sutter Home Red Moscato",
+  "category": "wine",
+  "subcategory": "Dessert",
+  "description": "A New World Moscato from California, USA.",
+  "abv": "11.8%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "muscat grape",
+   "strawberry",
+   "raspberry",
+   "cherry"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 13 New World Moscato bottlings catalogued here.",
+  "serve": {
+   "temp": "40-45°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, straight from the fridge: the chill keeps the sweetness lively rather than syrupy, and the light spritz some bottles carry fades as the glass warms. A small pour suits a wine this sweet and perfumed. Look for the fresh-grape, floral scent of Muscat first, with orange blossom and peach in the white and red berries in the pink and the red, held up by just enough acidity.",
+   "pair": [
+    "fresh fruit",
+    "spicy Thai dishes",
+    "almond cake"
+   ]
+  },
+  "composition": {
+   "summary": "Muscat grapes made sweet, most of them low in alcohol, in California and South Eastern Australia.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Muscat of Alexandria (Australia's Muscat Gordo Blanco) and Muscat Blanc à Petits Grains (Muscat Canelli); a little red wine for pink and red Moscato"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fermented cool and stopped early to keep sugar in and alcohol low; some lightly spritzed"
+    },
+    {
+     "label": "Aging",
+     "detail": "None; steel tank, bottled young"
+    }
+   ],
+   "process": "Chilling the wine stops the yeast while much of the grape's sugar is still unfermented, which keeps the alcohol low and the wine sweet."
+  },
+  "dexNumber": 7939
+ },
+ {
+  "id": "sutterhomesweetred-wb",
+  "name": "Sutter Home Sweet Red",
+  "category": "wine",
+  "subcategory": "Dessert",
+  "description": "A Sweet Red from California, USA.",
+  "abv": "10–12.5%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "cherry",
+   "raspberry",
+   "pomegranate",
+   "jam"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 3 Sweet Red bottlings catalogued here.",
+  "serve": {
+   "temp": "50-55°F, lightly chilled",
+   "glass": "Red wine glass",
+   "how": "Serve it lightly chilled, cooler than a dry red: the cold keeps the sweetness fresh and the fruit bright rather than jammy. A red wine glass and a modest pour suit it, since the sugar carries the flavour a long way. Look for red cherry and raspberry, with little of a dry red's grip.",
+   "pair": [
+    "dark chocolate",
+    "pulled pork",
+    "berry cobbler"
+   ]
+  },
+  "composition": {
+   "summary": "Red grapes made sweet, by stopping the fermentation early or blending back grape juice.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Seldom named on the label; any red variety may go in"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fermentation stopped while sugar remains, or unfermented juice blended back"
+    },
+    {
+     "label": "Aging",
+     "detail": "Little or none; steel tank, bottled young"
+    }
+   ],
+   "process": "Leaving sugar in a red softens its tannin and acidity, which is why a sweet red tastes rounder and lighter than a dry one."
+  },
+  "dexNumber": 7940
+ },
+ {
+  "id": "theprisonerredblend-wb",
+  "name": "The Prisoner Red Blend",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A California Red Blend from California, USA. Made from Zinfandel, Cabernet Sauvignon, Petite Sirah, Syrah, Merlot and Malbec.",
+  "abv": "15.5%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "blackberry",
+   "black cherry",
+   "mocha",
+   "vanilla"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 20 California Red Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it a little below room temperature: these are ripe, often high-alcohol wines, and warmth makes both the alcohol and any sweetness read louder. A red wine glass with some bowl is all it needs, and most bottles are ready when opened; the bigger, oak-heavy ones soften with half an hour of air. Look for dark berry fruit first, then the vanilla and mocha of the barrel.",
+   "pair": [
+    "smoked brisket",
+    "pepperoni pizza",
+    "grilled sausages"
+   ]
+  },
+  "composition": {
+   "summary": "Red grapes in any share, most often Zinfandel, Petite Sirah, Syrah and the Bordeaux grapes, blended from vineyards across California.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Zinfandel, Cabernet Sauvignon, Petite Sirah, Syrah, Merlot and Malbec"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Months in oak, often American; some finished in whiskey or bourbon barrels"
+    }
+   ],
+   "process": "Blending lots fermented apart lets a winery keep one style from vintage to vintage, whichever grapes did best that year."
+  },
+  "dexNumber": 7941
+ },
+ {
+  "id": "unshackledredblend-wb",
+  "name": "Unshackled Red Blend",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A California Red Blend from California, USA. Made from Zinfandel, Malbec, Syrah, Petite Sirah, Grenache and Cabernet Sauvignon.",
+  "abv": "15%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "blackberry",
+   "black cherry",
+   "mocha",
+   "vanilla"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 20 California Red Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it a little below room temperature: these are ripe, often high-alcohol wines, and warmth makes both the alcohol and any sweetness read louder. A red wine glass with some bowl is all it needs, and most bottles are ready when opened; the bigger, oak-heavy ones soften with half an hour of air. Look for dark berry fruit first, then the vanilla and mocha of the barrel.",
+   "pair": [
+    "smoked brisket",
+    "pepperoni pizza",
+    "grilled sausages"
+   ]
+  },
+  "composition": {
+   "summary": "Red grapes in any share, most often Zinfandel, Petite Sirah, Syrah and the Bordeaux grapes, blended from vineyards across California.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Zinfandel, Malbec, Syrah, Petite Sirah, Grenache and Cabernet Sauvignon"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Months in oak, often American; some finished in whiskey or bourbon barrels"
+    }
+   ],
+   "process": "Blending lots fermented apart lets a winery keep one style from vintage to vintage, whichever grapes did best that year."
+  },
+  "dexNumber": 7942
+ },
+ {
+  "id": "breadbutterredblend-wb",
+  "name": "Bread & Butter Red Blend",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A California Red Blend from California, USA.",
+  "abv": "13.5%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "blackberry",
+   "black cherry",
+   "mocha",
+   "vanilla"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 20 California Red Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it a little below room temperature: these are ripe, often high-alcohol wines, and warmth makes both the alcohol and any sweetness read louder. A red wine glass with some bowl is all it needs, and most bottles are ready when opened; the bigger, oak-heavy ones soften with half an hour of air. Look for dark berry fruit first, then the vanilla and mocha of the barrel.",
+   "pair": [
+    "smoked brisket",
+    "pepperoni pizza",
+    "grilled sausages"
+   ]
+  },
+  "composition": {
+   "summary": "Red grapes in any share, most often Zinfandel, Petite Sirah, Syrah and the Bordeaux grapes, blended from vineyards across California.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Zinfandel and Petite Sirah often lead; Syrah, Merlot, Cabernet Sauvignon, Malbec and Grenache in any share"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Months in oak, often American; some finished in whiskey or bourbon barrels"
+    }
+   ],
+   "process": "Blending lots fermented apart lets a winery keep one style from vintage to vintage, whichever grapes did best that year."
+  },
+  "dexNumber": 7943
+ },
+ {
+  "id": "breadbutterrose-wb",
+  "name": "Bread & Butter Rosé",
+  "category": "wine",
+  "subcategory": "Rosé",
+  "description": "A New World Rosé from California, USA.",
+  "abv": "12.5%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "strawberry",
+   "watermelon",
+   "red cherry",
+   "citrus"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 14 New World Rosé bottlings catalogued here.",
+  "serve": {
+   "temp": "45-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, in a white wine glass rather than a tumbler so the strawberry and citrus have somewhere to go. Read the label for where it sits: the paler bottles tend to finish dry, while the deeper pinks, the ones called blush or White Merlot, carry some sweetness. Look for the current vintage; rosé fades with keeping rather than improving.",
+   "pair": [
+    "grilled salmon",
+    "shrimp tacos",
+    "watermelon and feta salad"
+   ]
+  },
+  "composition": {
+   "summary": "Mostly red grapes given a few hours on their skins, sometimes with a white grape in the blend, made in every New World wine country.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Mostly red: Grenache, Syrah, Pinot Noir, Zinfandel, Merlot and Cabernet Sauvignon among them; sometimes a white such as Riesling, Vermentino or Sauvignon Blanc"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Pressed straight off the skins, or juice bled from a red's tank after a few hours (saignée), then fermented cool; a white grape sometimes blended in"
+    },
+    {
+     "label": "Aging",
+     "detail": "Stainless steel; released within months of the harvest"
+    }
+   ],
+   "process": "The colour comes from how long the juice sits on the red skins, minutes to hours, and how much white goes into the blend; the sweetness from whether the fermentation is let finish."
+  },
+  "dexNumber": 7944
+ },
+ {
+  "id": "justinrose-wb",
+  "name": "JUSTIN Rosé",
+  "category": "wine",
+  "subcategory": "Rosé",
+  "description": "A New World Rosé from California (Central Coast), USA.",
+  "abv": "13.5%",
+  "origin": "California (Central Coast), USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "strawberry",
+   "watermelon",
+   "red cherry",
+   "citrus"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 14 New World Rosé bottlings catalogued here.",
+  "serve": {
+   "temp": "45-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, in a white wine glass rather than a tumbler so the strawberry and citrus have somewhere to go. Read the label for where it sits: the paler bottles tend to finish dry, while the deeper pinks, the ones called blush or White Merlot, carry some sweetness. Look for the current vintage; rosé fades with keeping rather than improving.",
+   "pair": [
+    "grilled salmon",
+    "shrimp tacos",
+    "watermelon and feta salad"
+   ]
+  },
+  "composition": {
+   "summary": "Mostly red grapes given a few hours on their skins, sometimes with a white grape in the blend, made in every New World wine country.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Mostly red: Grenache, Syrah, Pinot Noir, Zinfandel, Merlot and Cabernet Sauvignon among them; sometimes a white such as Riesling, Vermentino or Sauvignon Blanc"
+    },
+    {
+     "label": "Region",
+     "detail": "California (Central Coast), USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Pressed straight off the skins, or juice bled from a red's tank after a few hours (saignée), then fermented cool; a white grape sometimes blended in"
+    },
+    {
+     "label": "Aging",
+     "detail": "Stainless steel; released within months of the harvest"
+    }
+   ],
+   "process": "The colour comes from how long the juice sits on the red skins, minutes to hours, and how much white goes into the blend; the sweetness from whether the fermentation is let finish."
+  },
+  "dexNumber": 7945
+ },
+ {
+  "id": "daourose-wb",
+  "name": "DAOU Rosé",
+  "category": "wine",
+  "subcategory": "Rosé",
+  "description": "A New World Rosé from California (Central Coast), USA. Made from Grenache and Sauvignon Blanc.",
+  "abv": "10–14.5%",
+  "origin": "California (Central Coast), USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "strawberry",
+   "watermelon",
+   "red cherry",
+   "citrus"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 14 New World Rosé bottlings catalogued here.",
+  "serve": {
+   "temp": "45-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, in a white wine glass rather than a tumbler so the strawberry and citrus have somewhere to go. Read the label for where it sits: the paler bottles tend to finish dry, while the deeper pinks, the ones called blush or White Merlot, carry some sweetness. Look for the current vintage; rosé fades with keeping rather than improving.",
+   "pair": [
+    "grilled salmon",
+    "shrimp tacos",
+    "watermelon and feta salad"
+   ]
+  },
+  "composition": {
+   "summary": "Mostly red grapes given a few hours on their skins, sometimes with a white grape in the blend, made in every New World wine country.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Grenache and Sauvignon Blanc"
+    },
+    {
+     "label": "Region",
+     "detail": "California (Central Coast), USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Pressed straight off the skins, or juice bled from a red's tank after a few hours (saignée), then fermented cool; a white grape sometimes blended in"
+    },
+    {
+     "label": "Aging",
+     "detail": "Stainless steel; released within months of the harvest"
+    }
+   ],
+   "process": "The colour comes from how long the juice sits on the red skins, minutes to hours, and how much white goes into the blend; the sweetness from whether the fermentation is let finish."
+  },
+  "dexNumber": 7946
+ },
+ {
+  "id": "menageatroisredblend-wb",
+  "name": "Ménage à Trois Red Blend",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A California Red Blend from California, USA. Made from Zinfandel, Merlot and Cabernet Sauvignon.",
+  "abv": "12–16%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "blackberry",
+   "black cherry",
+   "mocha",
+   "vanilla"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 20 California Red Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it a little below room temperature: these are ripe, often high-alcohol wines, and warmth makes both the alcohol and any sweetness read louder. A red wine glass with some bowl is all it needs, and most bottles are ready when opened; the bigger, oak-heavy ones soften with half an hour of air. Look for dark berry fruit first, then the vanilla and mocha of the barrel.",
+   "pair": [
+    "smoked brisket",
+    "pepperoni pizza",
+    "grilled sausages"
+   ]
+  },
+  "composition": {
+   "summary": "Red grapes in any share, most often Zinfandel, Petite Sirah, Syrah and the Bordeaux grapes, blended from vineyards across California.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Zinfandel, Merlot and Cabernet Sauvignon"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Months in oak, often American; some finished in whiskey or bourbon barrels"
+    }
+   ],
+   "process": "Blending lots fermented apart lets a winery keep one style from vintage to vintage, whichever grapes did best that year."
+  },
+  "dexNumber": 7947
+ },
+ {
+  "id": "menageatroissilksoftredblend-wb",
+  "name": "Ménage à Trois Silk Soft Red Blend",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A California Red Blend from California, USA. Made from Pinot Noir, Malbec and Petite Sirah.",
+  "abv": "12–16%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "blackberry",
+   "black cherry",
+   "mocha",
+   "vanilla"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 20 California Red Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it a little below room temperature: these are ripe, often high-alcohol wines, and warmth makes both the alcohol and any sweetness read louder. A red wine glass with some bowl is all it needs, and most bottles are ready when opened; the bigger, oak-heavy ones soften with half an hour of air. Look for dark berry fruit first, then the vanilla and mocha of the barrel.",
+   "pair": [
+    "smoked brisket",
+    "pepperoni pizza",
+    "grilled sausages"
+   ]
+  },
+  "composition": {
+   "summary": "Red grapes in any share, most often Zinfandel, Petite Sirah, Syrah and the Bordeaux grapes, blended from vineyards across California.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Pinot Noir, Malbec and Petite Sirah"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Months in oak, often American; some finished in whiskey or bourbon barrels"
+    }
+   ],
+   "process": "Blending lots fermented apart lets a winery keep one style from vintage to vintage, whichever grapes did best that year."
+  },
+  "dexNumber": 7948
+ },
+ {
+  "id": "orinswiftabstract-wb",
+  "name": "Orin Swift Abstract",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A California Red Blend from California, USA.",
+  "abv": "12–16%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "blackberry",
+   "black cherry",
+   "mocha",
+   "vanilla"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 20 California Red Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it a little below room temperature: these are ripe, often high-alcohol wines, and warmth makes both the alcohol and any sweetness read louder. A red wine glass with some bowl is all it needs, and most bottles are ready when opened; the bigger, oak-heavy ones soften with half an hour of air. Look for dark berry fruit first, then the vanilla and mocha of the barrel.",
+   "pair": [
+    "smoked brisket",
+    "pepperoni pizza",
+    "grilled sausages"
+   ]
+  },
+  "composition": {
+   "summary": "Red grapes in any share, most often Zinfandel, Petite Sirah, Syrah and the Bordeaux grapes, blended from vineyards across California.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Zinfandel and Petite Sirah often lead; Syrah, Merlot, Cabernet Sauvignon, Malbec and Grenache in any share"
+    },
+    {
+     "label": "Region",
+     "detail": "California, USA"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Months in oak, often American; some finished in whiskey or bourbon barrels"
+    }
+   ],
+   "process": "Blending lots fermented apart lets a winery keep one style from vintage to vintage, whichever grapes did best that year."
+  },
+  "dexNumber": 7949
+ },
+ {
+  "id": "yellowtailmoscato-wb",
+  "name": "[yellow tail] Moscato",
+  "category": "wine",
+  "subcategory": "Dessert",
+  "description": "A New World Moscato from South Eastern Australia, Australia.",
+  "abv": "7.5%",
+  "origin": "South Eastern Australia, Australia",
+  "rarity": "common",
+  "tastingNotes": [
+   "muscat grape",
+   "orange blossom",
+   "peach",
+   "honey"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 13 New World Moscato bottlings catalogued here.",
+  "serve": {
+   "temp": "40-45°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, straight from the fridge: the chill keeps the sweetness lively rather than syrupy, and the light spritz some bottles carry fades as the glass warms. A small pour suits a wine this sweet and perfumed. Look for the fresh-grape, floral scent of Muscat first, with orange blossom and peach in the white and red berries in the pink and the red, held up by just enough acidity.",
+   "pair": [
+    "fresh fruit",
+    "spicy Thai dishes",
+    "almond cake"
+   ]
+  },
+  "composition": {
+   "summary": "Muscat grapes made sweet, most of them low in alcohol, in California and South Eastern Australia.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Muscat of Alexandria (Australia's Muscat Gordo Blanco) and Muscat Blanc à Petits Grains (Muscat Canelli); a little red wine for pink and red Moscato"
+    },
+    {
+     "label": "Region",
+     "detail": "South Eastern Australia, Australia"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fermented cool and stopped early to keep sugar in and alcohol low; some lightly spritzed"
+    },
+    {
+     "label": "Aging",
+     "detail": "None; steel tank, bottled young"
+    }
+   ],
+   "process": "Chilling the wine stops the yeast while much of the grape's sugar is still unfermented, which keeps the alcohol low and the wine sweet."
+  },
+  "dexNumber": 7950
+ },
+ {
+  "id": "yellowtailpinkmoscato-wb",
+  "name": "[yellow tail] Pink Moscato",
+  "category": "wine",
+  "subcategory": "Dessert",
+  "description": "A New World Moscato from South Eastern Australia, Australia.",
+  "abv": "7.5%",
+  "origin": "South Eastern Australia, Australia",
+  "rarity": "common",
+  "tastingNotes": [
+   "muscat grape",
+   "strawberry",
+   "raspberry",
+   "cherry"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 13 New World Moscato bottlings catalogued here.",
+  "serve": {
+   "temp": "40-45°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, straight from the fridge: the chill keeps the sweetness lively rather than syrupy, and the light spritz some bottles carry fades as the glass warms. A small pour suits a wine this sweet and perfumed. Look for the fresh-grape, floral scent of Muscat first, with orange blossom and peach in the white and red berries in the pink and the red, held up by just enough acidity.",
+   "pair": [
+    "fresh fruit",
+    "spicy Thai dishes",
+    "almond cake"
+   ]
+  },
+  "composition": {
+   "summary": "Muscat grapes made sweet, most of them low in alcohol, in California and South Eastern Australia.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Muscat of Alexandria (Australia's Muscat Gordo Blanco) and Muscat Blanc à Petits Grains (Muscat Canelli); a little red wine for pink and red Moscato"
+    },
+    {
+     "label": "Region",
+     "detail": "South Eastern Australia, Australia"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fermented cool and stopped early to keep sugar in and alcohol low; some lightly spritzed"
+    },
+    {
+     "label": "Aging",
+     "detail": "None; steel tank, bottled young"
+    }
+   ],
+   "process": "Chilling the wine stops the yeast while much of the grape's sugar is still unfermented, which keeps the alcohol low and the wine sweet."
+  },
+  "dexNumber": 7951
+ },
+ {
+  "id": "yellowtailrose-wb",
+  "name": "[yellow tail] Rosé",
+  "category": "wine",
+  "subcategory": "Rosé",
+  "description": "A New World Rosé from South Eastern Australia, Australia.",
+  "abv": "12%",
+  "origin": "South Eastern Australia, Australia",
+  "rarity": "common",
+  "tastingNotes": [
+   "strawberry",
+   "watermelon",
+   "red cherry",
+   "citrus"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 14 New World Rosé bottlings catalogued here.",
+  "serve": {
+   "temp": "45-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, in a white wine glass rather than a tumbler so the strawberry and citrus have somewhere to go. Read the label for where it sits: the paler bottles tend to finish dry, while the deeper pinks, the ones called blush or White Merlot, carry some sweetness. Look for the current vintage; rosé fades with keeping rather than improving.",
+   "pair": [
+    "grilled salmon",
+    "shrimp tacos",
+    "watermelon and feta salad"
+   ]
+  },
+  "composition": {
+   "summary": "Mostly red grapes given a few hours on their skins, sometimes with a white grape in the blend, made in every New World wine country.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Mostly red: Grenache, Syrah, Pinot Noir, Zinfandel, Merlot and Cabernet Sauvignon among them; sometimes a white such as Riesling, Vermentino or Sauvignon Blanc"
+    },
+    {
+     "label": "Region",
+     "detail": "South Eastern Australia, Australia"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Pressed straight off the skins, or juice bled from a red's tank after a few hours (saignée), then fermented cool; a white grape sometimes blended in"
+    },
+    {
+     "label": "Aging",
+     "detail": "Stainless steel; released within months of the harvest"
+    }
+   ],
+   "process": "The colour comes from how long the juice sits on the red skins, minutes to hours, and how much white goes into the blend; the sweetness from whether the fermentation is let finish."
+  },
+  "dexNumber": 7952
+ },
+ {
+  "id": "yellowtailbigboldred-wb",
+  "name": "[yellow tail] Big Bold Red",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A Red Blend from South Eastern Australia, Australia.",
+  "abv": "13.5%",
+  "origin": "South Eastern Australia, Australia",
+  "rarity": "common",
+  "tastingNotes": [
+   "plum",
+   "blackberry",
+   "chocolate",
+   "spice"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 5 Red Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it slightly cool rather than at full room temperature, which flattens the fruit and brings the alcohol forward. A red wine glass with some bowl is enough; most are made to be opened young and need no decanting. Look for plum and blackberry up front and a soft, rounded finish.",
+   "pair": [
+    "beef burgers",
+    "lamb chops",
+    "barbecued ribs"
+   ]
+  },
+  "composition": {
+   "summary": "Two or more red grapes in any share, sold under a brand rather than a grape's name.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Any reds: Shiraz, Cabernet Sauvignon, Merlot and Durif in Australia; Shiraz and the Bordeaux grapes in South Africa"
+    },
+    {
+     "label": "Region",
+     "detail": "South Eastern Australia, Australia"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Steel or oak; some finished in spirit barrels"
+    }
+   ],
+   "process": "Blending from many vineyards lets a large winery make the same wine every year, smoothing out what any one grape or site did that vintage."
+  },
+  "dexNumber": 7953
+ },
+ {
+  "id": "yellowtailjammyredroo-wb",
+  "name": "[yellow tail] Jammy Red Roo",
+  "category": "wine",
+  "subcategory": "Dessert",
+  "description": "A Sweet Red from South Eastern Australia, Australia.",
+  "abv": "12%",
+  "origin": "South Eastern Australia, Australia",
+  "rarity": "common",
+  "tastingNotes": [
+   "cherry",
+   "raspberry",
+   "pomegranate",
+   "jam"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 3 Sweet Red bottlings catalogued here.",
+  "serve": {
+   "temp": "50-55°F, lightly chilled",
+   "glass": "Red wine glass",
+   "how": "Serve it lightly chilled, cooler than a dry red: the cold keeps the sweetness fresh and the fruit bright rather than jammy. A red wine glass and a modest pour suit it, since the sugar carries the flavour a long way. Look for red cherry and raspberry, with little of a dry red's grip.",
+   "pair": [
+    "dark chocolate",
+    "pulled pork",
+    "berry cobbler"
+   ]
+  },
+  "composition": {
+   "summary": "Red grapes made sweet, by stopping the fermentation early or blending back grape juice.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Seldom named on the label; any red variety may go in"
+    },
+    {
+     "label": "Region",
+     "detail": "South Eastern Australia, Australia"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fermentation stopped while sugar remains, or unfermented juice blended back"
+    },
+    {
+     "label": "Aging",
+     "detail": "Little or none; steel tank, bottled young"
+    }
+   ],
+   "process": "Leaving sugar in a red softens its tannin and acidity, which is why a sweet red tastes rounder and lighter than a dry one."
+  },
+  "dexNumber": 7954
+ },
+ {
+  "id": "jacobscreekclassicmoscato-wb",
+  "name": "Jacob's Creek Classic Moscato",
+  "category": "wine",
+  "subcategory": "Dessert",
+  "description": "A New World Moscato from South Eastern Australia, Australia.",
+  "abv": "7–12%",
+  "origin": "South Eastern Australia, Australia",
+  "rarity": "common",
+  "tastingNotes": [
+   "muscat grape",
+   "orange blossom",
+   "peach",
+   "honey"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 13 New World Moscato bottlings catalogued here.",
+  "serve": {
+   "temp": "40-45°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, straight from the fridge: the chill keeps the sweetness lively rather than syrupy, and the light spritz some bottles carry fades as the glass warms. A small pour suits a wine this sweet and perfumed. Look for the fresh-grape, floral scent of Muscat first, with orange blossom and peach in the white and red berries in the pink and the red, held up by just enough acidity.",
+   "pair": [
+    "fresh fruit",
+    "spicy Thai dishes",
+    "almond cake"
+   ]
+  },
+  "composition": {
+   "summary": "Muscat grapes made sweet, most of them low in alcohol, in California and South Eastern Australia.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Muscat of Alexandria (Australia's Muscat Gordo Blanco) and Muscat Blanc à Petits Grains (Muscat Canelli); a little red wine for pink and red Moscato"
+    },
+    {
+     "label": "Region",
+     "detail": "South Eastern Australia, Australia"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fermented cool and stopped early to keep sugar in and alcohol low; some lightly spritzed"
+    },
+    {
+     "label": "Aging",
+     "detail": "None; steel tank, bottled young"
+    }
+   ],
+   "process": "Chilling the wine stops the yeast while much of the grape's sugar is still unfermented, which keeps the alcohol low and the wine sweet."
+  },
+  "dexNumber": 7955
+ },
+ {
+  "id": "lindemansbin90moscato-wb",
+  "name": "Lindeman's Bin 90 Moscato",
+  "category": "wine",
+  "subcategory": "Dessert",
+  "description": "A New World Moscato from South Eastern Australia, Australia.",
+  "abv": "7–12%",
+  "origin": "South Eastern Australia, Australia",
+  "rarity": "common",
+  "tastingNotes": [
+   "muscat grape",
+   "orange blossom",
+   "peach",
+   "honey"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 13 New World Moscato bottlings catalogued here.",
+  "serve": {
+   "temp": "40-45°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, straight from the fridge: the chill keeps the sweetness lively rather than syrupy, and the light spritz some bottles carry fades as the glass warms. A small pour suits a wine this sweet and perfumed. Look for the fresh-grape, floral scent of Muscat first, with orange blossom and peach in the white and red berries in the pink and the red, held up by just enough acidity.",
+   "pair": [
+    "fresh fruit",
+    "spicy Thai dishes",
+    "almond cake"
+   ]
+  },
+  "composition": {
+   "summary": "Muscat grapes made sweet, most of them low in alcohol, in California and South Eastern Australia.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Muscat of Alexandria (Australia's Muscat Gordo Blanco) and Muscat Blanc à Petits Grains (Muscat Canelli); a little red wine for pink and red Moscato"
+    },
+    {
+     "label": "Region",
+     "detail": "South Eastern Australia, Australia"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fermented cool and stopped early to keep sugar in and alcohol low; some lightly spritzed"
+    },
+    {
+     "label": "Aging",
+     "detail": "None; steel tank, bottled young"
+    }
+   ],
+   "process": "Chilling the wine stops the yeast while much of the grape's sugar is still unfermented, which keeps the alcohol low and the wine sweet."
+  },
+  "dexNumber": 7956
+ },
+ {
+  "id": "wolfblassyellowlabelmoscato-wb",
+  "name": "Wolf Blass Yellow Label Moscato",
+  "category": "wine",
+  "subcategory": "Dessert",
+  "description": "A New World Moscato from Australia.",
+  "abv": "7%",
+  "origin": "Australia",
+  "rarity": "common",
+  "tastingNotes": [
+   "muscat grape",
+   "orange blossom",
+   "peach",
+   "honey"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 13 New World Moscato bottlings catalogued here.",
+  "serve": {
+   "temp": "40-45°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, straight from the fridge: the chill keeps the sweetness lively rather than syrupy, and the light spritz some bottles carry fades as the glass warms. A small pour suits a wine this sweet and perfumed. Look for the fresh-grape, floral scent of Muscat first, with orange blossom and peach in the white and red berries in the pink and the red, held up by just enough acidity.",
+   "pair": [
+    "fresh fruit",
+    "spicy Thai dishes",
+    "almond cake"
+   ]
+  },
+  "composition": {
+   "summary": "Muscat grapes made sweet, most of them low in alcohol, in California and South Eastern Australia.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Muscat of Alexandria (Australia's Muscat Gordo Blanco) and Muscat Blanc à Petits Grains (Muscat Canelli); a little red wine for pink and red Moscato"
+    },
+    {
+     "label": "Region",
+     "detail": "Australia"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fermented cool and stopped early to keep sugar in and alcohol low; some lightly spritzed"
+    },
+    {
+     "label": "Aging",
+     "detail": "None; steel tank, bottled young"
+    }
+   ],
+   "process": "Chilling the wine stops the yeast while much of the grape's sugar is still unfermented, which keeps the alcohol low and the wine sweet."
+  },
+  "dexNumber": 7957
+ },
+ {
+  "id": "19crimesredblend-wb",
+  "name": "19 Crimes Red Blend",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A Red Blend from South Eastern Australia, Australia.",
+  "abv": "12–14.5%",
+  "origin": "South Eastern Australia, Australia",
+  "rarity": "common",
+  "tastingNotes": [
+   "plum",
+   "blackberry",
+   "chocolate",
+   "spice"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 5 Red Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it slightly cool rather than at full room temperature, which flattens the fruit and brings the alcohol forward. A red wine glass with some bowl is enough; most are made to be opened young and need no decanting. Look for plum and blackberry up front and a soft, rounded finish.",
+   "pair": [
+    "beef burgers",
+    "lamb chops",
+    "barbecued ribs"
+   ]
+  },
+  "composition": {
+   "summary": "Two or more red grapes in any share, sold under a brand rather than a grape's name.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Any reds: Shiraz, Cabernet Sauvignon, Merlot and Durif in Australia; Shiraz and the Bordeaux grapes in South Africa"
+    },
+    {
+     "label": "Region",
+     "detail": "South Eastern Australia, Australia"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Steel or oak; some finished in spirit barrels"
+    }
+   ],
+   "process": "Blending from many vineyards lets a large winery make the same wine every year, smoothing out what any one grape or site did that vintage."
+  },
+  "dexNumber": 7958
+ },
+ {
+  "id": "19crimesthebanisheddarkred-wb",
+  "name": "19 Crimes The Banished Dark Red",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A Red Blend from South Eastern Australia, Australia.",
+  "abv": "12–14.5%",
+  "origin": "South Eastern Australia, Australia",
+  "rarity": "common",
+  "tastingNotes": [
+   "plum",
+   "blackberry",
+   "chocolate",
+   "spice"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 5 Red Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it slightly cool rather than at full room temperature, which flattens the fruit and brings the alcohol forward. A red wine glass with some bowl is enough; most are made to be opened young and need no decanting. Look for plum and blackberry up front and a soft, rounded finish.",
+   "pair": [
+    "beef burgers",
+    "lamb chops",
+    "barbecued ribs"
+   ]
+  },
+  "composition": {
+   "summary": "Two or more red grapes in any share, sold under a brand rather than a grape's name.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Any reds: Shiraz, Cabernet Sauvignon, Merlot and Durif in Australia; Shiraz and the Bordeaux grapes in South Africa"
+    },
+    {
+     "label": "Region",
+     "detail": "South Eastern Australia, Australia"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Steel or oak; some finished in spirit barrels"
+    }
+   ],
+   "process": "Blending from many vineyards lets a large winery make the same wine every year, smoothing out what any one grape or site did that vintage."
+  },
+  "dexNumber": 7959
+ },
+ {
+  "id": "19crimesuprisingredblend-wb",
+  "name": "19 Crimes Uprising Red Blend",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A Red Blend from South Eastern Australia, Australia.",
+  "abv": "12–14.5%",
+  "origin": "South Eastern Australia, Australia",
+  "rarity": "common",
+  "tastingNotes": [
+   "plum",
+   "blackberry",
+   "chocolate",
+   "spice"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 5 Red Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it slightly cool rather than at full room temperature, which flattens the fruit and brings the alcohol forward. A red wine glass with some bowl is enough; most are made to be opened young and need no decanting. Look for plum and blackberry up front and a soft, rounded finish.",
+   "pair": [
+    "beef burgers",
+    "lamb chops",
+    "barbecued ribs"
+   ]
+  },
+  "composition": {
+   "summary": "Two or more red grapes in any share, sold under a brand rather than a grape's name.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Any reds: Shiraz, Cabernet Sauvignon, Merlot and Durif in Australia; Shiraz and the Bordeaux grapes in South Africa"
+    },
+    {
+     "label": "Region",
+     "detail": "South Eastern Australia, Australia"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Steel or oak; some finished in spirit barrels"
+    }
+   ],
+   "process": "Blending from many vineyards lets a large winery make the same wine every year, smoothing out what any one grape or site did that vintage."
+  },
+  "dexNumber": 7960
+ },
+ {
+  "id": "kwvroodeberg-wb",
+  "name": "KWV Roodeberg",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A Red Blend from Western Cape, South Africa.",
+  "abv": "12–14.5%",
+  "origin": "Western Cape, South Africa",
+  "rarity": "common",
+  "tastingNotes": [
+   "plum",
+   "blackberry",
+   "chocolate",
+   "spice"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "One of 5 Red Blend bottlings catalogued here.",
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Red wine glass",
+   "how": "Serve it slightly cool rather than at full room temperature, which flattens the fruit and brings the alcohol forward. A red wine glass with some bowl is enough; most are made to be opened young and need no decanting. Look for plum and blackberry up front and a soft, rounded finish.",
+   "pair": [
+    "beef burgers",
+    "lamb chops",
+    "barbecued ribs"
+   ]
+  },
+  "composition": {
+   "summary": "Two or more red grapes in any share, sold under a brand rather than a grape's name.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Any reds: Shiraz, Cabernet Sauvignon, Merlot and Durif in Australia; Shiraz and the Bordeaux grapes in South Africa"
+    },
+    {
+     "label": "Region",
+     "detail": "Western Cape, South Africa"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Each grape fermented on its skins apart, then blended to a house style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Steel or oak; some finished in spirit barrels"
+    }
+   ],
+   "process": "Blending from many vineyards lets a large winery make the same wine every year, smoothing out what any one grape or site did that vintage."
+  },
+  "dexNumber": 7961
+ },
+ {
+  "id": "mulderboschcabernetsauvignonrose-wb",
+  "name": "Mulderbosch Cabernet Sauvignon Rosé",
+  "category": "wine",
+  "subcategory": "Rosé",
+  "description": "A New World Rosé from Coastal Region, South Africa. Made from Cabernet Sauvignon.",
+  "abv": "12.5%",
+  "origin": "Coastal Region, South Africa",
+  "rarity": "common",
+  "tastingNotes": [
+   "strawberry",
+   "watermelon",
+   "red cherry",
+   "citrus"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "One of 14 New World Rosé bottlings catalogued here.",
+  "serve": {
+   "temp": "45-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold, in a white wine glass rather than a tumbler so the strawberry and citrus have somewhere to go. Read the label for where it sits: the paler bottles tend to finish dry, while the deeper pinks, the ones called blush or White Merlot, carry some sweetness. Look for the current vintage; rosé fades with keeping rather than improving.",
+   "pair": [
+    "grilled salmon",
+    "shrimp tacos",
+    "watermelon and feta salad"
+   ]
+  },
+  "composition": {
+   "summary": "Mostly red grapes given a few hours on their skins, sometimes with a white grape in the blend, made in every New World wine country.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cabernet Sauvignon"
+    },
+    {
+     "label": "Region",
+     "detail": "Coastal Region, South Africa"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Pressed straight off the skins, or juice bled from a red's tank after a few hours (saignée), then fermented cool; a white grape sometimes blended in"
+    },
+    {
+     "label": "Aging",
+     "detail": "Stainless steel; released within months of the harvest"
+    }
+   ],
+   "process": "The colour comes from how long the juice sits on the red skins, minutes to hours, and how much white goes into the blend; the sweetness from whether the fermentation is let finish."
+  },
+  "dexNumber": 7962
  }
 ]

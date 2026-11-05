@@ -155,10 +155,26 @@ const GRAPES = { 'syrah-shiraz': 'Syrah' };
  * Cards with deliberately no atlas entry. Vermouth is aromatized and
  * fortified rather than a named wine on an appellation map, and pointing it
  * at something adjacent would be a small lie told twice.
+ *
+ * So are v4.16's six styles (specs/v4.16/style-cards.md): a blend, a
+ * rosé, a Moscato or a sweet red sold by its style, made anywhere in a
+ * state or in many countries. Bordeaux Blend and Provence Rosé point at
+ * the appellations that define them; these have none, and the atlas has
+ * no row for them, so they say so. Their bottles are on the map nowhere,
+ * as every bottle filed under a style made anywhere is, and carry their
+ * own grapes into the Grape filter. Sweet Red's says where the sweet reds
+ * of named places are, since the atlas styles eighteen of them Sweet Red.
  */
 const ABSENT = {
   'dry-vermouth': 'Vermouth is aromatized and fortified rather than an appellation wine.',
   'sweet-vermouth': 'Vermouth is aromatized and fortified rather than an appellation wine.',
+  'california-red-blend': 'A style blended from vineyards anywhere in California, rather than the wine of one place on the map.',
+  'new-world-rose': 'A style made across the New World, rather than an appellation wine.',
+  'new-world-moscato': 'A style made across the New World from Muscat grapes, rather than an appellation wine.',
+  'red-blend': 'A style made wherever red grapes grow, rather than an appellation wine.',
+  'white-blend': 'A style made wherever white grapes grow, rather than an appellation wine.',
+  'sweet-red':
+    'A style made in many wine countries, rather than an appellation wine. The sweet reds of named places, Kindzmarauli and Recioto della Valpolicella among them, are on the map under their own names.',
 };
 
 /*

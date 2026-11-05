@@ -295,6 +295,8 @@ const PLACE_OF: Readonly<Record<string, readonly string[]>> = {
   Scandinavia: [],
   'Spanish Caribbean': [],
   Worldwide: [],
+  // v4.16: New World Rosé and New World Moscato, styles made in many countries.
+  'New World': [],
   'West Africa': [],
   'Southern Africa': [],
   'Nordic and Baltic Europe': [],

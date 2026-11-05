@@ -903,7 +903,8 @@ export function OriginStory({ drink }: { drink: Pick<Drink, 'funFact' | 'originS
  * Atlas on them. A bottling (v4.15) is where the card it is filed under
  * is: its one appellation (Château Latour, Pauillac) or its grape; one
  * filed under a style made anywhere (Bordeaux Blend) has no place, and
- * draws nothing. The two vermouths say why they have no place on it
+ * draws nothing. The two vermouths, and v4.16's six styles made anywhere
+ * (California Red Blend, Sweet Red…), say why they have no place on it
  * rather than linking to something adjacent.
  *
  * A link carries names, resolved here; a name the atlas no longer has is

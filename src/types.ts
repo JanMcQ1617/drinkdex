@@ -199,7 +199,7 @@ export interface AtlasLink {
    * place of everything its appellation permits.
    */
   grapes?: string[];
-  /** Why this card has nothing to link to (the two vermouths). */
+  /** Why this card has nothing to link to (the two vermouths, v4.16's six styles). */
   absent?: string;
 }
 

@@ -1,0 +1,32 @@
+Thanks for trying Sipply. It's early, so tell me what's broken or confusing — both are useful.
+
+New in this build:
+
+- Six wine styles: California Red Blend, New World Rosé, New World Moscato, Red Blend, White Blend and Sweet Red, with 57 bottles filed under them, among them The Prisoner Red Blend, Apothic Red, Meiomi Red Blend, Josh Cellars Rosé, Barefoot Moscato, [yellow tail] Pink Moscato and 19 Crimes Red Blend. The Dex now holds 7,948 entries: 899 cocktails, 1,428 spirits and 5,621 wines, 3,271 of them bottles. The styles are made in many places, so their On the map says why the atlas has no place for them. The Moscatos and sweet reds are under Style: Dessert. Tell me if a bottle is under the wrong style, colour or region.
+- Help and support, Privacy Policy and Terms of Use in Settings, and the Terms of Use and Privacy Policy links on the sign-up screen, now open sipply.netlify.app. Check each opens its page.
+
+From the last build: real wine bottles, filed under their appellation or grape, which search finds by producer ("opus one", "krug"); and Dex titles count cocktails and spirits only, so wine never moves a title, up or down. A wine still gets its collected card.
+
+Worth poking at:
+
+- Bottle names are long, and some grid cells and drink-page heads run four or five lines. Do they read well, and does the Dex stay smooth when you scroll fast?
+- Filter the Dex to a region or a grape (Champagne, Mendoza, Chardonnay) and check the bottles there belong. A bottle's On the map should open its appellation or its grape.
+- Join with code for tournaments, and Current place at the top of Add place.
+- Continue with Facebook stays hidden while Meta reviews the app. If you made your account with Facebook, choose Continue with email with the address your Facebook account uses, then Or set a password by email.
+- People notifications. Open Activity (the heart on Home) and allow alerts, then have a second account follow you, tag you or invite you to a tournament: one notification each. Turn each kind off in Profile → "..." → Settings → Notifications.
+- Signing in with Google, and with Apple.
+- Places. On iOS 18 or later, post a drink and tap Add place, then open the place from your post.
+- Tagging people, Daily ideas (Settings → Notifications), Saved collections and their share links: a bottle in a shared collection should show its name on the web.
+- Tournaments: host one, join it with its code from a second account, and post a drink from each.
+- Posting a drink: the + at the top of Home. Also with the camera turned off for Sipply in Settings: you should still be able to post a photo from your library.
+
+Please report:
+
+- Anything that crashes, hangs, or shows an error you can't get out of
+- A photo that fails to upload or appears on the wrong post
+- Anything that looks wrong — spacing, colour, text that's cut off
+- Anything you expected to be able to do and couldn't
+
+Things I already know about: the app is 18+ and alcohol-focused by design; your collection lives on your device, so signing in elsewhere won't bring it with you; and most wines have no photo yet (71 do, and no bottle), so the rest show a drawn glass.
+
+You can delete your account any time from Profile → "..." → Settings → Delete account. It removes everything, including your photos.

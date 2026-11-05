@@ -78,6 +78,28 @@
   "src": "https://www.caymus-suisun.com"
  },
  {
+  "n": "Conundrum White",
+  "s": "White Blend",
+  "c": "United States",
+  "region": "California",
+  "colour": "White",
+  "grapes": [
+   "Chardonnay",
+   "Sauvignon Blanc",
+   "Semillon",
+   "Viognier"
+  ],
+  "src": "https://www.conundrumwines.com/wines/"
+ },
+ {
+  "n": "Conundrum Red",
+  "s": "California Red Blend",
+  "c": "United States",
+  "region": "California",
+  "colour": "Red",
+  "src": "https://www.conundrumwines.com/wines/"
+ },
+ {
   "n": "Mer Soleil Reserve Chardonnay",
   "s": "Monterey",
   "c": "United States",
@@ -313,6 +335,14 @@
   "src": "http://robertmondaviprivateselection.com/wines/pinot-noir/"
  },
  {
+  "n": "Robert Mondavi Private Selection Red Blend",
+  "s": "California Red Blend",
+  "c": "United States",
+  "region": "California",
+  "colour": "Red",
+  "src": "http://robertmondaviprivateselection.com/wines/red-blend/"
+ },
+ {
   "n": "Robert Mondavi Private Selection Chardonnay",
   "s": "Chardonnay",
   "c": "United States",
@@ -412,6 +442,14 @@
   "src": "https://www.woodbridgewines.com/wine/pinot-noir/"
  },
  {
+  "n": "Woodbridge Red Blend",
+  "s": "California Red Blend",
+  "c": "United States",
+  "region": "California",
+  "colour": "Red",
+  "src": "https://www.woodbridgewines.com/wine/red-blend/"
+ },
+ {
   "n": "Woodbridge Chardonnay",
   "s": "Chardonnay",
   "c": "United States",
@@ -465,6 +503,22 @@
    "Riesling"
   ],
   "src": "https://www.woodbridgewines.com/wine/riesling/"
+ },
+ {
+  "n": "Woodbridge Moscato",
+  "s": "New World Moscato",
+  "c": "United States",
+  "region": "California",
+  "colour": "Sweet White",
+  "src": "https://www.woodbridgewines.com/wine/moscato/"
+ },
+ {
+  "n": "Woodbridge Rosé",
+  "s": "New World Rosé",
+  "c": "United States",
+  "region": "California",
+  "colour": "Rosé",
+  "src": "https://www.woodbridgewines.com/wine/rose/"
  },
  {
   "n": "Beringer Private Reserve Cabernet Sauvignon",
@@ -610,6 +664,25 @@
   "src": "https://www.theduckhorncollection.com/products/decoy-california-zinfandel"
  },
  {
+  "n": "Decoy California Red Blend",
+  "s": "California Red Blend",
+  "c": "United States",
+  "region": "California",
+  "colour": "Red",
+  "grapes": [
+   "Zinfandel",
+   "Merlot",
+   "Cabernet Sauvignon",
+   "Petite Sirah",
+   "Syrah",
+   "Petit Verdot",
+   "Grenache",
+   "Malbec",
+   "Cabernet Franc"
+  ],
+  "src": "https://www.theduckhorncollection.com/products/decoy-california-red-blend"
+ },
+ {
   "n": "Decoy California Chardonnay",
   "s": "Chardonnay",
   "c": "United States",
@@ -630,6 +703,20 @@
    "Sauvignon Blanc"
   ],
   "src": "https://www.theduckhorncollection.com/products/decoy-california-sauvignon-blanc"
+ },
+ {
+  "n": "Decoy California Rosé",
+  "s": "New World Rosé",
+  "c": "United States",
+  "region": "California",
+  "colour": "Rosé",
+  "grapes": [
+   "Syrah",
+   "Carignan",
+   "Vermentino",
+   "Grenache"
+  ],
+  "src": "https://www.theduckhorncollection.com/products/decoy-california-rose"
  },
  {
   "n": "Decoy Brut Cuvée Sparkling Wine",
@@ -1169,6 +1256,19 @@
   "src": "https://www.kj.com/shop-wines-vintners-reserve/"
  },
  {
+  "n": "Kendall-Jackson Vintner's Reserve Rosé",
+  "s": "New World Rosé",
+  "c": "United States",
+  "region": "California",
+  "colour": "Rosé",
+  "grapes": [
+   "Pinot Noir",
+   "Syrah"
+  ],
+  "abv": "13.5%",
+  "src": "https://www.kj.com/kendall-jackson-california-vintners-reserve-rose-2024-750-ml/7002412.html"
+ },
+ {
   "n": "Kendall-Jackson Vintner's Reserve Brut Cuvée Sparkling Wine",
   "s": "California Sparkling Wine",
   "c": "United States",
@@ -1287,6 +1387,14 @@
   "src": "https://www.meiomi.com/wine/meiomi-cabernet-sauvignon/"
  },
  {
+  "n": "Meiomi Red Blend",
+  "s": "California Red Blend",
+  "c": "United States",
+  "region": "California",
+  "colour": "Red",
+  "src": "https://www.meiomi.com/wine/meiomi-red-blend/"
+ },
+ {
   "n": "Meiomi Chardonnay",
   "s": "Chardonnay",
   "c": "United States",
@@ -1342,6 +1450,14 @@
   "src": "https://www.joshcellars.com/products/josh-cellars-pinot-noir"
  },
  {
+  "n": "Josh Cellars Legacy Red Blend",
+  "s": "California Red Blend",
+  "c": "United States",
+  "region": "California",
+  "colour": "Red",
+  "src": "https://www.joshcellars.com/products/josh-cellars-legacy-red-blend"
+ },
+ {
   "n": "Josh Cellars Hearth Cabernet Sauvignon",
   "s": "Cabernet Sauvignon",
   "c": "United States",
@@ -1384,6 +1500,14 @@
    "Pinot Grigio"
   ],
   "src": "https://www.joshcellars.com/products/josh-cellars-pinot-grigio"
+ },
+ {
+  "n": "Josh Cellars Rosé",
+  "s": "New World Rosé",
+  "c": "United States",
+  "region": "California",
+  "colour": "Rosé",
+  "src": "https://www.joshcellars.com/products/josh-cellars-rose"
  },
  {
   "n": "Josh Cellars Sonoma County Sauvignon Blanc",
@@ -1474,6 +1598,30 @@
   "src": "https://www.barefootwine.com/our-wines.html"
  },
  {
+  "n": "Barefoot Rich Red Blend",
+  "s": "California Red Blend",
+  "c": "United States",
+  "region": "California",
+  "colour": "Red",
+  "src": "https://www.barefootwine.com/rich-red-blend.html"
+ },
+ {
+  "n": "Barefoot Sweet Red Blend",
+  "s": "Sweet Red",
+  "c": "United States",
+  "region": "California",
+  "colour": "Sweet Red",
+  "src": "https://www.barefootwine.com/sweet-red-blend.html"
+ },
+ {
+  "n": "Barefoot Red Moscato",
+  "s": "New World Moscato",
+  "c": "United States",
+  "region": "California",
+  "colour": "Sweet Red",
+  "src": "https://www.barefootwine.com/red-moscato.html"
+ },
+ {
   "n": "Barefoot Chardonnay",
   "s": "Chardonnay",
   "c": "United States",
@@ -1529,6 +1677,22 @@
   "src": "https://www.barefootwine.com/our-wines.html"
  },
  {
+  "n": "Barefoot Moscato",
+  "s": "New World Moscato",
+  "c": "United States",
+  "region": "California",
+  "colour": "Sweet White",
+  "src": "https://www.barefootwine.com/moscato.html"
+ },
+ {
+  "n": "Barefoot Pink Moscato",
+  "s": "New World Moscato",
+  "c": "United States",
+  "region": "California",
+  "colour": "Sweet Rosé",
+  "src": "https://www.barefootwine.com/pink-moscato.html"
+ },
+ {
   "n": "Barefoot White Zinfandel",
   "s": "White Zinfandel",
   "c": "United States",
@@ -1538,6 +1702,19 @@
    "Zinfandel"
   ],
   "src": "https://www.barefootwine.com/our-wines.html"
+ },
+ {
+  "n": "Barefoot Rosé",
+  "s": "New World Rosé",
+  "c": "United States",
+  "region": "California",
+  "colour": "Rosé",
+  "grapes": [
+   "Grenache",
+   "Zinfandel",
+   "Riesling"
+  ],
+  "src": "https://www.barefootwine.com/rose.html"
  },
  {
   "n": "Barefoot Bubbly Brut Cuvée",
@@ -1562,6 +1739,39 @@
   "region": "California",
   "colour": "Sparkling Rosé",
   "src": "https://www.barefootwine.com/our-wines.html"
+ },
+ {
+  "n": "Apothic Red",
+  "s": "California Red Blend",
+  "c": "United States",
+  "region": "California",
+  "colour": "Red",
+  "src": "https://www.apothic.com/apothic-red-wine-blend.html"
+ },
+ {
+  "n": "Apothic Dark",
+  "s": "California Red Blend",
+  "c": "United States",
+  "region": "California",
+  "colour": "Red",
+  "src": "https://www.apothic.com/apothic-dark-red-wine-blend.html"
+ },
+ {
+  "n": "Apothic Inferno",
+  "s": "California Red Blend",
+  "c": "United States",
+  "region": "California",
+  "colour": "Red",
+  "abv": "15.9%",
+  "src": "https://www.apothic.com/apothic-inferno-red-wine-blend.html"
+ },
+ {
+  "n": "Apothic Crush",
+  "s": "California Red Blend",
+  "c": "United States",
+  "region": "California",
+  "colour": "Red",
+  "src": "https://www.apothic.com/apothic-crush-red-wine-blend.html"
  },
  {
   "n": "Apothic Cabernet",
@@ -1597,6 +1807,19 @@
   "src": "https://www.apothic.com/wines"
  },
  {
+  "n": "Apothic White",
+  "s": "White Blend",
+  "c": "United States",
+  "region": "California",
+  "colour": "White",
+  "grapes": [
+   "Chardonnay",
+   "Riesling",
+   "Pinot Grigio"
+  ],
+  "src": "https://www.apothic.com/apothic-white-wine-blend.html"
+ },
+ {
   "n": "Apothic Chardonnay",
   "s": "Chardonnay",
   "c": "United States",
@@ -1606,6 +1829,14 @@
    "Chardonnay"
   ],
   "src": "https://www.apothic.com/wines"
+ },
+ {
+  "n": "Apothic Rosé",
+  "s": "New World Rosé",
+  "c": "United States",
+  "region": "California",
+  "colour": "Rosé",
+  "src": "https://www.apothic.com/apothic-rose.html"
  },
  {
   "n": "Bogle Cabernet Sauvignon",
@@ -1663,6 +1894,21 @@
   "src": "https://boglewinery.com/wine/"
  },
  {
+  "n": "Bogle Essential Red",
+  "s": "California Red Blend",
+  "c": "United States",
+  "region": "California",
+  "colour": "Red",
+  "grapes": [
+   "Petite Sirah",
+   "Teroldego",
+   "Syrah",
+   "Zinfandel"
+  ],
+  "abv": "14.5%",
+  "src": "https://boglewinery.com/wine/essential-red/"
+ },
+ {
   "n": "Bogle Chardonnay",
   "s": "Chardonnay",
   "c": "United States",
@@ -1705,6 +1951,18 @@
    "Chenin Blanc"
   ],
   "src": "https://boglewinery.com/wine/"
+ },
+ {
+  "n": "Bogle Rosé",
+  "s": "New World Rosé",
+  "c": "United States",
+  "region": "California (Central Valley)",
+  "colour": "Rosé",
+  "grapes": [
+   "Pinot Noir"
+  ],
+  "abv": "12%",
+  "src": "https://boglewinery.com/wine/rose/"
  },
  {
   "n": "Bogle Blanc de Blancs",
@@ -1751,6 +2009,28 @@
   "src": "https://www.cupcakevineyards.com/wine/citruskissed-pinot-grigio/"
  },
  {
+  "n": "Cupcake Vineyards Moscato",
+  "s": "New World Moscato",
+  "c": "United States",
+  "region": "California",
+  "colour": "Sweet White",
+  "src": "https://www.cupcakevineyards.com/wine/moscato/"
+ },
+ {
+  "n": "Cupcake Vineyards Rosé",
+  "s": "New World Rosé",
+  "c": "United States",
+  "region": "California",
+  "colour": "Rosé",
+  "grapes": [
+   "Grenache",
+   "Pinot Noir",
+   "Syrah",
+   "Merlot"
+  ],
+  "src": "https://www.cupcakevineyards.com/wine/rose/"
+ },
+ {
   "n": "Cupcake Vineyards Cabernet Sauvignon",
   "s": "Cabernet Sauvignon",
   "c": "United States",
@@ -1784,6 +2064,27 @@
   "src": "https://www.cupcakevineyards.com/wine/merlot/"
  },
  {
+  "n": "Cupcake Vineyards Red Velvet",
+  "s": "California Red Blend",
+  "c": "United States",
+  "region": "California",
+  "colour": "Red",
+  "grapes": [
+   "Merlot",
+   "Zinfandel",
+   "Petite Sirah"
+  ],
+  "src": "https://www.cupcakevineyards.com/wine/red-velvet/"
+ },
+ {
+  "n": "Cupcake Vineyards Black Forest",
+  "s": "California Red Blend",
+  "c": "United States",
+  "region": "California",
+  "colour": "Red",
+  "src": "https://www.cupcakevineyards.com/wine/black-forest/"
+ },
+ {
   "n": "Sutter Home White Zinfandel",
   "s": "White Zinfandel",
   "c": "United States",
@@ -1793,6 +2094,51 @@
    "Zinfandel"
   ],
   "src": "https://www.sutterhome.com/wines/white-zinfandel/"
+ },
+ {
+  "n": "Sutter Home White Merlot",
+  "s": "New World Rosé",
+  "c": "United States",
+  "region": "California",
+  "colour": "Rosé",
+  "grapes": [
+   "Merlot"
+  ],
+  "src": "https://www.sutterhome.com/wines/white-merlot/"
+ },
+ {
+  "n": "Sutter Home Moscato",
+  "s": "New World Moscato",
+  "c": "United States",
+  "region": "California",
+  "colour": "Sweet White",
+  "abv": "10.1%",
+  "src": "https://www.sutterhome.com/wines/moscato/"
+ },
+ {
+  "n": "Sutter Home Pink Moscato",
+  "s": "New World Moscato",
+  "c": "United States",
+  "region": "California",
+  "colour": "Sweet Rosé",
+  "src": "https://www.sutterhome.com/wines/pink-moscato/"
+ },
+ {
+  "n": "Sutter Home Red Moscato",
+  "s": "New World Moscato",
+  "c": "United States",
+  "region": "California",
+  "colour": "Sweet Red",
+  "abv": "11.8%",
+  "src": "https://www.sutterhome.com/wines/red-moscato/"
+ },
+ {
+  "n": "Sutter Home Sweet Red",
+  "s": "Sweet Red",
+  "c": "United States",
+  "region": "California",
+  "colour": "Sweet Red",
+  "src": "https://www.sutterhome.com/wines/sweet-red/"
  },
  {
   "n": "Sutter Home Cabernet Sauvignon",
@@ -1848,6 +2194,23 @@
    "Sauvignon Blanc"
   ],
   "src": "https://www.sutterhome.com/wines/sauvignon-blanc/"
+ },
+ {
+  "n": "The Prisoner Red Blend",
+  "s": "California Red Blend",
+  "c": "United States",
+  "region": "California",
+  "colour": "Red",
+  "grapes": [
+   "Zinfandel",
+   "Cabernet Sauvignon",
+   "Petite Sirah",
+   "Syrah",
+   "Merlot",
+   "Malbec"
+  ],
+  "abv": "15.5%",
+  "src": "https://theprisonerwinecompany.com/products/2024-the-prisoner-red-blend"
  },
  {
   "n": "The Prisoner Cabernet Sauvignon",
@@ -1913,6 +2276,23 @@
   "src": "https://theprisonerwinecompany.com/products/2024-saldo-zinfandel-california"
  },
  {
+  "n": "Unshackled Red Blend",
+  "s": "California Red Blend",
+  "c": "United States",
+  "region": "California",
+  "colour": "Red",
+  "grapes": [
+   "Zinfandel",
+   "Malbec",
+   "Syrah",
+   "Petite Sirah",
+   "Grenache",
+   "Cabernet Sauvignon"
+  ],
+  "abv": "15%",
+  "src": "https://theprisonerwinecompany.com/products/2023-unshackled-red-blend-california-copy"
+ },
+ {
   "n": "Unshackled Cabernet Sauvignon",
   "s": "Cabernet Sauvignon",
   "c": "United States",
@@ -1968,6 +2348,15 @@
   "src": "https://breadandbutterwines.com/wine/california-merlot/"
  },
  {
+  "n": "Bread & Butter Red Blend",
+  "s": "California Red Blend",
+  "c": "United States",
+  "region": "California",
+  "colour": "Red",
+  "abv": "13.5%",
+  "src": "https://breadandbutterwines.com/wine/california-red-blend/"
+ },
+ {
   "n": "Bread & Butter Sauvignon Blanc",
   "s": "Sauvignon Blanc",
   "c": "United States",
@@ -1988,6 +2377,15 @@
    "Pinot Grigio"
   ],
   "src": "https://breadandbutterwines.com/wine/california-pinot-grigio/"
+ },
+ {
+  "n": "Bread & Butter Rosé",
+  "s": "New World Rosé",
+  "c": "United States",
+  "region": "California",
+  "colour": "Rosé",
+  "abv": "12.5%",
+  "src": "https://breadandbutterwines.com/wine/california-rose/"
  },
  {
   "n": "Bread & Butter Napa Valley Cabernet Sauvignon",
@@ -2201,6 +2599,15 @@
    "Chardonnay"
   ],
   "src": "https://www.justinwine.com/collection/all"
+ },
+ {
+  "n": "JUSTIN Rosé",
+  "s": "New World Rosé",
+  "c": "United States",
+  "region": "California (Central Coast)",
+  "colour": "Rosé",
+  "abv": "13.5%",
+  "src": "https://www.justinwine.com/product/2024-rose-750"
  },
  {
   "n": "J. Lohr Estates Seven Oaks Cabernet Sauvignon",
@@ -2443,6 +2850,18 @@
    "Sauvignon Blanc"
   ],
   "src": "https://daouvineyards.com/wines/"
+ },
+ {
+  "n": "DAOU Rosé",
+  "s": "New World Rosé",
+  "c": "United States",
+  "region": "California (Central Coast)",
+  "colour": "Rosé",
+  "grapes": [
+   "Grenache",
+   "Sauvignon Blanc"
+  ],
+  "src": "https://daouvineyards.com/wines/2025-daou-rose"
  },
  {
   "n": "Mumm Napa Brut Prestige",
@@ -2733,6 +3152,32 @@
   "src": "https://www.francisfordcoppolawinery.com/product/claret/"
  },
  {
+  "n": "Ménage à Trois Red Blend",
+  "s": "California Red Blend",
+  "c": "United States",
+  "region": "California",
+  "colour": "Red",
+  "grapes": [
+   "Zinfandel",
+   "Merlot",
+   "Cabernet Sauvignon"
+  ],
+  "src": "https://www.menageatroiswines.com/wines/red-blend/"
+ },
+ {
+  "n": "Ménage à Trois Silk Soft Red Blend",
+  "s": "California Red Blend",
+  "c": "United States",
+  "region": "California",
+  "colour": "Red",
+  "grapes": [
+   "Pinot Noir",
+   "Malbec",
+   "Petite Sirah"
+  ],
+  "src": "https://www.menageatroiswines.com/wines/silk-soft-red-blend/"
+ },
+ {
   "n": "Ménage à Trois Gold Chardonnay",
   "s": "Chardonnay",
   "c": "United States",
@@ -2775,6 +3220,14 @@
    "Chardonnay"
   ],
   "src": "https://www.rodneystrong.com/wines/"
+ },
+ {
+  "n": "Orin Swift Abstract",
+  "s": "California Red Blend",
+  "c": "United States",
+  "region": "California",
+  "colour": "Red",
+  "src": "https://www.orinswift.com/wines/abstract/"
  },
  {
   "n": "Orin Swift Papillon",
